@@ -4,28 +4,21 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Logo2 from "@/public/assets/Logo2.png";
 import Link from 'next/link';
+import NavLink from "./NavLink";
 import { HiMenuAlt2, HiX } from "react-icons/hi";
 
 const NavBar = () => {
   const [activeLink, setActiveLink] = useState<string | null>(null);
   const [scrollActive, setScrollActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [pathname, setPathname] = useState<string>(window.location.pathname);
 
   useEffect(() => {
-    const handlePopstate = () => {
-      setPathname(window.location.pathname);
-    };
-
     window.addEventListener("scroll", () => {
       setScrollActive(window.scrollY > 20);
     });
-    window.addEventListener("popstate", handlePopstate);
-    return () => {
-      window.removeEventListener("popstate", handlePopstate);
-    };
+
   }, []);
-  
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -51,14 +44,16 @@ const NavBar = () => {
         <div className="hidden md:flex items-center">
           <div className="flex justify-between md:gap-x-9 font-semibold">
             {navLinks.map((link) => (
-              <Link 
-                key={link.key} 
-                href={link.href} 
-                onClick={() => setActiveLink(link.key)} 
-                className={`${pathname === link.href ? "text-primary" : ""} ${activeLink === link.key ? "text-primary" : ""}`}
+              <NavLink
+                key={link.key}
+                href={link.href}
+                activeClassName="text-primary"
+                nonActiveClassName="inactive-link"
+                onClick={() => setActiveLink(link.key)}
+                className={`${activeLink === link.key ? "text-primary" : ""}`}
               >
                 {link.label}
-              </Link>
+              </NavLink>
             ))}
           </div>
         </div>
