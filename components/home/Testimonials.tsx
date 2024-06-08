@@ -46,12 +46,12 @@ const Testimonials = () => {
           {Array.from({ length: 5 }).map((_, index) => (
             <CarouselItem
               key={index}
-              className="pl-20 basis-full xl:basis-1/2 max-w-2xl"
+              className="md:pl-20  basis-full xl:basis-1/2 max-w-2xl"
             >
               <div className="relative top-6 right-5">
                 <IoChatbubbles className="text-primary " size={50} />
               </div>
-              <Card className="h-52 flex flex-col pt-4 justify-between bg-stone-100 shadow-lg">
+              <Card className="h-52 flex flex-col md:py-4 justify-between bg-stone-100 shadow-lg">
                 <CardContent className="flex items-center justify-center p-6">
                   “ With the money from Yehulu saving and credit association, I
                   was able to streamline my work and manage myself and my family
