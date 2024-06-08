@@ -45,7 +45,7 @@ const Intro = () => {
           <IoHome className="text-primary text-2xl" />
           <p className="font-semibold">Individuals</p>
         </div>
-        <div className=" absolute right-10 bottom-24 xl:bottom-auto xl:-right-10 shadow-xl rounded-full flex items-center justify-center bg-white h-16 w-16">
+        <div className=" absolute right-10 bottom-24 xl:bottom-auto xl:right-10 2xl:-right-10 shadow-xl rounded-full flex items-center justify-center bg-white h-16 w-16">
           <FaPeopleGroup className="text-primary text-2xl" />
           <div className="absolute bottom-8 left-10 bg-primary w-32 h-10 flex justify-center items-center px-3 text-center rounded-full text-white">
             <p className="text-sm">Small business thrive</p>
