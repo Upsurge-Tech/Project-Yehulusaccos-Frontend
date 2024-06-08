@@ -1,14 +1,18 @@
+<<<<<<< HEAD
 import type { Config } from 'tailwindcss'
+=======
+import type { Config } from "tailwindcss";
+>>>>>>> c96b1798435ef1460f346a8ba9d2e52526ff21dc
 
 const config = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
-  prefix: '',
+  prefix: "",
   theme: {
     container: {
       center: true,
@@ -76,7 +80,14 @@ const config = {
       },
     },
   },
+<<<<<<< HEAD
   plugins: [require('tailwindcss-animate')],
 } satisfies Config
 
 export default config
+=======
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
+
+export default config;
+>>>>>>> c96b1798435ef1460f346a8ba9d2e52526ff21dc
