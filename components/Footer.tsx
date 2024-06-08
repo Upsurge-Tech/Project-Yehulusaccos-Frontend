@@ -18,19 +18,19 @@ const Footer = () => {
           <h2 className="text-lg font-semibold text-center md:text-start">About the company</h2>
           <p className="text-center md:text-start">Learn to love growth and change and you <br/> will be a success. Microsoft patch.</p>
           <div className="flex gap-x-4 justify-center md:justify-start">
-            <Link href='facebook.com/profile.php?id=61554075832185'>
+            <Link href='https://www.facebook.com/profile.php?id=61554075832185'>
               <FaFacebook className="text-green-600 hover:scale-110 transition-transform duration-300" size={25} />
             </Link>
-            <Link href='instagram.com/@yehulu_sacco'>
+            <Link href='https://www.instagram.com/@yehulu_sacco'>
               <FaInstagram className="text-green-600 hover:scale-110 transition-transform duration-300" size={25} />
             </Link>
-            <Link href='tiktok.com/@yehulu_sacco'>
+            <Link href='https://www.tiktok.com/@yehulu_sacco'>
               <FaTiktok className="text-green-600 hover:scale-110 transition-transform duration-300" size={25} />
             </Link>
             <Link href='https://www.youtube.com/@yehulusacco'>
               <FaYoutube className="text-green-600 hover:scale-110 transition-transform duration-300" size={25} />
             </Link>
-            <Link href='t.me/hullucooprativeAssociationPrivat'>
+            <Link href='https://www.t.me/hullucooprativeAssociationPrivat'>
               <FaTelegram  className="text-green-600 hover:scale-110 transition-transform duration-300" size={25} />
             </Link>
           </div>
