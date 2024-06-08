@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FaCarSide, FaPeopleGroup } from "react-icons/fa6";
 import { IoHome } from "react-icons/io5";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 const Intro = () => {
   return (
@@ -17,7 +18,9 @@ const Intro = () => {
           access to savings and credit services for all, especially those who
           might not qualify for traditional banking options
         </p>
-        <Button>Contact Us</Button>
+        <Link href="/contact">
+          <Button className="px-6 py-3">Contact Us</Button>
+        </Link>
       </div>
       <div className="order-1 xl:order-2 relative h-[500px] w-full flex items-center justify-center rounded-3xl">
         <Image

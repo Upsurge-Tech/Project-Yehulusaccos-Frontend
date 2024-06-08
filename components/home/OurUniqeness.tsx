@@ -55,7 +55,7 @@ const OurUniqeness = () => {
           <FaKey className="text-primary text-2xl" />
           <p className="font-semibold">Accessible</p>
         </div>
-        <div className="absolute bottom-12 -right-20 h-14 rounded-lg items-center px-4 shadow-xl bg-white flex gap-4">
+        <div className="absolute bottom-12 -right-16 h-14 rounded-lg items-center px-4 shadow-xl bg-white flex gap-4">
           <FaStoreAlt className="text-primary text-2xl" />
           <p className="font-semibold">No material collateral</p>
         </div>

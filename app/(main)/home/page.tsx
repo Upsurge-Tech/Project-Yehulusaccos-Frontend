@@ -8,7 +8,7 @@ import Metrics from "@/components/home/Metrics";
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col w-full gap-y-48 min-h-screen">
+    <div className="container my-20 flex flex-col w-full gap-y-48 min-h-screen">
       <Intro />
       <OurBelieve />
       <OurUniqeness />
