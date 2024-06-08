@@ -1,19 +1,19 @@
-import Footer from '@/components/Footer'
-import NavBar from '@/components/NavBar'
-import React, { ReactNode } from 'react'
+import Footer from "@/components/Footer";
+import NavBar from "@/components/NavBar";
+import React, { ReactNode } from "react";
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const MainLayout = ({ children }: Props) => {
   return (
-    <div className='flex flex-col   bg-stone-200'>
+    <div className="flex flex-col   bg-stone-200">
       <NavBar />
       {children}
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default MainLayout
+export default MainLayout;

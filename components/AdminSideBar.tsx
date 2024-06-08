@@ -1,7 +1,7 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { ReactNode } from 'react'
-import Logo2 from '@/public/assets/Logo2.png'
+import Image from "next/image";
+import Link from "next/link";
+import { ReactNode } from "react";
+import Logo2 from "@/public/assets/Logo2.png";
 import {
   Sheet,
   SheetClose,
@@ -10,62 +10,62 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
-import { HiMenuAlt2, HiX } from 'react-icons/hi'
-import { link } from 'fs'
-import { Button } from '@/components/ui/button'
-import { RiFileListFill } from 'react-icons/ri'
-import { MdAddBox } from 'react-icons/md'
-import { IoLogOut } from 'react-icons/io5'
-import NavLink from '@/components/NavLink'
-import { IconType } from 'react-icons'
-import AdminNavbar from '@/components/AdminNavBar'
+} from "@/components/ui/sheet";
+import { HiMenuAlt2, HiX } from "react-icons/hi";
+import { link } from "fs";
+import { Button } from "@/components/ui/button";
+import { RiFileListFill } from "react-icons/ri";
+import { MdAddBox } from "react-icons/md";
+import { IoLogOut } from "react-icons/io5";
+import NavLink from "@/components/NavLink";
+import { IconType } from "react-icons";
+import AdminNavbar from "@/components/AdminNavBar";
 
 const AdminSideBar = ({
   navLinks,
 }: {
-  navLinks: { href: string; label: string; Icon: IconType }[]
+  navLinks: { href: string; label: string; Icon: IconType }[];
 }) => {
   return (
-    <nav className='border h-screen py-9 flex flex-col items-center gap-9'>
-      <Link href='/home' className=''>
+    <nav className="border h-screen py-9 flex flex-col items-center gap-9">
+      <Link href="/home" className="">
         <Image
           src={Logo2}
-          alt='imageLogo'
+          alt="imageLogo"
           width={70}
           height={70}
-          className='relative w-[50px] h-[50px] md:w-[70px]  md:h-[70px]'
+          className="relative w-[50px] h-[50px] md:w-[70px]  md:h-[70px]"
         />
       </Link>
 
-      <div className='flex-1 flex flex-col'>
+      <div className="flex-1 flex flex-col">
         {navLinks.map(({ href, label, Icon }) => (
           <NavLink
-            className=' flex justify-center '
-            activeClassName='bg-primary/10 text-primary'
-            nonActiveClassName=''
+            className=" flex justify-center "
+            activeClassName="bg-primary/10 text-primary"
+            nonActiveClassName=""
             key={href}
             href={href}
           >
             <Button
-              variant={'ghost'}
-              className='flex gap-2 items-center py-2 px-12'
+              variant={"ghost"}
+              className="flex gap-2 items-center py-2 px-12"
             >
-              <Icon className='text-2xl' />
+              <Icon className="text-2xl" />
               <span>{label}</span>
             </Button>
           </NavLink>
         ))}
       </div>
 
-      <Button variant={'ghost'} className='w-full'>
-        <div className='flex gap-2 items-center'>
-          <IoLogOut className='text-2xl' />
-          <span className='text-md'>Logout</span>
+      <Button variant={"ghost"} className="w-full">
+        <div className="flex gap-2 items-center">
+          <IoLogOut className="text-2xl" />
+          <span className="text-md">Logout</span>
         </div>
       </Button>
     </nav>
-  )
-}
+  );
+};
 
-export default AdminSideBar
+export default AdminSideBar;

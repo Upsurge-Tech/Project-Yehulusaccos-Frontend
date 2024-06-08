@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Logo2 from "@/public/assets/Logo2.png";
-import Link from 'next/link';
+import Link from "next/link";
 import NavLink from "./NavLink";
 import { HiMenuAlt2, HiX } from "react-icons/hi";
 
@@ -16,7 +16,6 @@ const NavBar = () => {
     window.addEventListener("scroll", () => {
       setScrollActive(window.scrollY > 20);
     });
-
   }, []);
 
   const toggleMenu = () => {
@@ -28,17 +27,22 @@ const NavBar = () => {
   };
 
   const navLinks = [
-    { href: '/services', label: 'Services', key: 'services' },
-    { href: '/about', label: 'About us', key: 'about' },
-    { href: '/faq', label: 'Faq', key: 'faq' },
-    { href: '/news', label: 'News and announcements', key: 'news' },
-    { href: '/loan_eligibility', label: 'Loan and eligibility', key: 'loan' },
+    { href: "/services", label: "Services", key: "services" },
+    { href: "/about", label: "About us", key: "about" },
+    { href: "/faq", label: "Faq", key: "faq" },
+    { href: "/news", label: "News and announcements", key: "news" },
+    { href: "/loan_eligibility", label: "Loan and eligibility", key: "loan" },
   ];
 
   return (
-    <div className={`py-3 px-3 md:px-7 w-full ${scrollActive ? "shadow-md" : ""}`}>
+    <div
+      className={`py-3 px-3 md:px-7 w-full ${scrollActive ? "shadow-md" : ""}`}
+    >
       <div className="flex justify-between items-center">
-        <Link href='/home' className="w-[50px] md:w-[70px] h-[50px] md:h-[70px]">
+        <Link
+          href="/home"
+          className="w-[50px] md:w-[70px] h-[50px] md:h-[70px]"
+        >
           <Image src={Logo2} alt="imageLogo" className="w-full h-full" />
         </Link>
         <div className="hidden md:flex items-center">
@@ -64,8 +68,12 @@ const NavBar = () => {
               <option>AM</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-green-500">
-              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M10 12l-6-6h12l-6 6z"/>
+              <svg
+                className="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M10 12l-6-6h12l-6 6z" />
               </svg>
             </div>
           </div>
@@ -79,15 +87,22 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-      <div className={`fixed top-0 left-0 h-screen w-full bg-black bg-opacity-50 md:bg-opacity-0 z-50 transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-        <div className={`md:hidden flex flex-col items-center mt-3 space-y-2 p-4 w-full bg-white shadow-lg rounded-lg transform transition-transform duration-300 ${menuOpen ? "translate-y-0" : "-translate-y-full"}`}>
-          <button onClick={closeMenu} className="absolute top-0 right-0 m-4 text-3xl">
+      <div
+        className={`fixed top-0 left-0 h-screen w-full bg-black bg-opacity-50 md:bg-opacity-0 z-50 transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      >
+        <div
+          className={`md:hidden flex flex-col items-center mt-3 space-y-2 p-4 w-full bg-white shadow-lg rounded-lg transform transition-transform duration-300 ${menuOpen ? "translate-y-0" : "-translate-y-full"}`}
+        >
+          <button
+            onClick={closeMenu}
+            className="absolute top-0 right-0 m-4 text-3xl"
+          >
             <HiX />
           </button>
           {navLinks.map((link) => (
-            <Link 
-              key={link.key} 
-              href={link.href} 
+            <Link
+              key={link.key}
+              href={link.href}
               className="py-2 w-full text-center"
               onClick={() => setMenuOpen(false)}
             >
