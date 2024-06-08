@@ -4,21 +4,34 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Logo2 from "@/public/assets/Logo2.png";
 import Link from 'next/link';
-import { HiMenuAlt2 } from "react-icons/hi";
+import { HiMenuAlt2, HiX } from "react-icons/hi";
 
 const NavBar = () => {
   const [activeLink, setActiveLink] = useState<string | null>(null);
   const [scrollActive, setScrollActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pathname, setPathname] = useState<string>(window.location.pathname);
 
   useEffect(() => {
+    const handlePopstate = () => {
+      setPathname(window.location.pathname);
+    };
+
     window.addEventListener("scroll", () => {
       setScrollActive(window.scrollY > 20);
     });
+    window.addEventListener("popstate", handlePopstate);
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+    };
   }, []);
-
+  
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
   };
 
   const navLinks = [
@@ -42,7 +55,7 @@ const NavBar = () => {
                 key={link.key} 
                 href={link.href} 
                 onClick={() => setActiveLink(link.key)} 
-                className={`${activeLink === link.key ? "text-primary" : ""}`}
+                className={`${pathname === link.href ? "text-primary" : ""} ${activeLink === link.key ? "text-primary" : ""}`}
               >
                 {link.label}
               </Link>
@@ -50,17 +63,17 @@ const NavBar = () => {
           </div>
         </div>
         <div className="flex gap-x-4 items-center">
-        <div className="relative inline-block">
-          <select className="block appearance-none w-full bg-white hover:border-green-500 px-4 py-2 pr-8 rounded focus:outline-none focus:shadow-outline">
-            <option>EN</option>
-            <option>AM</option>
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-green-500">
-            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M10 12l-6-6h12l-6 6z"/>
-            </svg>
+          <div className="relative inline-block">
+            <select className="block appearance-none w-full bg-white hover:border-green-500 px-4 py-2 pr-8 rounded focus:outline-none focus:shadow-outline">
+              <option>EN</option>
+              <option>AM</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-green-500">
+              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M10 12l-6-6h12l-6 6z"/>
+              </svg>
+            </div>
           </div>
-        </div>
           <div className="hidden md:flex bg-primary text-white px-6 py-3 rounded-lg">
             <Link href="/contact">Contact Us</Link>
           </div>
@@ -71,8 +84,11 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-      {menuOpen && (
-        <div className="md:hidden flex flex-col items-center mt-3 space-y-2 p-4 w-full bg-white shadow-lg rounded-lg">
+      <div className={`fixed top-0 left-0 h-screen w-full bg-black bg-opacity-50 md:bg-opacity-0 z-50 transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+        <div className={`md:hidden flex flex-col items-center mt-3 space-y-2 p-4 w-full bg-white shadow-lg rounded-lg transform transition-transform duration-300 ${menuOpen ? "translate-y-0" : "-translate-y-full"}`}>
+          <button onClick={closeMenu} className="absolute top-0 right-0 m-4 text-3xl">
+            <HiX />
+          </button>
           {navLinks.map((link) => (
             <Link 
               key={link.key} 
@@ -87,7 +103,7 @@ const NavBar = () => {
             <Link href="/contact">Contact Us</Link>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
