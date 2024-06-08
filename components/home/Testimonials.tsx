@@ -13,18 +13,26 @@ import {
 
 const Testimonials = () => {
   return (
-    <div className="w-full flex flex-col items-center gap-y-10">
+    <div className="w-full flex flex-col items-center">
       <div
         style={{
           backgroundColor: "rgba(0, 182, 89, 0.05)",
         }}
-        className="w-48 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg"
+        className="w-48 mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg"
       >
         TESTIMONIAL
       </div>
       <h2 className="font-semibold text-2xl lg:text-4xl">
         What our customers say about as
       </h2>
+      <div className="hidden lg:flex relative  -rotate-45  lg:-top-2 left-72 ">
+        <Image
+          src="/curlyarrow.svg"
+          alt="curly green arrow"
+          width={100}
+          height={100}
+        />
+      </div>
       <Carousel className="w-full ">
         <div className="hidden xl:flex absolute -bottom-12 left-[230px] ">
           <Image

@@ -15,12 +15,12 @@ const values = [
 
 const OurBelieve = () => {
   return (
-    <div className=" w-full  flex flex-col items-center gap-y-10">
+    <div className=" w-full  flex flex-col items-center">
       <div
         style={{
           backgroundColor: "rgba(0, 182, 89, 0.05)",
         }}
-        className="w-48 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg"
+        className="w-48 mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg"
       >
         {" "}
         OUR BELEIVE
@@ -28,6 +28,14 @@ const OurBelieve = () => {
       <h2 className="font-semibold text-2xl lg:text-4xl">
         Our Guiding Principles
       </h2>
+      <div className="hidden lg:flex relative  -rotate-45 lg:-top-2 left-48 ">
+        <Image
+          src="/curlyarrow.svg"
+          alt="curly green arrow"
+          width={100}
+          height={100}
+        />
+      </div>
       <div className="w-full flex flex-col gap-y-20 xl:gap-y-0 xl:flex-row">
         <div className="flex flex-col gap-y-20 w-full ">
           <div className=" flex flex-col">

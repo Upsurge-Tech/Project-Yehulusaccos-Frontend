@@ -43,11 +43,11 @@ const OurUniqeness = () => {
           className="h-full object-cover rounded-xl lg:rounded-3xl"
           alt="2 plants in a jar with cents"
         />
-        <div className="hidden xl:block relative rotate-45 top-28  right-[600px]">
+        <div className="hidden lg:block relative rotate-45 -top-72 xl:top-28 right-36  xl:right-[400px] 2xl:right-[600px]">
           <Image
             src="/curlyarrow.svg"
             alt="curly green arrow"
-            width={150}
+            width={100}
             height={100}
           />
         </div>
