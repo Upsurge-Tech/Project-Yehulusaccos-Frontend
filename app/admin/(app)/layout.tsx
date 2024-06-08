@@ -44,14 +44,66 @@ const Layout = ({ children }: Props) => {
 export default Layout
 
 const AdminSideBar = () => {
-  return <div>side</div>
+  return (
+    <nav className='border h-screen py-9 flex flex-col items-center gap-9'>
+      <Link href='/home' className=''>
+        <Image
+          src={Logo2}
+          alt='imageLogo'
+          width={70}
+          height={70}
+          className='relative w-[50px] h-[50px] md:w-[70px]  md:h-[70px]'
+        />
+      </Link>
+
+      <div className='flex-1 flex flex-col'>
+        {navLinks.map(({ href, label, Icon }) => (
+          <NavLink
+            className=' flex justify-center '
+            activeClassName='bg-primary/10 text-primary'
+            nonActiveClassName=''
+            key={href}
+            href={href}
+          >
+            <Button
+              variant={'ghost'}
+              className='flex gap-2 items-center py-2 px-12'
+            >
+              <Icon className='text-2xl' />
+              <span>{label}</span>
+            </Button>
+          </NavLink>
+        ))}
+      </div>
+
+      <Button variant={'ghost'} className='w-full'>
+        <div className='flex gap-2 items-center'>
+          <IoLogOut className='text-2xl' />
+          <span className='text-md'>Logout</span>
+        </div>
+      </Button>
+    </nav>
+  )
 }
 
 const AdminNavbar = () => {
   return (
     <nav className='border'>
-      <div className='container flex items-center justify-between '>
-        <Link href='/home'>
+      <div className='container flex items-center justify-between md:p-3 '>
+        <div className='flex flex-col lg:flex-row lg:justify-end'>
+          <h1>
+            <span className='font-bold text-lg'>Welcome to admin panel, </span>
+            <span className='text-sm'>
+              Here you can view, add, edit, and delete news
+            </span>
+          </h1>
+        </div>
+        <Link href={'/news'}>
+          <Button className='shadow-lg shadow-primary/20'>
+            Visit On Website
+          </Button>
+        </Link>
+        <Link href='/home' className='md:hidden'>
           <Image
             src={Logo2}
             alt='imageLogo'
@@ -60,50 +112,52 @@ const AdminNavbar = () => {
             className='relative w-[50px] h-[50px] md:w-[70px]  md:h-[70px]'
           />
         </Link>
-        <h1>Admin Panel</h1>
-        <Sheet>
-          <SheetTrigger>
-            <HiMenuAlt2 className='text-3xl' />
-          </SheetTrigger>
-          <SheetContent className='flex flex-col'>
-            <SheetHeader>
-              <SheetTitle>Welcome to admin panel</SheetTitle>
-              <SheetDescription>
-                Here you can view, add, edit, and delete news
-              </SheetDescription>
-            </SheetHeader>
+        <h1 className='md:hidden'>Admin Panel</h1>
+        <div className='md:hidden'>
+          <Sheet>
+            <SheetTrigger>
+              <HiMenuAlt2 className='text-3xl' />
+            </SheetTrigger>
+            <SheetContent className='flex flex-col'>
+              <SheetHeader>
+                <SheetTitle>Welcome to admin panel</SheetTitle>
+                <SheetDescription>
+                  Here you can view, add, edit, and delete news
+                </SheetDescription>
+              </SheetHeader>
 
-            <div className='flex-1 pt-6 flex flex-col gap-2'>
-              <Link href='/news'>
-                <Button className='w-full'>Visit On Website</Button>
-              </Link>
-              {navLinks.map(({ href, label, Icon }) => (
-                <NavLink
-                  className=' flex justify-center'
-                  activeClassName='bg-primary/10 py-2 text-primary'
-                  nonActiveClassName=''
-                  key={href}
-                  href={href}
-                >
-                  <SheetClose>
+              <div className='flex-1 pt-6 flex flex-col gap-2'>
+                <Link href='/news'>
+                  <Button className='w-full'>Visit On Website</Button>
+                </Link>
+                {navLinks.map(({ href, label, Icon }) => (
+                  <NavLink
+                    className=' flex justify-center py-2'
+                    activeClassName='bg-primary/10  text-primary'
+                    nonActiveClassName=''
+                    key={href}
+                    href={href}
+                  >
+                    <SheetClose>
+                      <div className='flex gap-2 items-center'>
+                        <Icon className='text-2xl' />
+                        <span>{label}</span>
+                      </div>
+                    </SheetClose>
+                  </NavLink>
+                ))}
+                <div className='flex-1 flex flex-col justify-end'>
+                  <Button variant={'ghost'}>
                     <div className='flex gap-2 items-center'>
-                      <Icon className='text-2xl' />
-                      <span>{label}</span>
+                      <IoLogOut className='text-2xl' />
+                      <span className='text-md'>Logout</span>
                     </div>
-                  </SheetClose>
-                </NavLink>
-              ))}
-              <div className='flex-1 flex flex-col justify-end'>
-                <Button variant={'ghost'}>
-                  <div className='flex gap-2 items-center'>
-                    <IoLogOut className='text-2xl' />
-                    <span className='text-md'>Logout</span>
-                  </div>
-                </Button>
+                  </Button>
+                </div>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </nav>
   )
