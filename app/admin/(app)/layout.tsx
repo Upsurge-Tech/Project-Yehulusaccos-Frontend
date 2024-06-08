@@ -31,7 +31,7 @@ interface Props {
 const Layout = ({ children }: Props) => {
   return (
     <div className='flex'>
-      <div className=''>
+      <div className='hidden md:block'>
         <AdminSideBar />
       </div>
       <div className='flex-1'>
@@ -89,16 +89,16 @@ const AdminSideBar = () => {
 const AdminNavbar = () => {
   return (
     <nav className='border'>
-      <div className='container flex items-center justify-between md:p-3 '>
-        <div className='flex flex-col lg:flex-row lg:justify-end'>
-          <h1>
+      <div className='container flex items-center justify-between py-3 '>
+        <div className='hidden md:flex flex-col lg:flex-row lg:justify-end '>
+          <h1 className=''>
             <span className='font-bold text-lg'>Welcome to admin panel, </span>
             <span className='text-sm'>
               Here you can view, add, edit, and delete news
             </span>
           </h1>
         </div>
-        <Link href={'/news'}>
+        <Link href={'/news'} className='hidden md:inline-block'>
           <Button className='shadow-lg shadow-primary/20'>
             Visit On Website
           </Button>
