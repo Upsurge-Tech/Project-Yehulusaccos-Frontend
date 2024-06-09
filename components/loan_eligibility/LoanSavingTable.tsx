@@ -10,16 +10,25 @@ const rows = [
 const LoanSavingTable = () => {
   return (
     <div className="relative overflow-x-auto place-self-center md:mr-5 lg:mr-0 lg:place-self-end w-full sm:w-[400px] lg:w-[500px] xl:w-[600px]">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right  border-[1px] border-primary/90">
         <thead className="text-xs text-gray-700 uppercase bg-green-200 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" className="px-6 py-3">
+          <tr className="border-[1px] border-primary/90">
+            <th
+              scope="col"
+              className="px-6 py-3 border-[1px] border-primary/90"
+            >
               Days
             </th>
-            <th scope="col" className="px-6 py-3">
+            <th
+              scope="col"
+              className="px-6 py-3 border-[1px] border-primary/90"
+            >
               Interest(%)
             </th>
-            <th scope="col" className="px-6 py-3">
+            <th
+              scope="col"
+              className="px-6 py-3 border-[1px] border-primary/90"
+            >
               Insurance(%)
             </th>
           </tr>
@@ -28,11 +37,17 @@ const LoanSavingTable = () => {
           {rows.map((row) => (
             <tr
               key={row.days}
-              className="text-gray-50 bg-primary/65 border-b dark:bg-gray-800 dark:border-gray-700"
+              className="text-gray-50 bg-primary/65 border-[1px] border-primary/90"
             >
-              <td className="px-6 py-4">{row.days} </td>
-              <td className="px-6 py-4">{row.interest} %</td>
-              <td className="px-6 py-4">{row.insurance} %</td>
+              <td className="px-6 py-4 border-[1px] border-primary/90">
+                {row.days}{" "}
+              </td>
+              <td className="px-6 py-4 border-[1px] border-primary/90">
+                {row.interest} %
+              </td>
+              <td className="px-6 py-4 border-[1px] border-primary/90">
+                {row.insurance} %
+              </td>
             </tr>
           ))}
         </tbody>
