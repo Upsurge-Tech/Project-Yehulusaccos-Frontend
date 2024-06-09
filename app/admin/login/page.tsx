@@ -22,10 +22,14 @@ const Login = () => {
           const res = (await signIn("credentials", {
             ...formState,
             redirect: false,
-          })) as { status: number };
+          })) as { status: number; error?: string };
           console.log(res);
-          if (res.status === 401) {
-            throw new Error("Wrong email or password");
+          if (error) {
+            const errorString =
+              res.error === "CredentialsSignin"
+                ? "Invalid Credentials"
+                : res.error;
+            throw new Error(errorString);
           }
           router.push("/admin/posts");
         } catch (e) {
