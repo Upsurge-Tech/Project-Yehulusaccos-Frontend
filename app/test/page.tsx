@@ -7,7 +7,7 @@ import { adminTable } from '@/db/schema'
 const Test = async () => {
   const fetchAdmins = async () => {
     'use server'
-    const res = db.select().from(adminTable)
+    const res = await db.select().from(adminTable)
     return res
   }
   const data = await fetchAdmins()
