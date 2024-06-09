@@ -28,7 +28,7 @@ const LoanSavingTable = () => {
           {rows.map((row) => (
             <tr
               key={row.days}
-              className="text-gray-50 bg-green-300 border-b dark:bg-gray-800 dark:border-gray-700"
+              className="text-gray-50 bg-primary/65 border-b dark:bg-gray-800 dark:border-gray-700"
             >
               <td className="px-6 py-4">{row.days} </td>
               <td className="px-6 py-4">{row.interest} %</td>
