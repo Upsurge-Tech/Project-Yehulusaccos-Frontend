@@ -82,8 +82,8 @@ const ContactForm = () => {
             name="message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            rows="4"
             required
+            rows={4}
             className="w-full p-2 border rounded border-gray-400 shadow-sm bg-transparent focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50"
           ></textarea>
         </div>
