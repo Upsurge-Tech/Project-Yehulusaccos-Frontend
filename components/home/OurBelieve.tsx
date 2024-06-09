@@ -17,13 +17,12 @@ const OurBelieve = () => {
   return (
     <div className=" w-full  flex flex-col items-center">
       <div className="bg-primarySoft w-48 mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
-        {" "}
         OUR BELEIVE
       </div>
       <h2 className="font-semibold text-2xl lg:text-4xl">
         Our Guiding Principles
       </h2>
-      <div className="hidden lg:flex relative  -rotate-45 lg:-top-2 left-48 ">
+      <div className="hidden xl:flex relative  -rotate-45 lg:-top-2 left-48 ">
         <Image
           src="/curlyarrow.svg"
           alt="curly green arrow"
@@ -31,33 +30,33 @@ const OurBelieve = () => {
           height={100}
         />
       </div>
-      <div className="w-full flex flex-col gap-y-20 xl:gap-y-0 xl:flex-row">
-        <div className="flex flex-col gap-y-5 lg:gap-y-20 w-full ">
-          <div className=" flex flex-col">
+      <div className="w-full flex flex-col mt-10 xl:mt-auto gap-y-7 xl:gap-y-20 xl:flex-row">
+        <div className="flex flex-col items-center lg:items-start gap-y-5 xl:gap-y-20 w-full ">
+          <div className=" flex self-center flex-col w-3/4 xl:w-full">
             <Image
               src={"/threecircles.svg"}
               width={30}
               height={30}
               alt="three circles"
             />
-            <h3 className="text-lg font-semibold pt-5">Vision</h3>
+            <h3 className="text-lg font-semibold pt-2 xl:pt-5">Vision</h3>
             <p className="text-gray-600 text-sm">Access to finance for all</p>
           </div>
-          <div className="flex flex-col">
+          <div className="flex self-center flex-col w-3/4 xl:w-full">
             <Image
               src={"/briefcase.svg"}
               width={30}
               height={30}
               alt="briefcase"
             />
-            <h3 className="text-lg font-semibold pt-5">Mission</h3>
+            <h3 className="text-lg font-semibold pt-2 xl:pt-5">Mission</h3>
             <p className="text-gray-600 text-sm">
               Providing savings and credit services easily with modern
               technology
             </p>
           </div>
         </div>
-        <div className="flex flex-col w-full gap-y-5 ">
+        <div className="flex flex-col self-center w-3/4 xl:w-full gap-y-2 xl:gap-y-5 ">
           <Image
             src={"/rocket.svg"}
             width={30}

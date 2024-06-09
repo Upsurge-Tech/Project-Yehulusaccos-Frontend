@@ -22,10 +22,10 @@ const OurUniqeness = () => {
         >
           OUR UNIQENESS
         </div>
-        <h2 className="font-semibold text-2xl lg:text-4xl">
+        <h2 className="font-semibold text-2xl self-center xl:self-auto lg:text-4xl">
           What makes us different?
         </h2>
-        <div className="flex flex-col gap-y-5">
+        <div className="flex flex-col gap-y-5 self-center xl:self-auto xl:w-full w-3/4">
           {uniqeness.map((unique) => (
             <div key={unique} className="flex  gap-x-5  text-gray-500">
               <div>
@@ -36,7 +36,7 @@ const OurUniqeness = () => {
           ))}
         </div>
       </div>
-      <div className="place-self-center h-[300px] sm:h-[500px] w-4/5 xl:w-full order-1 xl:order-2 relative flex flex-col items-center justify-center rounded-3xl">
+      <div className="place-self-center h-[300px] sm:h-[500px] w-3/4 xl:w-full order-1 xl:order-2 relative flex flex-col items-center justify-center rounded-3xl">
         <Image
           src="/plantsWithCents.svg"
           fill

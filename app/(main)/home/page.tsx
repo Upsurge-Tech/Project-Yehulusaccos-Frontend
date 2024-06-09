@@ -8,7 +8,7 @@ import Metrics from "@/components/home/Metrics";
 
 const HomePage = () => {
   return (
-    <div className="container overflow-hidden xl:overflow-visible my-20 flex flex-col w-full gap-y-5 md:gap-y-48 min-h-screen">
+    <div className="container overflow-hidden xl:overflow-visible my-20 flex flex-col w-full gap-y-5 md:gap-y-16 xl:gap-y-48 min-h-screen">
       <Intro />
       <OurBelieve />
       <OurUniqeness />
