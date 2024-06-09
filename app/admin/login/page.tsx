@@ -48,20 +48,20 @@ const Login = () => {
     }
   };
   return (
-    <main className="flex flex-col gap-6">
-      <nav className="container py-2 border flex justify-center">
+    <main className="flex flex-col md:flex-row gap-6 min-h-screen">
+      <nav className="bg-primarySoft container py-2 border flex justify-center items-center">
         <Link href="/home" className="">
           <Image
             src={Logo2}
             alt="imageLogo"
             width={70}
             height={70}
-            className="relative w-[50px] h-[50px] md:w-[70px]  md:h-[70px]"
+            className="relative w-[50px] h-[50px] md:w-[200px]  md:h-[200px]"
           />
         </Link>
       </nav>
-      <div className="container">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <div className="flex-1 md:flex-auto container flex flex-col justify-center">
+        <form onSubmit={handleSubmit} className="m-auto  flex flex-col gap-6 ">
           <h1 className="text-2xl font-bold ">Admin Login Page</h1>
           <div>
             <Label htmlFor="email">Email</Label>
