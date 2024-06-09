@@ -10,10 +10,10 @@
     "prettier-fix": "prettier --write '**/*.{ts,tsx}'"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.3.3",
     "@googlemaps/js-api-loader": "^1.16.6",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
-    "@react-google-maps/api": "^2.19.3",
     "@types/googlemaps": "^3.43.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

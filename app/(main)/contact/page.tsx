@@ -14,35 +14,35 @@ const ContactPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="space-y-7 md:pt-14">
+      <div className="space-y-7 md:pt-14 pt-8">
         <h1 className='bg-[#00B6590D] text-primary px-6 py-3 font-bold text-center'>CONTACT US</h1>
         <div className='flex md:translate-x-10'>
           <p className='text-4xl font-semibold'>Get in touch</p>
           <Image src={Vector} alt='vectorimage' className='hidden md:inline-block' />
         </div>
       </div>
-      <div className="flex justify-between gap-x-10  md:w-[75%] w-[90%] py-10">
-        <div className='hidden md:inline-block flex-1 flex-col'>
-          <div className="relative w-full h-full">
+      <div className="flex flex-col md:flex-row justify-between gap-x-10 md:w-[75%] w-[90%] py-10">
+        <div className='md:inline-block flex-1 flex-col'>
+          <div className="relative w-full h-64 md:h-full">
             <Image
               src={plant}
               fill
               className="h-full rounded-xl lg:rounded-3xl"
               alt="2 plants in a jar with cents"
             />
-            <div className="ripple absolute left-30 bottom-60 transform -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-full flex items-center justify-center bg-white w-20 h-20">
+            <div className="ripple absolute md:left-30 translate-x-10 -translate-y-8 md:bottom-60 transform md:-translate-x-1/2 md:-translate-y-1/2 shadow-xl rounded-full flex items-center justify-center bg-white h-14 w-14 md:w-20 md:h-20">
               <BiSolidMessageRounded className="text-2xl" size={40} />
-              <div className="absolute bottom-10 right-14 bg-primary w-32 h-10 flex justify-center items-center px-3 text-center rounded-full text-white">
+              <div className="absolute md:bottom-10 md:right-14 translate-x-14 md:translate-x-0 bg-primary w-20 md:w-32 h-10 flex justify-center items-center px-3 text-center rounded-full text-white">
                 <p className="text-sm">Sending...</p>
               </div>
             </div>
-            <div className="absolute right-1/3 top-30 transform translate-x-1/2 translate-y-24 shadow-xl rounded-full flex items-center justify-center bg-white h-20 w-20">
+            <div className="absolute md:right-1/3 translate-y-56 translate-x-40 md:top-30 transform md:translate-x-1/2 md:translate-y-24 shadow-xl rounded-full flex items-center justify-center bg-white h-14 w-14 md:h-20 md:w-20">
               <FaPhoneVolume className="text-2xl"/>
-              <div className="absolute -translate-y-8 left-14 bg-primary w-32 h-10 flex justify-center items-center px-3 text-center rounded-full text-white">
+              <div className="absolute md:-translate-y-8 translate-x-14 md:translate-x-0 md:left-14 bg-primary w-20 md:w-32 h-10 flex justify-center items-center px-3 text-center rounded-full text-white">
                 <p className="text-sm">Calling...</p>
               </div>
             </div>
-            <div className="w-full flex items-center absolute bottom-20 mx-auto">
+            <div className="hidden md:flex w-full items-center absolute bottom-10 md:bottom-20 mx-auto">
               <FaPhoneVolume className='text-primary translate-x-[120px]'/>
               <p className='mx-auto'>+251937999995 / +251937999996</p>
           </div>
