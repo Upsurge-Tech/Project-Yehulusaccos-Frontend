@@ -22,7 +22,7 @@ const Intro = () => {
           <Button className="px-6 py-3">Contact Us</Button>
         </Link>
       </div>
-      <div className="order-1 xl:order-2 relative h-[500px] w-full flex items-center justify-center rounded-3xl">
+      <div className=" place-self-center mx-5 order-1 xl:order-2 relative h-[300px] sm:h-[500px] w-4/5 xl:w-full  flex items-center justify-center rounded-3xl">
         <Image
           src="/_DSC3225-1.jpg"
           fill
@@ -37,18 +37,18 @@ const Intro = () => {
             height={100}
           />
         </div>
-        <div className=" absolute -left-16 xl:-left-24 top-10 h-14 rounded-lg items-center px-4 shadow-xl bg-white flex gap-4">
-          <FaCarSide className="text-primary text-2xl" />
-          <p className="font-semibold">Small business</p>
+        <div className=" absolute -left-10 md:-left-16 xl:-left-24 top-10 h-8 sm:h-14 rounded-lg items-center px-1 sm:px-4 shadow-xl bg-white flex gap-4">
+          <FaCarSide className="text-primary text-lg sm:text-2xl" />
+          <p className="font-semibold text-sm sm:text-md">Small business</p>
         </div>
-        <div className=" absolute -bottom-7  h-14 rounded-lg items-center px-4 shadow-xl bg-white flex gap-4">
-          <IoHome className="text-primary text-2xl" />
-          <p className="font-semibold">Individuals</p>
+        <div className=" absolute -bottom-7 h-8 sm:h-14 rounded-lg items-center px-1 sm:px-4 shadow-xl bg-white flex gap-4">
+          <IoHome className="text-primary text-lg sm:text-2xl" />
+          <p className="font-semibold text-sm sm:text-md">Individuals</p>
         </div>
-        <div className=" absolute right-10 bottom-24 xl:bottom-auto xl:right-10 2xl:-right-10 shadow-xl rounded-full flex items-center justify-center bg-white h-16 w-16">
-          <FaPeopleGroup className="text-primary text-2xl" />
-          <div className="absolute bottom-8 left-10 bg-primary w-32 h-10 flex justify-center items-center px-3 text-center rounded-full text-white">
-            <p className="text-sm">Small business thrive</p>
+        <div className=" absolute right-12 md:right-10 bottom-24 xl:bottom-auto xl:right-10 2xl:-right-10 shadow-xl rounded-full flex items-center justify-center bg-white h-10 w-10 sm:h-16 sm:w-16">
+          <FaPeopleGroup className="text-primary text-lg lg:text-2xl" />
+          <div className="absolute sm:bottom-8 bottom-7 left-2 sm:left-10 bg-primary w-32 h-8 sm:h-10 flex justify-center items-center px-2 sm:px-3 text-center rounded-full text-white">
+            <p className="sm:text-sm text-xs">Small business thrive</p>
           </div>
         </div>
       </div>

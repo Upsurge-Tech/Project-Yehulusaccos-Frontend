@@ -32,7 +32,7 @@ const OurBelieve = () => {
         />
       </div>
       <div className="w-full flex flex-col gap-y-20 xl:gap-y-0 xl:flex-row">
-        <div className="flex flex-col gap-y-20 w-full ">
+        <div className="flex flex-col gap-y-5 lg:gap-y-20 w-full ">
           <div className=" flex flex-col">
             <Image
               src={"/threecircles.svg"}
