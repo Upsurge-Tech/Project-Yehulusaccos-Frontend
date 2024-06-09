@@ -1,25 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode } from "react";
 import Logo2 from "@/public/assets/Logo2.png";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { HiMenuAlt2, HiX } from "react-icons/hi";
-import { link } from "fs";
+
 import { Button } from "@/components/ui/button";
-import { RiFileListFill } from "react-icons/ri";
-import { MdAddBox } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import NavLink from "@/components/NavLink";
 import { IconType } from "react-icons";
-import AdminNavbar from "@/components/AdminNavBar";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const AdminSideBar = ({
   navLinks,
@@ -58,7 +48,13 @@ const AdminSideBar = ({
         ))}
       </div>
 
-      <Button variant={"ghost"} className="w-full">
+      <Button
+        variant={"ghost"}
+        className="w-full"
+        onClick={async () => {
+          await signOut({ redirect: true, callbackUrl: "/admin/login" });
+        }}
+      >
         <div className="flex gap-2 items-center">
           <IoLogOut className="text-2xl" />
           <span className="text-md">Logout</span>
