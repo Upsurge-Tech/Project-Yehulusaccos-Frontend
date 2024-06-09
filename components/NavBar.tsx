@@ -65,7 +65,7 @@ const NavBar = () => {
           <div className="relative inline-block">
             <select className="block appearance-none w-full bg-white hover:border-green-500 px-4 py-2 pr-8 rounded focus:outline-none focus:shadow-outline">
               <option>EN</option>
-              <option>AM</option>
+              <option>አማ</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-green-500">
               <svg
