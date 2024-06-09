@@ -1,62 +1,28 @@
 import React, { useState } from 'react';
-import emailjs from '@emailjs/browser';
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    fullname: '',
-    email: '',
-    phone: '',
-    city: '',
-    reason: '',
-    message: ''
-  });
+  const [fullname, setFullname] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [city, setCity] = useState('');
+  const [reason, setReason] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const sendEmail = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    
-    const templateParams = {
-      fullname: formData.fullname,
-      email: formData.email,
-      phone: formData.phone,
-      city: formData.city,
-      reason: formData.reason,
-      message: formData.message
-    };
-
-    emailjs.sendForm(
-      process.env.REACT_APP_EMAILJS_SERVICE_ID ?? '',
-      process.env.REACT_APP_EMAILJS_TEMPLATE_ID ?? '',
-      e.target,
-      process.env.REACT_APP_EMAILJS_USER_ID
-    )
-    .then((result) => {
-      console.log(result.text);
-      alert('Message sent successfully!');
-    })
-    .catch((error) => {
-      console.error(error.text);
-      alert('Failed to send message. Please try again.');
-    });
-
-    e.target.reset();
   };
 
   return (
     <div className="w-full rounded-lg p-8">
-      <form onSubmit={sendEmail}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4 space-y-3">
           <label className="block text-gray-700">Full Name</label>
           <input
             type="text"
             placeholder="Your fullname"
             name="fullname"
-            value={formData.fullname}
-            onChange={handleChange}
+            value={fullname}
+            onChange={(e) => setFullname(e.target.value)}
             required
             className="w-full p-2 border border-gray-400 shadow-sm rounded bg-transparent focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50"
           />
@@ -67,8 +33,8 @@ const ContactForm = () => {
             type="email"
             placeholder="Your email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             className="w-full p-2 border border-gray-400 shadow-sm bg-transparent rounded focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50"
           />
@@ -79,8 +45,8 @@ const ContactForm = () => {
             type="tel"
             placeholder="Your phone number"
             name="phone"
-            value={formData.phone}
-            onChange={handleChange}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             required
             className="w-full p-2 border rounded border-gray-400 shadow-sm bg-transparent focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50"
           />
@@ -91,8 +57,8 @@ const ContactForm = () => {
             type="text"
             placeholder="Your city"
             name="city"
-            value={formData.city}
-            onChange={handleChange}
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
             required
             className="w-full p-2 border rounded border-gray-400 shadow-sm bg-transparent focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50"
           />
@@ -103,8 +69,8 @@ const ContactForm = () => {
             type="text"
             placeholder="Your reason"
             name="reason"
-            value={formData.reason}
-            onChange={handleChange}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
             required
             className="w-full p-2 border rounded border-gray-400 shadow-sm bg-transparent focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50"
           />
@@ -114,9 +80,9 @@ const ContactForm = () => {
           <textarea
             placeholder="Your message"
             name="message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             rows="4"
-            value={formData.message}
-            onChange={handleChange}
             required
             className="w-full p-2 border rounded border-gray-400 shadow-sm bg-transparent focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50"
           ></textarea>

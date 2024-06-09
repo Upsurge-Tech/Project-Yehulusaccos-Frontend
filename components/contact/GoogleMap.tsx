@@ -1,38 +1,32 @@
-"use client";
-import React, { useEffect, useRef } from "react";
-import { Loader } from "@googlemaps/js-api-loader";
+// src/Map.js
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-export default function Map() {
-  const mapRef = useRef<HTMLDivElement>(null);
-  
+const containerStyle = {
+  width: '100%',
+  height: '400px'
+};
+
+const Map = () => {
+    
   const lat = 7.050384829407225
   const lng = 38.47354272883577
 
-  useEffect(() => {
-    const initMap = async () => {
-      const loader = new Loader({
-        apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-        version: "weekly",
-      });
-
-      const { Map, Marker } = await loader.load().then(() => google.maps);
-
-      const position = { lat, lng };
-      const mapOptions: google.maps.MapOptions = {
-        center: position,
-        zoom: 17,
-      };
-
-      const map = new Map(mapRef.current as HTMLDivElement, mapOptions);
-      const marker = new Marker({ map, position });
-    };
-
-    initMap();
-  }, [lat, lng]);
+  const center = {
+    lat: lat,
+    lng: lng
+  };
 
   return (
-    <div className="w-full mx-auto h-[500px]">
-      <div ref={mapRef} className="w-full h-full" />
-    </div>
+    <LoadScript googleMapsApiKey="AIzaSyAKA9gCfSkN1u8SgFH9ZT2iwvwUY4glSp0">
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={17}
+      >
+        <Marker position={center} />
+      </GoogleMap>
+    </LoadScript>
   );
 }
+
+export default Map;
