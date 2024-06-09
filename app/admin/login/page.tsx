@@ -17,11 +17,12 @@ const Login = () => {
   const [error, setError] = useState<string>("");
   const [formState, setFormState] = useState({
     email: "abebe@gmail.com",
-    password: "abebe1",
+    password: "abebe",
   });
   const router = useRouter();
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
     try {
       const res = (await signIn("credentials", {
