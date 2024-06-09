@@ -17,12 +17,14 @@ import { IoLogOut } from "react-icons/io5";
 import NavLink from "@/components/NavLink";
 import { IconType } from "react-icons";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const AdminNavbar = ({
   navLinks,
 }: {
   navLinks: { href: string; label: string; Icon: IconType }[];
 }) => {
+  const router = useRouter();
   return (
     <nav className="border">
       <div className="container flex items-center justify-between py-3 ">
@@ -86,10 +88,9 @@ const AdminNavbar = ({
                   <Button
                     variant={"ghost"}
                     onClick={async () => {
-                      await signOut({
-                        redirect: true,
-                        callbackUrl: "/admin/login",
-                      });
+                      await signOut({ redirect: false });
+
+                      router.push("/admin/login");
                     }}
                   >
                     <div className="flex gap-2 items-center">

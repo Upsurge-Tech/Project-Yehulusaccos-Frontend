@@ -17,27 +17,25 @@ const Login = () => {
   const [error, setError] = useState<string>("");
   const [formState, setFormState] = useState({
     email: "abebe@gmail.com",
-    password: "abcd",
+    password: "abebe1",
   });
   const router = useRouter();
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("here");
     setIsLoading(true);
     try {
       const res = (await signIn("credentials", {
         ...formState,
         redirect: false,
       })) as { status: number; error?: string };
-      console.log(res);
-      if (error) {
+      if (res.error) {
         const errorString =
           res.error === "CredentialsSignin" ? "Invalid Credentials" : res.error;
+        console.log("errorString", errorString);
         throw new Error(errorString);
       }
       router.push("/admin/posts");
     } catch (e) {
-      console.log(e);
       if (e instanceof Error) {
         setError(e.message);
       } else {
@@ -87,9 +85,9 @@ const Login = () => {
               }
             />
           </div>
-          {isLoading && <p className="text-primary">Loading...</p>}
-          {error}
-          {error && <p className="text-destructive text-sm">{error}</p>}
+          {!isLoading && error && (
+            <p className="text-destructive text-sm">{error}</p>
+          )}
           <Button className="flex gap-3" type="submit">
             <Spinner spin={isLoading} />
             <span>Login</span>
