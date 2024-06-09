@@ -36,7 +36,7 @@ const OurUniqeness = () => {
           ))}
         </div>
       </div>
-      <div className="h-[500px] order-1 xl:order-2 relative w-full flex flex-col items-center justify-center rounded-3xl">
+      <div className="place-self-center h-[300px] sm:h-[500px] w-4/5 xl:w-full order-1 xl:order-2 relative flex flex-col items-center justify-center rounded-3xl">
         <Image
           src="/plantsWithCents.svg"
           fill
@@ -51,12 +51,12 @@ const OurUniqeness = () => {
             height={100}
           />
         </div>
-        <div className=" absolute -left-16 top-10 h-14 rounded-lg items-center px-4 shadow-xl bg-white flex gap-4">
-          <FaKey className="text-primary text-2xl" />
+        <div className=" absolute -left-10 sm:-left-16 top-10 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4">
+          <FaKey className="text-primary text-lg sm:text-2xl" />
           <p className="font-semibold">Accessible</p>
         </div>
-        <div className="absolute bottom-12 -right-16 h-14 rounded-lg items-center px-4 shadow-xl bg-white flex gap-4">
-          <FaStoreAlt className="text-primary text-2xl" />
+        <div className="absolute bottom-12 -right-10 sm:-right-16 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4">
+          <FaStoreAlt className="text-primary text-lg sm:text-2xl" />
           <p className="font-semibold">No material collateral</p>
         </div>
       </div>
