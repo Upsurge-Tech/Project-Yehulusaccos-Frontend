@@ -25,7 +25,7 @@ const Layout = ({ children }: Props) => {
     if (status === "unauthenticated") {
       router.push("/admin/login");
     }
-  }, [status]);
+  }, [status, router]);
 
   if (status !== "authenticated") {
     return null;

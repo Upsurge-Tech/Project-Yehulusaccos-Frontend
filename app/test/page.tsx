@@ -27,12 +27,12 @@ const DummyFetchArticles = async () => {
   const { data } = (await res.json()) as { data: Article[] };
   return (
     <div>
-      {data.map(({ title, thumbnail, contents, createdAt }) => (
-        <div className="border">
+      {data.map(({ id, title, thumbnail, contents, createdAt }) => (
+        <div className="border" key={id}>
           <h1 className="font-bold">{title}</h1>
           <Image alt={title} src={thumbnail} width={150} height={150} />
           {contents.map((content) => (
-            <>
+            <div key={content.id}>
               {content.type === "heading" && (
                 <h2 className="font-bold" key={content.id}>
                   {content.heading}
@@ -51,7 +51,7 @@ const DummyFetchArticles = async () => {
               {content.type === "paragraph" && (
                 <p key={content.id}>{content.paragraph}</p>
               )}
-            </>
+            </div>
           ))}
 
           <p>{new Date(createdAt).toDateString()}</p>
