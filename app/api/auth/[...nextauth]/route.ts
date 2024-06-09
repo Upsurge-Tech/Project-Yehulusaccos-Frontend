@@ -6,7 +6,7 @@ import db from "@/db";
 import { eq, and } from "drizzle-orm";
 import { adminTable } from "@/db/schema";
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
