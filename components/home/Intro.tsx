@@ -8,7 +8,7 @@ import Link from "next/link";
 const Intro = () => {
   return (
     <div className=" grid grid-cols-1 xl:grid-cols-2 gap-x-10 xl:gap-x-36 gap-y-10">
-      <div className=" order-2 xl:order-1 flex h-full flex-col items-start justify-center py-5 gap-y-14">
+      <div className=" order-2 xl:order-1 flex h-full flex-col items-start place-self-center justify-center py-5 gap-y-14 w-3/4 xl:w-full">
         <h2 className="font-semibold text-3xl lg:text-5xl">
           Inclusive development to all & for all!
         </h2>
