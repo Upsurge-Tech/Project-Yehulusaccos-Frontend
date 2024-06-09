@@ -1,12 +1,12 @@
-import { int, mysqlTable, varchar } from 'drizzle-orm/mysql-core'
+import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
-export const adminTable = mysqlTable('admin', {
-  id: int('id').autoincrement().primaryKey(),
-  email: varchar('email', { length: 50 }).notNull(),
-  password: varchar('password', { length: 50 }).notNull(),
-})
+export const adminTable = mysqlTable("admin", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 50 }).notNull(),
+  password: varchar("password", { length: 50 }).notNull(),
+});
 
-export type AdminSQL = typeof adminTable.$inferSelect
+export type AdminSQL = typeof adminTable.$inferSelect;
 
 // CREATE TABLE admin (
 //     id INT AUTO_INCREMENT PRIMARY KEY,

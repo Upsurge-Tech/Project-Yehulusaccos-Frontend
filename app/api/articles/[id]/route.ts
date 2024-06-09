@@ -4,7 +4,7 @@ import { articles } from "@/data/articles";
 
 export const GET = async (
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) => {
   const id = params.id;
   const article = articles.find((article) => article.id === Number(id));
