@@ -43,6 +43,8 @@ const AboutUs = () => {
             alt="green unequal strokes"
             width={50}
             height={100}
+            priority
+            sizes="(max-width: 768px) 100vw, 33vw"
           />
         </div>
       </div>

@@ -40,6 +40,7 @@ const OurOffice = () => {
                 className="rounded-xl object-cover"
                 src={`/assets/office_${index + 1}.jpg`}
                 alt="Office photo"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
             </CarouselItem>
           ))}

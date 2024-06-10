@@ -17,6 +17,7 @@ const CustomAvatar = ({ src, name, role }: Props) => {
           src={src}
           alt={name}
           fill
+          sizes="(max-width: 768px) 100vw, 33vw"
         />
       </div>
       <div className="flex flex-col gap-y-1">
