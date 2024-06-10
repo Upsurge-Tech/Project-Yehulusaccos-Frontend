@@ -32,10 +32,10 @@ const AboutUs = () => {
       </div>
       <div className=" place-self-center mx-5 order-1 xl:order-2 relative h-[300px] sm:h-[500px] w-4/5 xl:w-full  flex items-center justify-center rounded-3xl">
         <Image
-          src="/assets/About_1.JPG"
+          src="/assets/About_1.jpg"
           fill
           className=" object-cover rounded-xl lg:rounded-3xl"
-          alt="7 persons standing & 1 person sitting for a photoshoot"
+          alt="A person infront of receptionist."
         />
         <div className="hidden xl:block relative rotate-12 bottom-[250px] left-[265px] xl:left-[295px]   ">
           <Image
