@@ -29,16 +29,15 @@ const OurOffice = () => {
         </div>
       </div>
       <Carousel className="w-full ">
-        <CarouselContent className="-ml-1 py-3">
+        <CarouselContent className="mx-1 sm:mx-5 lg:mx-auto py-3">
           {Array.from({ length: 20 }).map((_, index) => (
             <CarouselItem
               key={index}
-              className="  basis-full lg:basis-1/2 2xl:basis-1/3"
+              className="relative mx-4 xl:mx-10 h-72 lg:h-96 basis-full lg:basis-1/2 "
             >
               <Image
-                width={700}
-                height={100}
-                className="rounded-xl"
+                fill
+                className="rounded-xl object-cover"
                 src={`/assets/office_${index + 1}.jpg`}
                 alt="Office photo"
               />
