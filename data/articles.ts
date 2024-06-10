@@ -49,7 +49,7 @@ const article: Article = {
 };
 export const articles: Article[] = [
   article,
-  ...new Array().fill(8).map((_, i) => ({
+  ...Array.from({ length: 6 }).map((_, i) => ({
     ...article,
     id: i + 2,
   })),
