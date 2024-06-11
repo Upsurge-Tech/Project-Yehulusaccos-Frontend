@@ -1,10 +1,7 @@
+"use client";
+
 const Posts = () => {
-  return (
-    <div>
-      Posts
-      <p>hello,</p>
-    </div>
-  );
+  return <div>Posts</div>;
 };
 
 export default Posts;
