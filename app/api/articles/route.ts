@@ -6,6 +6,7 @@ export const GET = async (request: NextRequest) => {
   const params = request.nextUrl.searchParams;
   const pageParam = params.get("page");
   const sizeParam = params.get("size");
+  const offsetParam = params.get("offset");
 
   if (pageParam === null) {
     return Response.json(
@@ -22,19 +23,15 @@ export const GET = async (request: NextRequest) => {
 
   const page = parseInt(pageParam);
   const size = parseInt(sizeParam);
+  const offset = offsetParam ? parseInt(offsetParam) : 0;
 
-  const numArticles = articles.length;
+  const afterOffsetArticles = articles.slice(offset);
+  const numArticles = afterOffsetArticles.length;
   const numPages = Math.ceil(numArticles / size);
-  if (page < 1 || page > numPages) {
-    return Response.json(
-      { error: `page, ${page}, must be between 1 and ${numPages}` },
-      { status: 200 }
-    );
-  }
 
   const startIndex = (page - 1) * size;
   const endIndex = Math.min(startIndex + size, numArticles);
-  const slicedArticles = articles.slice(startIndex, endIndex);
+  const slicedArticles = afterOffsetArticles.slice(startIndex, endIndex);
 
   console.log("pagination status:", JSON.stringify({ numPages, numArticles }));
   return Response.json({ data: slicedArticles, numPages });

@@ -47,10 +47,7 @@ const article: Article = {
     },
   ],
 };
-export const articles: Article[] = [
-  article,
-  ...Array.from({ length: 6 }).map((_, i) => ({
-    ...article,
-    id: i + 2,
-  })),
-];
+export const articles: Article[] = Array.from({ length: 10 }).map((_, i) => ({
+  ...article,
+  id: i + 1,
+}));
