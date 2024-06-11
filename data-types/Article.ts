@@ -20,10 +20,23 @@ export interface ImageContent {
   alt: string;
 }
 
+export interface YouTubeContent {
+  type: "youtube";
+  id: number;
+  articleId: number;
+  youtubeId: string;
+}
+
 export interface Article {
   id: number;
   title: string;
+  excerpt: string;
   thumbnail: string;
   createdAt: string; //a date string
-  contents: (HeadingContent | ParagraphContent | ImageContent)[];
+  contents: (
+    | HeadingContent
+    | ParagraphContent
+    | ImageContent
+    | YouTubeContent
+  )[];
 }
