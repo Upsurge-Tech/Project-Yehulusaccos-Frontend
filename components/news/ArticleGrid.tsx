@@ -1,49 +1,35 @@
-'use client';
+import React from "react";
+import ArticleCardMain from "./ArticleCardMain";
+import PaginationControls from "./PaginationControls";
+import articles from "@/data/articles";
 
-import React, { useState } from 'react';
-import ArticleCardMain from './ArticleCardMain';
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+const ArticleGrid = ({ searchParams }: { searchParams: any }) => {
+  const page = searchParams["page"] ?? "1";
+  const per_page = searchParams["per_page"] ?? "6";
 
+  const start = (Number(page) - 1) * Number(per_page);
+  const end = start + Number(per_page);
 
-const ArticleGrid = ({articles}) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const articlesPerPage = 6;
-
-  const totalPages = Math.ceil(articles.length / articlesPerPage);
-
-  const indexOfLastArticle = currentPage * articlesPerPage;
-  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const articlesToShow = articles.slice(start, end);
 
   return (
-    <div className="mx-auto p-4">
-      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 grid-rows-2 md:gap-10 sm:gap-5">
-        {currentArticles.map((article, index) => (
-          <ArticleCardMain key={index} image={article.thumbnail} paragraph={article.paragraph} title={article.title} date={article.createdAt} />
+    <div className="flex flex-col gap-4 items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+        {articlesToShow.map((article) => (
+          <ArticleCardMain
+            key={article.id}
+            image={article.thumbnail}
+            title={article.title}
+            paragraph={article.excerpt}
+            date={article.createdAt}
+          />
         ))}
       </div>
-
-      <div className="flex justify-between items-center mt-4">
-        <button
-          className="text-primary flex items-center gap-x-3"
-          onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
-          disabled={currentPage === 1}
-        >
-            <FaArrowLeft/> Previous 
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          className="text-primary flex gap-x-3 items-center"
-          onClick={() => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages))}
-          disabled={currentPage === totalPages}
-        >
-          Next <FaArrowRight/>
-        </button>
-      </div>
+      <PaginationControls
+        hasNextPage={end < articles.length}
+        hasPrevPage={start > 0}
+      />
     </div>
   );
 };
-
 export default ArticleGrid;

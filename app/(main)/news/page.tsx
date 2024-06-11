@@ -6,12 +6,17 @@ import ArticleCardMain from "@/components/news/ArticleCardMain";
 import ArticleCardSide from "@/components/news/ArticleCardSide";
 import ArticleGrid from "@/components/news/ArticleGrid";
 
+const NewsPage = ({
+  searchParams,
+}: {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+}) => {
+  const latestArticle1 = articles[0];
+  const latestArticles2 = [articles[1], articles[2]];
 
-const NewsPage = () => {
-  const latestArticle1 = articles.splice(0, 3);
-  const latestArticle2 = latestArticle1.splice(0, 1)[0];
-
-  return(
+  return (
     <div>
       <div className="space-y-16">
         <div className="space-y-7 md:pt-14 pt-8">
@@ -29,25 +34,34 @@ const NewsPage = () => {
         </div>
         <div className="md:w-[80%] mx-auto grid md:grid-cols-5 gap-x-6">
           <div className="md:col-span-2 col-span-1 md:p-0 p-4">
-            <ArticleCardMain image={latestArticle2.thumbnail} title={latestArticle2.title} date={latestArticle2.createdAt} paragraph={latestArticle2.paragraph} />
+            <ArticleCardMain
+              image={latestArticle1.thumbnail}
+              title={latestArticle1.title}
+              date={latestArticle1.createdAt}
+              paragraph={latestArticle1.excerpt}
+            />
           </div>
           <div className="md:col-span-3 col-span-1 flex flex-col gap-y-6 p-4 md:p-0">
-            {
-              latestArticle1.map((article, index) => (
-                <ArticleCardSide key={index} image={article.thumbnail} title={article.title} date={article.createdAt} paragraph={article.paragraph} />
-              ))
-            }
+            {latestArticles2.map((article, index) => (
+              <ArticleCardSide
+                key={index}
+                image={article.thumbnail}
+                title={article.title}
+                date={article.createdAt}
+                paragraph={article.excerpt}
+              />
+            ))}
           </div>
         </div>
       </div>
       <div className="w-[80%] mx-auto py-40 space-y-5">
         <h1 className="font-bold text-3xl px-3">Older News</h1>
         <div className="w-full">
-          <ArticleGrid articles={articles} />
+          <ArticleGrid searchParams={searchParams} />
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default NewsPage;
