@@ -50,4 +50,5 @@ const article: Article = {
 export const articles: Article[] = Array.from({ length: 10 }).map((_, i) => ({
   ...article,
   id: i + 1,
+  title: `${i + 1} ${article.title}`,
 }));
