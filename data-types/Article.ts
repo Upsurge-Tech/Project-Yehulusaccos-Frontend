@@ -44,38 +44,33 @@ export interface Article {
 export interface HeadingFormContent {
   type: "heading";
   heading: string;
-  error: string;
-  isDirty: boolean;
 }
 
 export interface ParagraphFormContent {
   type: "paragraph";
   paragraph: string;
-  error: string;
-  isDirty: boolean;
 }
 export interface ImageFormContent {
   type: "image";
   alt: string;
   file: File | null;
-  error: string;
-  isDirty: boolean;
 }
 export interface YouTubeFormContent {
+  elementId: string;
   type: "youtube";
   youtubeLink: string;
   error: string;
-  isDirty: boolean;
 }
 
+export type FormContent =
+  | HeadingFormContent
+  | ParagraphFormContent
+  | ImageFormContent
+  | YouTubeFormContent;
+
 export interface ArticleFormState {
-  title: { error: string; title: string; isDirty: boolean };
-  thumbnail: { error: string; thumbnail: File | null; isDirty: boolean };
+  title: string;
+  thumbnail: File | null;
   unknown: string;
-  contents: (
-    | HeadingFormContent
-    | ParagraphFormContent
-    | ImageFormContent
-    | YouTubeFormContent
-  )[];
+  contents: FormContent[];
 }
