@@ -38,7 +38,7 @@ const NavBar = () => {
     <div
       className={`py-3 px-3 md:px-7 w-full ${scrollActive ? "shadow-md" : ""}`}
     >
-      <div className="flex justify-between items-center">
+      <div className="container flex justify-between items-center">
         <Link
           href="/home"
           className="w-[50px] md:w-[70px] h-[50px] md:h-[70px]"
