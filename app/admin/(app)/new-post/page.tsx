@@ -9,111 +9,76 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { ArticleFormState } from "@/data-types/Article";
+import error from "next/error";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { IconType } from "react-icons";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { FaFileImage, FaParagraph, FaYoutube } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
+import { MdCancel, MdOutlineCleaningServices } from "react-icons/md";
 import { RiLayoutTop2Fill } from "react-icons/ri";
+import { saveArticle } from "./SaveFile";
 
-interface FormState {
-  title: { error: string; data: string };
-  thumbnail: { error: string; data: string };
-  unknown: string;
-  contents: {
-    error: string;
-    type: "heading" | "paragraph" | "image" | "youtube";
-    data: string;
-    alt: string | null;
-  }[];
-}
+const addButtons: {
+  Icon: IconType;
+  label: string;
+  type: "paragraph" | "image" | "heading" | "youtube";
+}[] = [
+  {
+    Icon: FaParagraph,
+    label: "Paragraph",
+    type: "paragraph",
+  },
+  {
+    Icon: FaFileImage,
+    label: "Image",
+    type: "image",
+  },
+  {
+    Icon: RiLayoutTop2Fill,
+    label: "Heading",
+    type: "heading",
+  },
+  {
+    Icon: FaYoutube,
+    label: "Youtube Video",
+    type: "youtube",
+  },
+];
+
 const NewPost = () => {
-  const [formState, setFormState] = useState<FormState>({
-    title: { error: "", data: "title" },
-    thumbnail: { error: "", data: "" },
+  const [formState, setFormState] = useState<ArticleFormState>({
+    title: { error: "", title: "title", isDirty: false },
+    thumbnail: { error: "", thumbnail: null, isDirty: false },
     unknown: "",
-    contents: [],
+    contents: [
+      { type: "heading", heading: "heading", error: "", isDirty: false },
+    ],
   });
 
-  const addButtons = [
-    {
-      Icon: FaParagraph,
-      label: "Paragraph",
-      onClick: () => {
-        setFormState({
-          ...formState,
-          unknown: "",
-          contents: [
-            ...formState.contents,
-            {
-              error: "",
-              type: "paragraph",
-              data: formState.unknown,
-              alt: null,
-            },
-          ],
-        });
-      },
-    },
-    {
-      Icon: FaFileImage,
-      label: "Image",
-      onClick: () => {
-        setFormState({
-          ...formState,
-          unknown: "",
-          contents: [
-            ...formState.contents,
-            {
-              error: "",
-              type: "image",
-              data: formState.unknown,
-              alt: "",
-            },
-          ],
-        });
-      },
-    },
-    {
-      Icon: RiLayoutTop2Fill,
-      label: "Heading",
-      onClick: () => {
-        setFormState({
-          ...formState,
-          unknown: "",
-          contents: [
-            ...formState.contents,
-            {
-              error: "",
-              type: "heading",
-              data: formState.unknown,
-              alt: null,
-            },
-          ],
-        });
-      },
-    },
-    {
-      Icon: FaYoutube,
-      label: "Youtube Video",
-      onClick: () => {
-        setFormState({
-          ...formState,
-          unknown: "",
-          contents: [
-            ...formState.contents,
-            {
-              error: "",
-              type: "youtube",
-              data: formState.unknown,
-              alt: null,
-            },
-          ],
-        });
-      },
-    },
-  ];
+  const [file, setFile] = useState<File | null>(null);
   return (
     <div>
+      <form
+        action=""
+        className="bg-red-500"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const formData = new FormData();
+          formData.append("image", file as Blob);
+          const res = await saveArticle(formData, formState);
+          console.log("reply for image upload", res);
+        }}
+      >
+        <Input
+          type="file"
+          accept="image/*"
+          name="image"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+        <Button type="submit">Upload</Button>
+      </form>
       <div className="flex justify-between pb-9">
         <h1 className="text-primary font-bold text-2xl">Add new post</h1>
         <Button className="bg-blue-600">Publish</Button>
@@ -125,22 +90,26 @@ const NewPost = () => {
             id="title"
             required
             placeholder="Enter title"
-            value={formState.title.data}
+            value={formState.title.title}
             onChange={(e) => {
               setFormState({
                 ...formState,
-                title: { ...formState.title, data: e.target.value },
+                title: {
+                  ...formState.title,
+                  title: e.target.value,
+                  isDirty: true,
+                },
               });
             }}
           />
         </div>
-        {formState.contents.map(({ error, type, data, alt }, i) => {
-          const id = i + type;
-          let label = "--";
-          if (type === "heading") label = "Heading";
-          if (type === "paragraph") label = "Paragraph";
-          if (type === "image") label = "Image";
-          if (type === "youtube") label = "Youtube Video";
+        {formState.contents.map((content, i) => {
+          const id = i + content.type;
+          const label =
+            i +
+            1 +
+            ". " +
+            addButtons.find((b) => b.type === content.type)?.label;
 
           return (
             <div key={i} className="relative">
@@ -155,50 +124,89 @@ const NewPost = () => {
               >
                 <MdCancel />
               </button>
+
               <Label htmlFor={id}>
                 {i + 1}.{label}
               </Label>
-              {type === "heading" && (
+              {content.type === "heading" && (
                 <Input
                   id={id}
-                  value={data}
+                  value={content.heading}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    const newContents = [...formState.contents];
-                    newContents[i] = {
-                      ...newContents[i],
-                      data: e.target.value,
-                      error: value === "" ? "Can not be empty" : "",
-                    };
+                    const newContents = [
+                      ...formState.contents.slice(0, i),
+                      {
+                        type: content.type,
+                        isDirty: true,
+                        heading: e.target.value,
+                        error: "",
+                      },
+                      ...formState.contents.slice(i + 1),
+                    ];
 
-                    setFormState({ ...formState, contents: newContents });
+                    setFormState({
+                      ...formState,
+                      contents: newContents,
+                    });
                   }}
                 />
               )}
-              {type === "paragraph" && (
+              {content.type === "paragraph" && (
                 <Textarea
                   id={id}
-                  value={data}
+                  value={content.paragraph}
                   rows={5}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    const newContents = [...formState.contents];
-                    newContents[i] = {
-                      ...newContents[i],
-                      data: e.target.value,
-                      error: value === "" ? "Can not be empty" : "",
-                    };
-                    setFormState({ ...formState, contents: newContents });
+                    const newContents = [
+                      ...formState.contents.slice(0, i),
+                      {
+                        type: content.type,
+                        isDirty: true,
+                        paragraph: e.target.value,
+                        error: "",
+                      },
+                      ...formState.contents.slice(i + 1),
+                    ];
+
+                    setFormState({
+                      ...formState,
+                      contents: newContents,
+                    });
                   }}
                 />
               )}
-              {type === "image" && (
-                <ImageInput id={id} onChange={() => {}} value="" />
+              {content.type === "image" && (
+                <div className="border p-2">
+                  <ImageInput
+                    id={id}
+                    onFile={(file) => {
+                      const newContents = [
+                        ...formState.contents.slice(0, i),
+                        {
+                          type: content.type,
+                          isDirty: true,
+                          file,
+                          error: "",
+                          alt: "",
+                        },
+                        ...formState.contents.slice(i + 1),
+                      ];
+
+                      setFormState({
+                        ...formState,
+                        contents: newContents,
+                      });
+                    }}
+                    file={content.file}
+                  />
+                </div>
               )}
-              {type === "youtube" && (
+              {content.type === "youtube" && (
                 <YoutubeInput id={id} onChange={() => {}} value="" />
               )}
-              {error && <p className="text-destructive text-sm">{error}</p>}
+              {error && (
+                <p className="text-destructive text-sm">{content.error}</p>
+              )}
             </div>
           );
 
@@ -216,11 +224,48 @@ const NewPost = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom" align="end">
                 <div className="flex gap-3 px-3 items-center  text-black/80">
-                  {addButtons.map(({ Icon, label, onClick }) => (
+                  {addButtons.map(({ Icon, label, type }) => (
                     <DropdownMenuItem
+                      onClick={() => {
+                        let content;
+                        if (type === "heading")
+                          content = {
+                            type,
+                            heading: formState.unknown,
+                            error: "",
+                            isDirty: false,
+                          };
+                        if (type === "paragraph")
+                          content = {
+                            type,
+                            paragraph: formState.unknown,
+                            error: "",
+                            isDirty: false,
+                          };
+                        if (type === "youtube")
+                          content = {
+                            type,
+                            youtubeLink: "",
+                            error: "",
+                            isDirty: false,
+                          };
+                        else if (type === "image")
+                          content = {
+                            type,
+                            alt: "",
+                            file: null,
+                            error: "",
+                            isDirty: false,
+                          };
+                        if (!content) throw new Error("Unknown type" + type);
+                        setFormState({
+                          ...formState,
+                          unknown: "",
+                          contents: [...formState.contents, content],
+                        });
+                      }}
                       key={label}
                       className="flex flex-col py-3"
-                      onClick={() => onClick()}
                     >
                       <Icon className="text-2xl" />
                       <p>{label}</p>
@@ -233,7 +278,16 @@ const NewPost = () => {
         </div>
         <div>
           <Label htmlFor="thumb">Thumbnail *</Label>
-          <ImageInput id="thumb" onChange={() => {}} value={""} />
+          <ImageInput
+            id="thumb"
+            onFile={(file) => {
+              setFormState({
+                ...formState,
+                thumbnail: { thumbnail: file, error: "", isDirty: true },
+              });
+            }}
+            file={formState.thumbnail.thumbnail}
+          />
         </div>
       </form>
     </div>
@@ -244,16 +298,69 @@ export default NewPost;
 
 const ImageInput = ({
   id,
-  onChange,
-  value,
+  onFile,
+  file,
 }: {
   id: string;
-  onChange: (url: string) => void;
-  value: string;
+  onFile: (file: File | null) => void;
+  file: File | null;
 }) => {
+  const [localUrl, setLocalUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!file) return;
+
+    const reader = new FileReader();
+    console.log("here");
+    reader.onload = (e) => {
+      const url = (e.target?.result as string) || null;
+      setLocalUrl(url);
+    };
+    reader.readAsDataURL(file);
+
+    return () => reader.abort();
+  }, [file]);
+
+  const ref = useRef<HTMLInputElement>(null);
+
   return (
-    <div>
-      <Input id={id} type="file" accept="image/*" />
+    <div className="relative max-w-[250px] border rounded">
+      <button
+        className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border shadown`}
+        onClick={(e) => {
+          console.log("here");
+          e.preventDefault();
+          ref.current?.value && (ref.current.value = "");
+          onFile(null);
+          setLocalUrl(null);
+        }}
+      >
+        <MdOutlineCleaningServices />
+      </button>
+
+      <label
+        htmlFor={id}
+        className={`${file ? "hidden" : ""}  p-3 flex gap-2 `}
+      >
+        <FaFileImage className="text-xl text-black/80" />
+        <span>Add Image</span>
+      </label>
+      <input
+        ref={ref}
+        id={id}
+        type="file"
+        accept="image/*"
+        onChange={(e) => onFile(e.target.files?.[0] || null)}
+        className="hidden"
+      />
+      {localUrl && (
+        <Image
+          src={localUrl}
+          alt=""
+          width={10}
+          height={10}
+          className="w-full max-h-[250px] object-contain bg-muted"
+        />
+      )}
     </div>
   );
 };
