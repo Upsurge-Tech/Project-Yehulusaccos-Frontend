@@ -59,7 +59,7 @@ const NewPost = () => {
     const state = formState;
     for (const content of state.contents) {
       if (content.type === "youtube" && content.error) {
-        // document.getElementById(content.elementId)?.focus();
+        document.getElementById(content.elementId)?.focus();
         return;
       }
     }
@@ -112,15 +112,16 @@ const NewPost = () => {
             addButtons.find((b) => b.type === content.type)?.label;
 
           const replaceContent = (content: FormContent) => {
-            const newContents = [
-              ...formState.contents.slice(0, i),
-              content,
-              ...formState.contents.slice(i + 1),
-            ];
-
-            setFormState({
-              ...formState,
-              contents: newContents,
+            setFormState((formState) => {
+              const newContents = [
+                ...formState.contents.slice(0, i),
+                content,
+                ...formState.contents.slice(i + 1),
+              ];
+              return {
+                ...formState,
+                contents: newContents,
+              };
             });
           };
 
@@ -181,12 +182,12 @@ const NewPost = () => {
                 <YoutubeInput
                   id={content.elementId}
                   error={content.error}
-                  onLinkChange={(youtubeLink) => {
+                  onLinkChange={(youtubeLink: string, error: string) => {
                     replaceContent({
                       elementId: content.elementId,
                       type: content.type,
                       youtubeLink,
-                      error: "",
+                      error,
                     });
                   }}
                   link={content.youtubeLink}
@@ -344,32 +345,43 @@ const YoutubeInput = ({
 }: {
   id: string;
   error: string;
-  onLinkChange: (url: string) => void;
+  onLinkChange: (link: string, error: string) => void;
   link: string;
 }) => {
-  const getVideoId = (): string | null => {
+  const getVideoId = (link: string): string | null => {
     try {
+      if (!link.includes("https://www.youtube.com/watch?v")) {
+        return null;
+      }
       const url = new URL(link);
       const params = new URLSearchParams(url.search);
       const videoId = params.get("v");
       return videoId || null;
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       return null;
     }
   };
 
-  const videoId = getVideoId();
+  const videoId = getVideoId(link);
   const thumbnail = `https://img.youtube.com/vi/${videoId}/0.jpg`;
 
   return (
     <div>
-      {error && <p className="text-destructive">{error}</p>}
+      {error && <p className="text-destructive text-sm">{error}</p>}
       <Input
         required
         id={id}
         value={link}
-        onChange={(e) => onLinkChange(e.target.value)}
+        onChange={(e) => {
+          const link = e.target.value;
+          onLinkChange(
+            link,
+            !getVideoId(link)
+              ? "Please paste a valid youtube link (eg: https://www.youtube.com/watch?v=Abc123Abc )"
+              : ""
+          );
+        }}
         placeholder="Paste the link to the video"
       />
 
@@ -379,7 +391,7 @@ const YoutubeInput = ({
             <FaYoutube className="absolute top-1/2 left-1/2 transform translate-x-[-50%] translate-y-[-50%] text-3xl text-white/80 " />
             <Image
               src={thumbnail}
-              alt={`Youtube link`}
+              alt={error ? "Broken Link" : `Youtube link`}
               width={250}
               height={250}
               className="rounded h-full w-full"
