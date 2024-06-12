@@ -8,7 +8,7 @@ interface Props {
 
 const MainLayout = ({ children }: Props) => {
   return (
-    <div className="flex flex-col   bg-stone-200">
+    <div className="flex flex-col   bg-stone-50">
       <NavBar />
       {children}
       <Footer />
