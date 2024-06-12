@@ -12,7 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArticleFormState } from "@/data-types/Article";
 import error from "next/error";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { IconType } from "react-icons";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { FaFileImage, FaParagraph, FaYoutube } from "react-icons/fa";
@@ -57,38 +58,46 @@ const NewPost = () => {
     ],
   });
 
-  const [file, setFile] = useState<File | null>(null);
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const state = formState;
+    if (
+      state.title.error ||
+      state.thumbnail.error ||
+      state.contents.some((c) => c.error)
+    ) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("images", state.thumbnail.thumbnail as Blob);
+    for (const content of state.contents) {
+      if (content.type === "image") {
+        formData.append("images", content.file as Blob);
+      }
+    }
+
+    console.log("submitting", state);
+    const copy = {
+      ...state,
+      contents: state.contents.map((c) =>
+        c.type === "image" ? { ...c, file: null } : c
+      ),
+    };
+    saveArticle(formData, copy);
+  };
+
   return (
     <div>
-      <form
-        action=""
-        className="bg-red-500"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const formData = new FormData();
-          formData.append("image", file as Blob);
-          const res = await saveArticle(formData, formState);
-          console.log("reply for image upload", res);
-        }}
-      >
-        <Input
-          type="file"
-          accept="image/*"
-          name="image"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
-        <Button type="submit">Upload</Button>
-      </form>
-      <div className="flex justify-between pb-9">
-        <h1 className="text-primary font-bold text-2xl">Add new post</h1>
-        <Button className="bg-blue-600">Publish</Button>
-      </div>
-      <form action="" className="flex flex-col gap-6">
+      <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-6">
+        <div className="flex justify-between pb-9">
+          <h1 className="text-primary font-bold text-2xl">Add new post</h1>
+          <Button className="bg-blue-600">Publish</Button>
+        </div>
         <div>
           <Label htmlFor="title">Title *</Label>
           <Input
             id="title"
-            required
             placeholder="Enter title"
             value={formState.title.title}
             onChange={(e) => {
@@ -153,6 +162,7 @@ const NewPost = () => {
               )}
               {content.type === "paragraph" && (
                 <Textarea
+                  required
                   id={id}
                   value={content.paragraph}
                   rows={5}
@@ -202,7 +212,27 @@ const NewPost = () => {
                 </div>
               )}
               {content.type === "youtube" && (
-                <YoutubeInput id={id} onChange={() => {}} value="" />
+                <YoutubeInput
+                  id={id}
+                  onLinkChange={(link) => {
+                    const newContents = [
+                      ...formState.contents.slice(0, i),
+                      {
+                        type: content.type,
+                        isDirty: true,
+                        youtubeLink: link,
+                        error: "",
+                      },
+                      ...formState.contents.slice(i + 1),
+                    ];
+
+                    setFormState({
+                      ...formState,
+                      contents: newContents,
+                    });
+                  }}
+                  link={content.youtubeLink}
+                />
               )}
               {error && (
                 <p className="text-destructive text-sm">{content.error}</p>
@@ -245,7 +275,8 @@ const NewPost = () => {
                         if (type === "youtube")
                           content = {
                             type,
-                            youtubeLink: "",
+                            youtubeLink:
+                              "https://www.youtube.com/watch?v=th8OswsAq6Q",
                             error: "",
                             isDirty: false,
                           };
@@ -325,7 +356,7 @@ const ImageInput = ({
   return (
     <div className="relative max-w-[250px] border rounded">
       <button
-        className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border shadown`}
+        className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
         onClick={(e) => {
           console.log("here");
           e.preventDefault();
@@ -367,16 +398,50 @@ const ImageInput = ({
 
 const YoutubeInput = ({
   id,
-  onChange,
-  value,
+  onLinkChange,
+  link,
 }: {
   id: string;
-  onChange: (url: string) => void;
-  value: string;
+  onLinkChange: (url: string) => void;
+  link: string;
 }) => {
+  const getVideoId = (): string | null => {
+    try {
+      const url = new URL(link);
+      const params = new URLSearchParams(url.search);
+      const videoId = params.get("v");
+      return videoId || null;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const videoId = getVideoId();
+  const thumbnail = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+
   return (
     <div>
-      <Input id={id} accept="image/*" />
+      <Input
+        id={id}
+        value={link}
+        onChange={(e) => onLinkChange(e.target.value)}
+        placeholder="Paste the link to the video"
+      />
+      {videoId && (
+        <div className="relative w-[250px] max-h-[250px]">
+          <Link href={link} target="_blank">
+            <FaYoutube className="absolute top-1/2 left-1/2 transform translate-x-[-50%] translate-y-[-50%] text-3xl text-white/80 " />
+            <Image
+              src={thumbnail}
+              alt={`Youtube link`}
+              width={250}
+              height={250}
+              className="rounded h-full w-full"
+            />
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
