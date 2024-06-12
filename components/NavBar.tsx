@@ -77,9 +77,11 @@ const NavBar = () => {
               </svg>
             </div>
           </div>
-          <div className="hidden lg:flex bg-primary text-white px-6 py-3 rounded-lg">
-            <Link href="/contact">Contact Us</Link>
-          </div>
+          <Link href="/contact">
+            <div className="hidden lg:flex bg-primary text-white px-6 py-3 rounded-lg">
+              Contact Us
+            </div>
+          </Link>
           <div className="lg:hidden flex items-center">
             <button onClick={toggleMenu} className="text-3xl">
               <HiMenuAlt2 />
