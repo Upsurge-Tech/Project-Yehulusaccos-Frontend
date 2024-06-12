@@ -36,9 +36,9 @@ const Layout = ({ children }: Props) => {
       <div className="hidden md:block">
         <AdminSideBar navLinks={navLinks} />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col h-screen ">
         <AdminNavbar navLinks={navLinks} />
-        <div className="py-9 container">{children}</div>
+        <div className="py-9 container overflow-auto">{children}</div>
       </div>
     </div>
   );
