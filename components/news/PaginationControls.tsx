@@ -1,54 +1,37 @@
-"use client";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaArrowRightLong } from "react-icons/fa6";
 
-import { FC } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-
-interface PaginationControlsProps {
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-}
-
-const PaginationControls: FC<PaginationControlsProps> = ({
-  hasNextPage,
-  hasPrevPage,
-}) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const page = searchParams.get("page") ?? "1";
-  const per_page = searchParams.get("per_page") ?? "6";
+const Pagination = ({ numPages, currentPage, onPageChange }: { numPages: number; currentPage: number; onPageChange: (page: number) => void }) => {
+  const pages = Array.from({ length: numPages }, (_, i) => i + 1);
 
   return (
-    <div className="w-full flex justify-between md:py-8">
+    <div className="flex justify-between items-center text-primary">
       <button
-        className={` text-primary flex items-center justify-between gap-x-3 ${hasPrevPage ? "cursor-pointer" : "cursor-not-allowed"}`}
-        disabled={!hasPrevPage}
-        onClick={() => {
-          router.push(`/news/?page=${Number(page) - 1}&per_page=${per_page}`);
-        }}
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className={` ${currentPage === 1 ? "opacity-50": ""} flex justify-between items-center gap-x-3`}
       >
-        <FaArrowLeft size={20} />
-        prev page
+        <FaArrowLeftLong size={25}/>
+        Oldest
       </button>
-
-      <div>
-        <span className="hidden md:inline-block">page</span>
-        {page} / {Math.ceil(10 / Number(per_page))}
-      </div>
-
+      {pages.map(page => (
+        <button
+          key={page}
+          onClick={() => onPageChange(page)}
+          className={page === currentPage ? 'active' : ''}
+        >
+          {page}
+        </button>
+      ))}
       <button
-        className={`text-primary flex items-center justify-between gap-x-3 ${hasNextPage ? "cursor-pointer" : "cursor-not-allowed"}`}
-        disabled={!hasNextPage}
-        onClick={() => {
-          router.push(`/news/?page=${Number(page) + 1}&per_page=${per_page}`);
-        }}
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === numPages}
+        className={` ${currentPage === numPages ? "opacity-50": ""} flex justify-between items-center gap-x-3`}
       >
-        next page
-        <FaArrowRight size={20} />
+        Newest
+        <FaArrowRightLong size={25} />
       </button>
     </div>
   );
 };
-
-export default PaginationControls;
+export default Pagination;

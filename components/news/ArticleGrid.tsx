@@ -1,21 +1,38 @@
-import React from "react";
+'use client';
+
+import React, {useEffect, useState} from "react";
 import ArticleCardMain from "./ArticleCardMain";
-import PaginationControls from "./PaginationControls";
-import articles from "@/data/articles";
+import Pagination from "./PaginationControls";
 
-const ArticleGrid = ({ searchParams }: { searchParams: any }) => {
-  const page = searchParams["page"] ?? "1";
-  const per_page = searchParams["per_page"] ?? "6";
 
-  const start = (Number(page) - 1) * Number(per_page);
-  const end = start + Number(per_page);
 
-  const articlesToShow = articles.slice(start, end);
+const ArticleGrid = () => {
+
+  const [articles, setArticles] = useState([]);
+  const [numPages, setNumPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 6;
+  const offset = 3;
+
+  useEffect(() => {
+    const fetchArticles = async (page: number) => {
+      const res = await fetch(`/api/articles?page=${page}&size=${pageSize}&offset=${offset}`);
+      const { data, numPages } = await res.json();
+      setArticles(data);
+      setNumPages(numPages);
+    };
+
+    fetchArticles(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-        {articlesToShow.map((article) => (
+        {/* {articles.map((article) => (
           <ArticleCardMain
             key={article.id}
             image={article.thumbnail}
@@ -23,11 +40,12 @@ const ArticleGrid = ({ searchParams }: { searchParams: any }) => {
             paragraph={article.excerpt}
             date={article.createdAt}
           />
-        ))}
+        ))} */}
       </div>
-      <PaginationControls
-        hasNextPage={end < articles.length}
-        hasPrevPage={start > 0}
+      <Pagination
+        numPages={numPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

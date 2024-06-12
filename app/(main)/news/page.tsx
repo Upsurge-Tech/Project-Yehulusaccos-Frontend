@@ -57,7 +57,7 @@ const NewsPage = ({
       <div className="w-[80%] mx-auto py-40 space-y-5">
         <h1 className="font-bold text-3xl px-3">Older News</h1>
         <div className="w-full">
-          <ArticleGrid searchParams={searchParams} />
+          <ArticleGrid/>
         </div>
       </div>
     </div>
