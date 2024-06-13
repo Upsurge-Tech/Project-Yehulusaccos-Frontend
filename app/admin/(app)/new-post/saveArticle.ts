@@ -98,12 +98,13 @@ export async function saveArticle(
         } else if (type === "youtube") {
           const videoId = getVideoId(content.youtubeLink);
           if (videoId === null) {
-            throw new Error("Invalid youtube link");
+            throw new Error(`Invalid youtube link at ${i + 1}th block`);
           }
           data = videoId;
         }
+
         if (data === "") {
-          throw new Error(`Empty content in ${type} at index ${i}`);
+          throw new Error(`Empty content in ${type} at ${i + 1}th block`);
         }
 
         return { articleId, type, data, alt };
@@ -114,7 +115,7 @@ export async function saveArticle(
     console.error(e);
     let errString = "";
     if (e instanceof Error) errString = e.message;
-    return { error: "Failed to save contents" + errString };
+    return { error: "Failed to save article -" + errString };
   }
 
   try {
@@ -125,7 +126,6 @@ export async function saveArticle(
     await removeFilesIfExist(filePaths);
     return { error: "Failed to save images" };
   }
-  throw new Error("test error");
   console.log("Successful save articleId =", articleId);
   return articleId;
 }

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArticleFormState, FormContent } from "@/data-types/Article";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { MdCancel } from "react-icons/md";
 import { saveArticle } from "./saveArticle";
@@ -20,6 +21,8 @@ const NewPost = () => {
     unknown: "",
     contents: [{ type: "heading", heading: "heading" }],
   });
+
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -63,16 +66,19 @@ const NewPost = () => {
       }),
     };
     console.log(formData, copy);
+    setError("");
     try {
       setIsLoading(true);
       const res = await saveArticle(formData, copy);
       if (typeof res === "number") {
         console.log("Article saved with id", res);
+        router.push("/admin/posts");
       } else {
+        setError(res.error);
         console.log("Friendly error", res.error);
       }
     } catch (e) {
-      setError("Something went wrong: " + JSON.stringify(e));
+      setError("Something went wrong, Please try again later");
       console.log("Not friendly error", e);
     } finally {
       setIsLoading(false);
@@ -86,10 +92,15 @@ const NewPost = () => {
     >
       <div className="flex justify-between pb-9">
         <h1 className="text-primary font-bold text-2xl">Add new post</h1>
-        <Button className="bg-blue-600">
-          <Spinner spin={isLoading} />
-          <span>Publish</span>
-        </Button>
+        <div>
+          <div className="flex justify-end">
+            <Button className="bg-blue-600" disabled={isLoading}>
+              <Spinner spin={isLoading} />
+              <span>Publish</span>
+            </Button>
+          </div>
+          {error && <p className="text-destructive text-sm">{error}</p>}
+        </div>
       </div>
       <div>
         <Label htmlFor="title">Title *</Label>
