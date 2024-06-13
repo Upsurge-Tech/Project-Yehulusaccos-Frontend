@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Article } from "@/data-types/Article";
+import { Article, ParagraphContent } from "@/data-types/Article";
 import formateDate from "@/utils/dateFormatter";
 
 interface Props {
@@ -26,8 +26,9 @@ const ArticleCard = ({ article }: Props) => {
       </h2>
       <p className="text-gray-600 text-[11px] sm:text-xs line-clamp-3 sm:line-clamp-none">
         {
-          article.contents.find((content) => content.type === "paragraph")!
-            .paragraph
+          (article.contents.find(
+            (content) => content.type === "paragraph"
+          ) as ParagraphContent)!.paragraph
         }
       </p>
     </div>
