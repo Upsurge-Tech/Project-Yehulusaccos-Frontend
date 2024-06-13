@@ -14,9 +14,9 @@ const ContactPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="space-y-7 md:pt-14 pt-8">
-        <h1 className="bg-[#00B6590D] text-primary px-6 py-3 font-bold text-center">
+        <div className="bg-primarySoft lg:mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
           CONTACT US
-        </h1>
+        </div>
         <div className="flex md:translate-x-10">
           <p className="text-4xl font-semibold">Get in touch</p>
           <Image
