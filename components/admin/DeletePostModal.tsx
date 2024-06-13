@@ -1,4 +1,5 @@
 "use client";
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,13 +11,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import deleteArticle from "@/lib/admin/deleteArticle";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const DeletePostModal = ({ id }: { id: number }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <div>
@@ -35,6 +37,7 @@ const DeletePostModal = ({ id }: { id: number }) => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
+            {error && <p className="text-destructive text-sm">{error}</p>}
             <div className="flex justify-center gap-3">
               <DialogClose className="border text-sm px-3 rounded ">
                 Cancel
@@ -43,12 +46,24 @@ const DeletePostModal = ({ id }: { id: number }) => {
                 variant={"destructive"}
                 onClick={async (e) => {
                   setError("");
-                  try{
-                    
+                  try {
+                    setIsLoading(true);
+                    const res = await deleteArticle(id);
+                    if (res && res.error) {
+                      console.error(res.error);
+                      setError(res.error);
+                    }
+                    router.refresh();
+                  } catch (e) {
+                    console.error(e);
+                    setError("Something went wrong, please try again later");
+                  } finally {
+                    setIsLoading(false);
                   }
                 }}
               >
-                Delete
+                <Spinner spin={isLoading} />
+                <span> Delete </span>
               </Button>
             </div>
           </DialogFooter>
