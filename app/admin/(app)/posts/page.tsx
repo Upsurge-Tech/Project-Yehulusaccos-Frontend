@@ -1,3 +1,4 @@
+import DeletePostModal from "@/components/admin/DeletePostModal";
 import PostsPagination from "@/components/admin/PostsPagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -74,9 +75,7 @@ const Posts = async ({
                     </Button>
                   </Link>
 
-                  <Button size={"sm"} variant={"destructive"}>
-                    Delete
-                  </Button>
+                  <DeletePostModal id={article.id} />
                 </div>
               </TableCell>
             </TableRow>
