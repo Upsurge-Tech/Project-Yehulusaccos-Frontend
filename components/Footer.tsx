@@ -12,8 +12,12 @@ import {
   FaTelegram,
 } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+
+  const tFooter = useTranslations("Footer");
+
   return (
     <footer className="bg-[#FAFFFC] w-full p-10 border-t-[1px] border-stone-200">
       <div className="container mx-auto flex md:flex-row flex-col md:justify-between md:gap-x-10 space-y-8 md:space-y-0">
@@ -22,11 +26,11 @@ const Footer = () => {
         </Link>
         <div className="space-y-6">
           <h2 className="text-lg font-semibold text-center md:text-start">
-            About the company
+            {tFooter("AboutCompany")}
           </h2>
           <p className="text-center md:text-start">
-            Learn to love growth and change and you <br /> will be a success.
-            Microsoft patch.
+            {tFooter("Paragraph1")}<br/>
+            {tFooter("Paragraph2")}
           </p>
           <div className="flex gap-x-4 justify-center md:justify-start">
             <Link href="https://www.facebook.com/profile.php?id=61554075832185">
@@ -66,71 +70,71 @@ const Footer = () => {
           </div>
         </div>
         <div className="md:space-y-4">
-          <h2 className="text-lg font-semibold">Pages</h2>
+          <h2 className="text-lg font-semibold">{tFooter('Pages')}</h2>
           <ul className="space-y-2">
             <li>
               <Link href="/services" className="hover:text-green-600">
-                Services
+                {tFooter('Services')}
               </Link>
             </li>
             <li>
               <Link href="/faq" className="hover:text-green-600">
-                FAQ
+                {tFooter('Faq')}
               </Link>
             </li>
             <li>
               <Link href="/news" className="hover:text-green-600">
-                News
+                {tFooter('News')}
               </Link>
             </li>
             <li>
               <Link href="/contact" className="hover:text-green-600">
-                Contact us
+                {tFooter('Contactus')}
               </Link>
             </li>
           </ul>
         </div>
         <div className="md:space-y-4">
-          <h2 className="text-lg font-semibold">Get started</h2>
+          <h2 className="text-lg font-semibold">{tFooter('GetStarted')}</h2>
           <ul className="space-y-2">
             <li>
               <Link href="/careers" className="hover:text-green-600">
-                Careers
+                {tFooter('Careers')}
               </Link>
             </li>
             <li>
               <Link href="/contact" className="hover:text-green-600">
-                Contact us
+                {tFooter('contact')}
               </Link>
             </li>
             <li>
               <Link href="/legal-documents" className="hover:text-green-600">
-                Legal documents
+                {tFooter('Legal')}
               </Link>
             </li>
           </ul>
         </div>
         <div className="md:space-y-4">
-          <h2 className="text-lg font-semibold">About</h2>
+          <h2 className="text-lg font-semibold">{tFooter('About')}</h2>
           <ul className="space-y-2">
             <li>
               <Link href="/about" className="hover:text-green-600">
-                Yehulu at a glance
+                {tFooter('Glance')}
               </Link>
             </li>
             <li>
               <Link href="/mission" className="hover:text-green-600">
-                Mission, vision, and values
+                {tFooter('Mission')}
               </Link>
             </li>
             <li>
               <Link href="/shareholders" className="hover:text-green-600">
-                Shareholders
+                {tFooter('Shareholders')}
               </Link>
             </li>
             <li>
               <Link href="/investor-relations" className="hover:text-green-600">
-                Investor relations
+                {tFooter('Investors')}
               </Link>
             </li>
           </ul>
