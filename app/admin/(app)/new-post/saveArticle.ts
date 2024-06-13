@@ -7,6 +7,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 const removeArticle = async (articleId: number) => {
+  await db.delete(contentTable).where(eq(contentTable.articleId, articleId));
   await db.delete(articleTable).where(eq(articleTable.id, articleId));
 };
 
@@ -118,6 +119,7 @@ export async function saveArticle(
 
   try {
     await saveFiles(imageFiles, filePaths);
+    throw new Error("cant save files");
   } catch (e) {
     console.error(e);
     await removeArticle(articleId);
