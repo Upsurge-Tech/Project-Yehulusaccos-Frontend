@@ -4,7 +4,10 @@ import styles from "./spinner.module.css";
 export default function Spinner() {
   return (
     <div data-testid="spinner" className={``}>
-      <ImSpinner8 data-testid="spinner-icon" className={`text-[1rem] ${styles.rotate} mx-auto`} />
+      <ImSpinner8
+        data-testid="spinner-icon"
+        className={`text-[1rem] ${styles.rotate} mx-auto`}
+      />
     </div>
   );
 }
