@@ -36,16 +36,16 @@ const NavBar = () => {
 
   return (
     <div
-      className={`py-3 px-3 md:px-7 w-full ${scrollActive ? "shadow-md" : ""}`}
+      className={`fixed bg-stone-50 z-30 py-3 px-3 md:px-7 w-full ${scrollActive ? "shadow-sm" : ""}`}
     >
-      <div className="flex justify-between items-center">
+      <div className="container flex justify-between items-center">
         <Link
           href="/home"
           className="w-[50px] md:w-[70px] h-[50px] md:h-[70px]"
         >
           <Image src={Logo2} alt="imageLogo" className="w-full h-full" />
         </Link>
-        <div className="hidden md:flex items-center">
+        <div className="hidden lg:flex items-center">
           <div className="flex justify-between md:gap-x-9 font-semibold">
             {navLinks.map((link) => (
               <NavLink
@@ -77,10 +77,12 @@ const NavBar = () => {
               </svg>
             </div>
           </div>
-          <div className="hidden md:flex bg-primary text-white px-6 py-3 rounded-lg">
-            <Link href="/contact">Contact Us</Link>
-          </div>
-          <div className="md:hidden flex items-center">
+          <Link href="/contact">
+            <div className="hidden lg:flex bg-primary text-white px-6 py-3 rounded-lg">
+              Contact Us
+            </div>
+          </Link>
+          <div className="lg:hidden flex items-center">
             <button onClick={toggleMenu} className="text-3xl">
               <HiMenuAlt2 />
             </button>
@@ -91,7 +93,7 @@ const NavBar = () => {
         className={`fixed top-0 left-0 h-screen w-full bg-black bg-opacity-50 md:bg-opacity-0 z-50 transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       >
         <div
-          className={`md:hidden flex flex-col items-center mt-3 space-y-2 p-4 w-full bg-white shadow-lg rounded-lg transform transition-transform duration-300 ${menuOpen ? "translate-y-0" : "-translate-y-full"}`}
+          className={`lg:hidden flex flex-col items-center mt-3 space-y-2 p-4 w-full bg-white shadow-lg rounded-lg transform transition-transform duration-300 ${menuOpen ? "translate-y-0" : "-translate-y-full"}`}
         >
           <button
             onClick={closeMenu}

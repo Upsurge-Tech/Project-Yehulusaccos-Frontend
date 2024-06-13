@@ -22,6 +22,9 @@ const Posts = async ({
   let page: number = 1;
   if (searchParams.page) {
     page = parseInt(searchParams.page as string);
+    if (isNaN(page)) {
+      page = 1;
+    }
   }
   const size = 5;
 
