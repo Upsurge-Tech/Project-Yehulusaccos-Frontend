@@ -1,13 +1,10 @@
-'use client';
+"use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ArticleCardMain from "./ArticleCardMain";
 import Pagination from "./PaginationControls";
 
-
-
 const ArticleGrid = () => {
-
   const [articles, setArticles] = useState([]);
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,7 +13,9 @@ const ArticleGrid = () => {
 
   useEffect(() => {
     const fetchArticles = async (page: number) => {
-      const res = await fetch(`/api/articles?page=${page}&size=${pageSize}&offset=${offset}`);
+      const res = await fetch(
+        `/api/articles?page=${page}&size=${pageSize}&offset=${offset}`
+      );
       const { data, numPages } = await res.json();
       setArticles(data);
       setNumPages(numPages);

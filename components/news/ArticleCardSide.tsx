@@ -3,7 +3,17 @@ import Image from "next/image";
 import { IoIosArrowRoundUp } from "react-icons/io";
 import car from "@/public/article-images/car.jpg";
 
-const ArticleCardSide = ({ title, image, paragraph, date }: { title: string, image: string, paragraph: string, date: string }) => {
+const ArticleCardSide = ({
+  title,
+  image,
+  paragraph,
+  date,
+}: {
+  title: string;
+  image: string;
+  paragraph: string;
+  date: string;
+}) => {
   // const dateval = new Date(date);
   // const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   // const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateval);

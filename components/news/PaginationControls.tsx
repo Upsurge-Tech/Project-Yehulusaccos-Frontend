@@ -1,7 +1,15 @@
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-const Pagination = ({ numPages, currentPage, onPageChange}: {numPages:number, currentPage:number, onPageChange: (page:number) => void}) => {
+const Pagination = ({
+  numPages,
+  currentPage,
+  onPageChange,
+}: {
+  numPages: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}) => {
   const pages = Array.from({ length: numPages }, (_, i) => i + 1);
   const leftPages = pages.slice(0, 2);
   const rightPages = pages.slice(numPages - 2, numPages);
@@ -17,21 +25,21 @@ const Pagination = ({ numPages, currentPage, onPageChange}: {numPages:number, cu
         Oldest
       </button>
       <div className="flex gap-2">
-        {leftPages.map(page => (
+        {leftPages.map((page) => (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={page === currentPage ? 'active' : ''}
+            className={page === currentPage ? "active" : ""}
           >
             {page}
           </button>
         ))}
         {numPages > 4 && <span>...</span>}
-        {rightPages.map(page => (
+        {rightPages.map((page) => (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={page === currentPage ? 'active' : ''}
+            className={page === currentPage ? "active" : ""}
           >
             {page}
           </button>

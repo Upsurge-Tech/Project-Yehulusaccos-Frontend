@@ -2,7 +2,17 @@ import React from "react";
 import Image from "next/image";
 import { IoIosArrowRoundUp } from "react-icons/io";
 
-const ArticleCardMain = ({ image, paragraph, date, title}: { image: string; paragraph: string; date: string; title: string }) => {
+const ArticleCardMain = ({
+  image,
+  paragraph,
+  date,
+  title,
+}: {
+  image: string;
+  paragraph: string;
+  date: string;
+  title: string;
+}) => {
   // const dateval = new Date(date);
   // const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   // const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateval);

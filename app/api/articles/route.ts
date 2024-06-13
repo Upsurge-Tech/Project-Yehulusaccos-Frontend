@@ -36,4 +36,3 @@ export const GET = async (request: NextRequest) => {
   console.log("pagination status:", JSON.stringify({ numPages, numArticles }));
   return Response.json({ data: slicedArticles, numPages });
 };
-
