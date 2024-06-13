@@ -18,6 +18,7 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { FaFileImage, FaParagraph, FaYoutube } from "react-icons/fa";
 import { MdCancel, MdOutlineCleaningServices } from "react-icons/md";
 import { RiLayoutTop2Fill } from "react-icons/ri";
+import { saveArticle } from "./saveArticle";
 
 const addButtons: {
   Icon: IconType;
@@ -49,7 +50,7 @@ const addButtons: {
 const NewPost = () => {
   const [formState, setFormState] = useState<ArticleFormState>({
     title: "title",
-    thumbnail: null,
+    thumbnail: { file: null, alt: "" },
     unknown: "",
     contents: [{ type: "heading", heading: "heading" }],
   });
@@ -65,20 +66,32 @@ const NewPost = () => {
     }
 
     const formData = new FormData();
-    formData.append("images", state.thumbnail as Blob);
+    formData.append("images", state.thumbnail.file as File);
     for (const content of state.contents) {
       if (content.type === "image") {
-        formData.append("images", content.file as Blob);
+        formData.append("images", content.file as File);
       }
     }
 
     console.log("submitting", state);
+    let nearestHeading: string = formState.title;
     const copy = {
       ...state,
-      thumbnail: null,
-      contents: state.contents.map((c) =>
-        c.type === "image" ? { ...c, file: null } : c
-      ),
+      thumbnail: { file: null, alt: `Image describing ${nearestHeading}` },
+      contents: state.contents.map((c) => {
+        if (c.type === "heading") {
+          nearestHeading = c.heading;
+        }
+        if (c.type === "image") {
+          return {
+            ...c,
+            file: null,
+            alt: `Image describing ${nearestHeading}`,
+          };
+        } else {
+          return c;
+        }
+      }),
     };
     console.log(formData, copy);
     // saveArticle(formData, copy);
@@ -86,7 +99,7 @@ const NewPost = () => {
 
   return (
     <div>
-      <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-6">
+      <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-3">
         <div className="flex justify-between pb-9">
           <h1 className="text-primary font-bold text-2xl">Add new post</h1>
           <Button className="bg-blue-600">Publish</Button>
@@ -197,8 +210,15 @@ const NewPost = () => {
           );
         })}
 
-        <div className="relative text-black/80">
-          <Input id="unknown" placeholder="Type / to choose a block" />
+        <div className="relative text-black/80 pt-3">
+          <Input
+            id="unknown"
+            placeholder="Type / to choose a block"
+            value={formState.unknown}
+            onChange={(e) =>
+              setFormState({ ...formState, unknown: e.target.value })
+            }
+          />
           <div className="absolute right-1 top-0 bottom-0 flex justify-center items-center ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="p-0">
@@ -216,13 +236,11 @@ const NewPost = () => {
                           content = { type, heading: formState.unknown };
                         } else if (type === "paragraph") {
                           content = { type, paragraph: formState.unknown };
-                        }
-                        if (type === "youtube") {
+                        } else if (type === "youtube") {
                           content = {
                             type,
                             elementId: `${Math.round(Math.random() * 10000)}`,
-                            youtubeLink:
-                              "https://www.youtube.com/watch?v=th8OswsAq6Q",
+                            youtubeLink: "",
                             error: "",
                           };
                         } else if (type === "image") {
@@ -233,7 +251,10 @@ const NewPost = () => {
 
                         setFormState({
                           ...formState,
-                          unknown: "",
+                          unknown:
+                            type === "heading" || type === "paragraph"
+                              ? ""
+                              : formState.unknown,
                           contents: [...formState.contents, content],
                         });
                       }}
@@ -254,9 +275,12 @@ const NewPost = () => {
           <ImageInput
             id="thumb"
             onFile={(file) => {
-              setFormState({ ...formState, thumbnail: file });
+              setFormState({
+                ...formState,
+                thumbnail: { ...formState.thumbnail, file },
+              });
             }}
-            file={formState.thumbnail}
+            file={formState.thumbnail.file}
           />
         </div>
       </form>
@@ -382,7 +406,7 @@ const YoutubeInput = ({
               : ""
           );
         }}
-        placeholder="Paste the link to the video"
+        placeholder="Paste the link of the video"
       />
 
       {videoId && (

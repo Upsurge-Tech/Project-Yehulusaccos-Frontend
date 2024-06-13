@@ -70,7 +70,7 @@ export type FormContent =
 
 export interface ArticleFormState {
   title: string;
-  thumbnail: File | null;
+  thumbnail: { file: File | null; alt: string };
   unknown: string;
   contents: FormContent[];
 }
