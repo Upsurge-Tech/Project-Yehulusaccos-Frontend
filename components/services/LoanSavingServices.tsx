@@ -3,15 +3,6 @@ import Image from "next/image";
 import HorizontalStepper from "./HorizontalStepper";
 import { useTranslations } from "next-intl";
 
-// const steps = [
-//   { id: 1, step: "1000Birr membership fee" },
-//   { id: 2, step: "Be Willing to save from a minimum of 10 birr a day" },
-//   { id: 3, step: "Be Willing to buy a minimum of 50 lotteries of price 100birr each"},
-//   { id: 4, step: "A Copy of your ID" },
-//   { id: 5, step: "Four passport size photos" },
-//   { id: 6, step: "Be willing to accept and follow terms and conditions"},
-// ];
-
 const LoanSavingServices = () => {
 
   const tLoanSavingServices = useTranslations("Services.LoanSaving");
