@@ -55,6 +55,17 @@ const NewsDetailPage = async ({ params: { id } }: Props) => {
               );
           })}
         </div>
+        {article.contents.map((content) => {
+          if (content.type === "youtube")
+            return (
+              <iframe
+                key={content.youtubeId}
+                src={`https://www.youtube.com/embed/${content.youtubeId}`}
+                allowFullScreen
+                className="h-[35vh] sm:h-[50vh] xl:h-[80vh] rounded-lg"
+              />
+            );
+        })}
       </div>
       <ArticlesGrid label="Related" articles={relatedArticles} />
     </div>
