@@ -119,13 +119,13 @@ export async function saveArticle(
 
   try {
     await saveFiles(imageFiles, filePaths);
-    throw new Error("cant save files");
   } catch (e) {
     console.error(e);
     await removeArticle(articleId);
     await removeFilesIfExist(filePaths);
     return { error: "Failed to save images" };
   }
+  throw new Error("test error");
   console.log("Successful save articleId =", articleId);
   return articleId;
 }
