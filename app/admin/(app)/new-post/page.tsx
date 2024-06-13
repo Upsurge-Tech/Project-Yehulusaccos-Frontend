@@ -18,7 +18,6 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { FaFileImage, FaParagraph, FaYoutube } from "react-icons/fa";
 import { MdCancel, MdOutlineCleaningServices } from "react-icons/md";
 import { RiLayoutTop2Fill } from "react-icons/ri";
-import { saveArticle } from "./saveArticle";
 
 const addButtons: {
   Icon: IconType;
@@ -210,67 +209,62 @@ const NewPost = () => {
           );
         })}
 
-        <div className="relative text-black/80 pt-3">
-          <Input
-            id="unknown"
-            placeholder="Type / to choose a block"
-            value={formState.unknown}
-            onChange={(e) =>
-              setFormState({ ...formState, unknown: e.target.value })
-            }
-          />
-          <div className="absolute right-1 top-0 bottom-0 flex justify-center items-center ">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="p-0">
-                <button className="p-0">
-                  <AiFillPlusSquare className="text-3xl " />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="bottom" align="end">
-                <div className="flex gap-3 px-3 items-center  text-black/80">
-                  {addButtons.map(({ Icon, label, type }) => (
-                    <DropdownMenuItem
-                      onClick={() => {
-                        let content: FormContent;
-                        if (type === "heading") {
-                          content = { type, heading: formState.unknown };
-                        } else if (type === "paragraph") {
-                          content = { type, paragraph: formState.unknown };
-                        } else if (type === "youtube") {
-                          content = {
-                            type,
-                            elementId: `${Math.round(Math.random() * 10000)}`,
-                            youtubeLink: "",
-                            error: "",
-                          };
-                        } else if (type === "image") {
-                          content = { type, alt: "", file: null };
-                        } else {
-                          throw new Error(`unknown content type ${type}`);
-                        }
+        <div className="text-black/80 pt-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="p-0">
+              <Button
+                variant={"ghost"}
+                className="w-full flex justify-between border-2 p-3"
+              >
+                <span>Add a block</span>
+                <AiFillPlusSquare className="text-3xl " />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <div className="flex gap-3 px-3 items-center  text-black/80">
+                {addButtons.map(({ Icon, label, type }, i) => (
+                  <DropdownMenuItem
+                    tabIndex={i}
+                    onClick={() => {
+                      let content: FormContent;
+                      if (type === "heading") {
+                        content = { type, heading: formState.unknown };
+                      } else if (type === "paragraph") {
+                        content = { type, paragraph: formState.unknown };
+                      } else if (type === "youtube") {
+                        content = {
+                          type,
+                          elementId: `${Math.round(Math.random() * 10000)}`,
+                          youtubeLink: "",
+                          error: "",
+                        };
+                      } else if (type === "image") {
+                        content = { type, alt: "", file: null };
+                      } else {
+                        throw new Error(`unknown content type ${type}`);
+                      }
 
-                        setFormState({
-                          ...formState,
-                          unknown:
-                            type === "heading" || type === "paragraph"
-                              ? ""
-                              : formState.unknown,
-                          contents: [...formState.contents, content],
-                        });
-                      }}
-                      key={label}
-                      className="flex flex-col py-3"
-                    >
-                      <Icon className="text-2xl" />
-                      <p>{label}</p>
-                    </DropdownMenuItem>
-                  ))}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                      setFormState({
+                        ...formState,
+                        unknown:
+                          type === "heading" || type === "paragraph"
+                            ? ""
+                            : formState.unknown,
+                        contents: [...formState.contents, content],
+                      });
+                    }}
+                    key={label}
+                    className="flex flex-col py-3"
+                  >
+                    <Icon className="text-2xl" />
+                    <p>{label}</p>
+                  </DropdownMenuItem>
+                ))}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <div>
+        <div className="pt-9">
           <Label htmlFor="thumb">Thumbnail *</Label>
           <ImageInput
             id="thumb"
@@ -317,7 +311,7 @@ const ImageInput = ({
   const ref = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="relative max-w-[250px] border rounded">
+    <div className="relative max-w-[200px] border rounded">
       <button
         className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
         onClick={(e) => {
@@ -354,7 +348,7 @@ const ImageInput = ({
           alt=""
           width={10}
           height={10}
-          className="w-full max-h-[250px] object-contain bg-muted"
+          className="w-full max-h-[200px] object-contain bg-muted"
         />
       )}
     </div>
@@ -410,7 +404,7 @@ const YoutubeInput = ({
       />
 
       {videoId && (
-        <div className="relative w-[250px] max-h-[250px]">
+        <div className="relative w-[200px] max-h-[200px]">
           <Link href={link} target="_blank">
             <FaYoutube className="absolute top-1/2 left-1/2 transform translate-x-[-50%] translate-y-[-50%] text-3xl text-white/80 " />
             <Image
