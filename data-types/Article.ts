@@ -1,3 +1,9 @@
+export const contentTypeStrings = [
+  "heading",
+  "paragraph",
+  "image",
+  "youtube",
+] as const;
 export interface HeadingContent {
   type: "heading";
   id: number;

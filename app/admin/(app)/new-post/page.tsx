@@ -18,6 +18,7 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { FaFileImage, FaParagraph, FaYoutube } from "react-icons/fa";
 import { MdCancel, MdOutlineCleaningServices } from "react-icons/md";
 import { RiLayoutTop2Fill } from "react-icons/ri";
+import { saveArticle } from "./saveArticle";
 
 const addButtons: {
   Icon: IconType;
@@ -93,7 +94,16 @@ const NewPost = () => {
       }),
     };
     console.log(formData, copy);
-    // saveArticle(formData, copy);
+    try {
+      const res = await saveArticle(formData, copy);
+      if (typeof res === "number") {
+        console.log("Article saved with id", res);
+      } else {
+        console.log("Friendly error", res.error);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

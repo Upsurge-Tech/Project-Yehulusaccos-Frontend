@@ -1,4 +1,12 @@
-import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { contentTypeStrings } from "@/data-types/Article";
+import {
+  int,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 export const adminTable = mysqlTable("admin", {
   id: int("id").autoincrement().primaryKey(),
@@ -7,6 +15,30 @@ export const adminTable = mysqlTable("admin", {
 });
 
 export type AdminSQL = typeof adminTable.$inferSelect;
+
+export const articleTable = mysqlTable("article", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 50 }).notNull(),
+  thumbnail: text("thumbnail").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+export type ArticleSQL = typeof articleTable.$inferSelect;
+
+export const contentTable = mysqlTable("content", {
+  id: int("id").autoincrement().primaryKey(),
+  articleId: int("article_id")
+    .notNull()
+    .references(() => articleTable.id, { onDelete: "cascade" }),
+  type: mysqlEnum("type", contentTypeStrings).notNull(),
+  data: text("data").notNull(),
+  alt: text("alt"),
+});
+
+export type ContentSQL = typeof contentTable.$inferSelect;
+
+// export const articleRelations = relations(articleTable, ({ many }) => ({
+//   contents: many(contentTable, (content) => content.articleId),
+// }));
 
 // CREATE TABLE admin (
 //     id INT AUTO_INCREMENT PRIMARY KEY,
