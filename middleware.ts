@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from "next-intl/middleware";
 
 const middleware = createMiddleware({
@@ -6,7 +6,8 @@ const middleware = createMiddleware({
   defaultLocale: "en",
 });
 
-export default async function (req) {
+// eslint-disable-next-line import/no-anonymous-default-export
+export default async function (req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Redirect from the root URL to /en/home or /am/home

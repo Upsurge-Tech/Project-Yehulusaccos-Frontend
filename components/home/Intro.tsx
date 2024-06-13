@@ -4,6 +4,7 @@ import { FaCarSide, FaPeopleGroup } from "react-icons/fa6";
 import { IoHome } from "react-icons/io5";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import currlyarrow from '@/public/curlyarrow.svg'
 
 import { useTranslations } from "next-intl";
 
@@ -34,7 +35,7 @@ const Intro = () => {
         />
         <div className="hidden xl:block relative right-96 top-[160px]  xl:right-[500px]  xl:top-28 ">
           <Image
-            src="/curlyarrow.svg"
+            src={currlyarrow}
             alt="curly green arrow"
             width={150}
             height={100}
