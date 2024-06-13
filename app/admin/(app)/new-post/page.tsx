@@ -9,10 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArticleFormState, FormContent } from "@/data-types/Article";
+import { saveArticle } from "@/lib/admin/saveArticle";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { MdCancel } from "react-icons/md";
-import { saveArticle } from "./saveArticle";
 
 const NewPost = () => {
   const [formState, setFormState] = useState<ArticleFormState>({
