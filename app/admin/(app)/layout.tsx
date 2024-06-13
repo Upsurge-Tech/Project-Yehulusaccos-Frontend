@@ -38,7 +38,9 @@ const Layout = ({ children }: Props) => {
       </div>
       <div className="flex-1 flex flex-col h-screen ">
         <AdminNavbar navLinks={navLinks} />
-        <div className="flex-1 py-9 container overflow-auto">{children}</div>
+        <div className="flex-1 flex flex-col overflow-auto">
+          <div className="flex-1 py-9 container">{children}</div>
+        </div>
       </div>
     </div>
   );

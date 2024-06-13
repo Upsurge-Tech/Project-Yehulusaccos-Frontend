@@ -94,7 +94,7 @@ const NewPost = () => {
         <h1 className="text-primary font-bold text-2xl">Add new post</h1>
         <div>
           <div className="flex justify-end">
-            <Button className="bg-blue-600" disabled={isLoading}>
+            <Button className="bg-tertiary" disabled={isLoading}>
               <Spinner spin={isLoading} />
               <span>Publish</span>
             </Button>

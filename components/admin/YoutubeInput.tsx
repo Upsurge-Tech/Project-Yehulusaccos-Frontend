@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import getVideoId from "@/lib/admin/getVideoId";
 import Image from "next/image";
 import Link from "next/link";
 import { FaYoutube } from "react-icons/fa6";
@@ -14,21 +15,6 @@ const YoutubeInput = ({
   onLinkChange: (link: string, error: string) => void;
   link: string;
 }) => {
-  const getVideoId = (link: string): string | null => {
-    try {
-      if (!link.includes("https://www.youtube.com/watch?v")) {
-        return null;
-      }
-      const url = new URL(link);
-      const params = new URLSearchParams(url.search);
-      const videoId = params.get("v");
-      return videoId || null;
-    } catch (e) {
-      // console.log(e);
-      return null;
-    }
-  };
-
   const videoId = getVideoId(link);
   const thumbnail = `https://img.youtube.com/vi/${videoId}/0.jpg`;
 
