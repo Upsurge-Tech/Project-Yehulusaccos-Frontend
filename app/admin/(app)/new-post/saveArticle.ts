@@ -38,9 +38,10 @@ const saveFiles = async (files: File[], filePaths: string[]) => {
 
 const removeFilesIfExist = async (filePaths: string[]) => {
   await Promise.all(
-    filePaths.map(async (path) => {
+    filePaths.map(async (filePath) => {
       try {
-        await fs.unlink(path);
+        const absolutePath = path.join(process.cwd(), "public", filePath);
+        await fs.unlink(absolutePath);
       } catch (e) {
         if (e instanceof Error && "code" in e && e.code === "ENOENT") {
           return;
@@ -117,7 +118,6 @@ export async function saveArticle(
 
   try {
     await saveFiles(imageFiles, filePaths);
-    console.log("saved images");
   } catch (e) {
     console.error(e);
     await removeArticle(articleId);
