@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 
 import formateDate from "@/utils/dateFormatter";
+import Contents from "@/components/news/Contents";
 
 interface Props {
   params: {
@@ -42,30 +43,7 @@ const NewsDetailPage = async ({ params: { id } }: Props) => {
             priority
           />
         </div>
-        <div className="flex flex-col gap-y-5">
-          {article.contents.map((content) => {
-            if (content.type === "paragraph")
-              return (
-                <p
-                  key={content.id}
-                  className="text-gray-500 text-[13px] sm:text-sm md:text-md"
-                >
-                  {content.paragraph}
-                </p>
-              );
-          })}
-        </div>
-        {article.contents.map((content) => {
-          if (content.type === "youtube")
-            return (
-              <iframe
-                key={content.youtubeId}
-                src={`https://www.youtube.com/embed/${content.youtubeId}`}
-                allowFullScreen
-                className="h-[35vh] sm:h-[50vh] xl:h-[80vh] rounded-lg"
-              />
-            );
-        })}
+        <Contents contents={article.contents} />
       </div>
       <ArticlesGrid label="Related" articles={relatedArticles} />
     </div>
