@@ -6,8 +6,12 @@ import Logo2 from "@/public/assets/Logo2.png";
 import Link from "next/link";
 import NavLink from "./NavLink";
 import { HiMenuAlt2, HiX } from "react-icons/hi";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 const NavBar = () => {
+  const t = useTranslations("NavBar");
+
   const [activeLink, setActiveLink] = useState<string | null>(null);
   const [scrollActive, setScrollActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,11 +31,11 @@ const NavBar = () => {
   };
 
   const navLinks = [
-    { href: "/services", label: "Services", key: "services" },
-    { href: "/about", label: "About us", key: "about" },
-    { href: "/faq", label: "Faq", key: "faq" },
-    { href: "/news", label: "News and announcements", key: "news" },
-    { href: "/loan_eligibility", label: "Loan and eligibility", key: "loan" },
+    { href: "/services", label: t("services"), key: "services" },
+    { href: "/about", label: t("about"), key: "about" },
+    { href: "/faq", label: t("faq"), key: "faq" },
+    { href: "/news", label: t("news"), key: "news" },
+    { href: "/loan_eligibility", label: t("loan"), key: "loan" },
   ];
 
   return (
@@ -62,24 +66,10 @@ const NavBar = () => {
           </div>
         </div>
         <div className="flex gap-x-4 items-center">
-          <div className="relative inline-block">
-            <select className="block appearance-none w-full bg-white hover:border-green-500 px-4 py-2 pr-8 rounded focus:outline-none focus:shadow-outline">
-              <option>EN</option>
-              <option>አማ</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-green-500">
-              <svg
-                className="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M10 12l-6-6h12l-6 6z" />
-              </svg>
-            </div>
-          </div>
+          <LanguageSwitcher />
           <Link href="/contact">
             <div className="hidden lg:flex bg-primary text-white px-6 py-3 rounded-lg">
-              Contact Us
+              {t("contactUs")}
             </div>
           </Link>
           <div className="lg:hidden flex items-center">
@@ -97,7 +87,7 @@ const NavBar = () => {
         >
           <button
             onClick={closeMenu}
-            className="absolute top-0 right-0 m-4 text-3xl"
+            className="absolute top-0 right-0 m-4 text-3xl px-5"
           >
             <HiX />
           </button>
@@ -112,7 +102,7 @@ const NavBar = () => {
             </Link>
           ))}
           <div className="mb-6 w-full text-center bg-primary text-white px-6 py-3 rounded-lg">
-            <Link href="/contact">Contact Us</Link>
+            <Link href="/contact">{t("contactUs")}</Link>
           </div>
         </div>
       </div>

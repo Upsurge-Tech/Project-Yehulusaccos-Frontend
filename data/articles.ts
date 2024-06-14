@@ -13,7 +13,6 @@ const article: Article = {
     {
       id: 3,
       articleId: 1,
-
       type: "image",
       src: "/article-images/house.jpg",
       alt: "alt text",
@@ -22,7 +21,6 @@ const article: Article = {
     {
       id: 4,
       articleId: 1,
-
       type: "paragraph",
       paragraph:
         "We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.",
@@ -31,7 +29,6 @@ const article: Article = {
     {
       id: 5,
       articleId: 1,
-
       type: "paragraph",
       paragraph:
         "We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.",
@@ -47,8 +44,10 @@ const article: Article = {
     },
   ],
 };
-export const articles: Article[] = Array.from({ length: 50 }).map((_, i) => ({
+export const articles: Article[] = Array.from({ length: 40 }).map((_, i) => ({
   ...article,
   id: i + 1,
   title: `${i + 1} ${article.title}`,
 }));
+
+export default articles;

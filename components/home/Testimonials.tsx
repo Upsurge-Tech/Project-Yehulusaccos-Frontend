@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import { IoChatbubbles } from "react-icons/io5";
-import { Card, CardContent, CardFooter } from "../ui/card";
+import { CardContent, CardFooter } from "../ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -11,18 +12,28 @@ import {
   CarouselNext,
 } from "../ui/carousel";
 
+import curlyarrow from "@/public/curlyarrow.svg";
+import unequalStripes from "@/public/unequalStripes.svg";
+import TitleFadeIn from "../animation/TitleFadeIn";
+import FadeIn from "../animation/FadeIn";
+import PopUp from "../animation/PopUp";
+
 const Testimonials = () => {
+  const tTestimonials = useTranslations("Home.Testimonials");
+  const tCarousel = useTranslations("Home.Testimonials.Statements");
+
   return (
     <div className="w-full flex flex-col items-center">
       <div className="bg-primarySoft w-48 mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
-        TESTIMONIAL
+        {tTestimonials("Header")}
       </div>
-      <h2 className="font-semibold text-2xl lg:text-4xl">
-        What our customers say about as
-      </h2>
+      <TitleFadeIn
+        title={tTestimonials("Title")}
+        className="font-semibold text-2xl lg:text-4xl"
+      />
       <div className="hidden lg:flex relative  -rotate-45  lg:-top-2 left-72 ">
         <Image
-          src="/curlyarrow.svg"
+          src={curlyarrow}
           alt="curly green arrow"
           width={100}
           height={100}
@@ -30,20 +41,10 @@ const Testimonials = () => {
       </div>
       <Carousel className="w-full ">
         <div className="hidden xl:flex absolute -bottom-12 left-[230px] ">
-          <Image
-            src="/unequalStripes.svg"
-            alt="strokes"
-            width={100}
-            height={100}
-          />
+          <Image src={unequalStripes} alt="strokes" width={100} height={100} />
         </div>
         <div className="hidden xl:flex absolute top-4 rotate-180 right-[160px] ">
-          <Image
-            src="/unequalStripes.svg"
-            alt="strokes"
-            width={100}
-            height={100}
-          />
+          <Image src={unequalStripes} alt="strokes" width={100} height={100} />
         </div>
         <CarouselContent className="-ml-1 py-3">
           {Array.from({ length: 5 }).map((_, index) => (
@@ -51,10 +52,10 @@ const Testimonials = () => {
               key={index}
               className="md:pl-20  basis-full xl:basis-1/2 max-w-2xl"
             >
-              <div className="relative top-6 right-5">
+              <PopUp className="relative top-6 right-5 z-10">
                 <IoChatbubbles className="text-primary " size={50} />
-              </div>
-              <Card className="h-52 flex flex-col md:py-4 justify-between bg-stone-100 shadow-lg">
+              </PopUp>
+              <FadeIn className="h-52 flex flex-col md:py-4 justify-between rounded-xl border-[1px] bg-stone-50 border-stone-200 shadow-lg">
                 <CardContent className="flex items-center justify-center p-6">
                   “ With the money from Yehulu saving and credit association, I
                   was able to streamline my work and manage myself and my family
@@ -65,7 +66,7 @@ const Testimonials = () => {
                     Ato Alemneh Mengesha
                   </p>
                 </CardFooter>
-              </Card>
+              </FadeIn>
             </CarouselItem>
           ))}
         </CarouselContent>
