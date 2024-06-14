@@ -41,5 +41,5 @@ export default function Counter({
     [springValue]
   );
 
-  return <span ref={ref} />;
+  return <span ref={ref}>{value}</span>;
 }
