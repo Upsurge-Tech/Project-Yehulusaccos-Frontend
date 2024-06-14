@@ -73,10 +73,8 @@ const Intro = () => {
           className=" absolute right-12 md:right-10 bottom-24 xl:bottom-auto xl:right-10 2xl:-right-10 shadow-xl rounded-full flex items-center justify-center bg-white h-10 w-10 sm:h-16 sm:w-16"
         >
           <FaPeopleGroup className="text-primary text-lg lg:text-2xl" />
-          <div className="absolute sm:bottom-8 bottom-7 left-2 sm:left-10 bg-primary w-32 h-8 sm:h-10 flex justify-center items-center px-2 sm:px-3 text-center rounded-full text-white">
-            <p className="sm:text-sm text-xs">
-              {tIntro("SmallBusinessThrive")}
-            </p>
+          <div className="absolute sm:bottom-8 bottom-7 left-2 sm:left-10 bg-primary w-32 h-8  sm:h-10 flex justify-center items-center px-2 sm:px-3 text-center rounded-lg text-white">
+            <p className=" text-xs">{tIntro("SmallBusinessThrive")}</p>
           </div>
         </Bounce>
       </div>
