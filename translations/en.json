@@ -8,6 +8,26 @@
         "contactUs": "Contact us"
     },
 
+    "Footer":{
+        "AboutCompany": "About the company",
+        "Paragraph1":"Learn to love growth and change and you",
+        "Paragraph2":"will be a success. Microsoft patch.",
+        "Pages":"Pages",
+        "Services":"Services",
+        "Contactus":"Contact us",
+        "contact":"Contact us",
+        "Faq":"FAQ",
+        "News":"News",
+        "GetStarted":"Get started",
+        "Careers":"Careers",
+        "Legal":"Legal documents",
+        "About":"About",
+        "Glance":"Yehulu at a glance",
+        "Mission":" Mission, vision, and values",
+        "Shareholders":"Shareholders",
+        "Investors":"Investor relations"
+    },
+
     "Home":{
         "Intro":{
             "Title":"Inclusive development to all & for all!",
@@ -74,6 +94,109 @@
             "Employees":"Permanent and contract employees",
             "Customers":"Lent to customers",
             "Finance":"Financial capital"
+        }
+    },
+
+    "Services":{
+        "LoanSaving":{
+            "Header":"LOAN AND SAVING SERVICES",
+            "Title":"To become a member of our service"
+        },
+        "HorizontalStepper":{
+            "Step1":{
+                "id" : "1",
+                "step":"1000Birr membership fee"
+            },
+            "Step2":{
+                "id" : "2",
+                "step":"Be Willing to save from a minimum of 10 birr a day"
+            },
+            "Step3":{
+                "id" : "3",
+                "step":"Be Willing to buy a minimum of 50 lotteries of price 100birr each"
+            },
+            "Step4":{
+                "id" : "4",
+                "step":"A Copy of your ID"
+            },
+            "Step5":{
+                "id": "5",
+                "step":"Four passport size photos"
+            },
+            "Step6":{
+                "id" : "6",
+                "step":"Be willing to accept and follow terms and conditions"
+            }
+        },
+        "SavingServices":{
+            "Header":"LOAN AND SAVING SERVICES",
+            "Title":"Saving Services",
+            "SavingServicesList":{
+                "service1":{
+                    "title": "Regular savings",
+                    "desc": "This type of savings allows the members of the association to increase their saving habit by saving at least 10 Birr every day and it is the duty of all members to save accordingly.",
+                    "image": "/threecircles.svg"
+                },
+                "service2":{
+                    "title": "Time deposit",
+                    "desc": "It is a type of savings in which the individual get better interest service by saving time limit deposit up-to 20% of the amount he/she made agreement more than half a year period.",
+                    "image": "/briefcase.svg"
+                },
+                "service3":{
+                    "title": "Home Purchase Savings",
+                    "desc": "It is a type of savings in which the individual saves 30% to become a home owner.",
+                    "image": "/home.svg"
+                },
+                "service4":{
+                    "title": "Vehicle Purchase Savings",
+                    "desc": "The person can save 50% of the vehicle ownership and get the type of vehicle of their choice.",
+                    "image": "/vehicle.svg"
+                },
+                "service5":{
+                    "title": "Demand Savings",
+                    "desc": "This type of savings is a type of savings in which themembers or non-members willingly deposit their money in the cooperative society and can earn or spend their money at any time and qualify for loan services.",
+                    "image": "/hand.svg"
+                },
+                "service6":{
+                    "title": "Children's Savings",
+                    "desc": "It is a type of savings that parents save for their children under 18 years of age.",
+                    "image": "/children.svg"
+                },
+                "service7":{
+                    "title": "Taxi Savings",
+                    "desc": "This is a type of savings where taxi owners save from their daily income to upgrade their vehicles type.",
+                    "image": "/taxi.svg"
+                },
+                "service8":{
+                    "title": "My Drive Savings",
+                    "desc": "This is a type of savings where taxi owners save from their daily income to upgrade their vehicles type",
+                    "image": "/mydrive.svg"
+                }
+
+            }
+        },
+
+        "LoanServices":{
+            "Header":"LOAN AND SAVING SERVICES",
+            "Title":"Loan Services",
+            "LoanServicesList":{
+                "service1":{
+                    "title": "For social services",
+                    "image": "/social.svg"
+                },
+                "service2":{
+                    "title": "For the purchase of car",
+                    "image": "/vehicle.svg"
+                },
+                "service3":{
+                    "title": "For business expansion",
+                    "image": "/briefcase.svg"
+                },
+                "service4":{
+                    "title": "For a purchase of a house",
+                    "image": "/home.svg"
+                }
+            }
         }
     }
 }
