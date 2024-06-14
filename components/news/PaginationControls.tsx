@@ -1,5 +1,4 @@
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 const Pagination = ({
   numPages,
@@ -29,7 +28,7 @@ const Pagination = ({
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={page === currentPage ? "active" : ""}
+            className={page === currentPage ? "active font-bold" : ""}
           >
             {page}
           </button>
@@ -39,7 +38,7 @@ const Pagination = ({
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={page === currentPage ? "active" : ""}
+            className={page === currentPage ? "active font-bold" : ""}
           >
             {page}
           </button>

@@ -1,10 +1,9 @@
-import React from "react";
-import articles from "@/data/articles";
-import Image from "next/image";
-import Vector from "@/public/Vector.svg";
 import ArticleCardMain from "@/components/news/ArticleCardMain";
 import ArticleCardSide from "@/components/news/ArticleCardSide";
 import ArticleGrid from "@/components/news/ArticleGrid";
+import articles from "@/data/articles";
+import Vector from "@/public/Vector.svg";
+import Image from "next/image";
 
 const NewsPage = ({
   searchParams,
@@ -34,22 +33,11 @@ const NewsPage = ({
         </div>
         <div className="md:w-[80%] mx-auto grid md:grid-cols-5 gap-x-6">
           <div className="md:col-span-2 col-span-1 md:p-0 p-4">
-            <ArticleCardMain
-              image={latestArticle1.thumbnail}
-              title={latestArticle1.title}
-              date={latestArticle1.createdAt}
-              paragraph={latestArticle1.excerpt}
-            />
+            <ArticleCardMain article={latestArticle1} />
           </div>
           <div className="md:col-span-3 col-span-1 flex flex-col gap-y-6 p-4 md:p-0">
             {latestArticles2.map((article, index) => (
-              <ArticleCardSide
-                key={index}
-                image={article.thumbnail}
-                title={article.title}
-                date={article.createdAt}
-                paragraph={article.excerpt}
-              />
+              <ArticleCardSide key={index} article={article} />
             ))}
           </div>
         </div>

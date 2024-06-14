@@ -1,18 +1,9 @@
-import React from "react";
+import { Article } from "@/data-types/Article";
+import formateDate from "@/utils/dateFormatter";
 import Image from "next/image";
 import { IoIosArrowRoundUp } from "react-icons/io";
 
-const ArticleCardMain = ({
-  image,
-  paragraph,
-  date,
-  title,
-}: {
-  image: string;
-  paragraph: string;
-  date: string;
-  title: string;
-}) => {
+const ArticleCardMain = ({ article }: { article: Article }) => {
   // const dateval = new Date(date);
   // const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   // const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateval);
@@ -20,22 +11,22 @@ const ArticleCardMain = ({
     <div className="flex flex-col gap-y-4">
       <div className="flex-1 w-full h-full">
         <Image
-          src={image}
+          src={article.thumbnail}
           width={1600}
           height={1900}
-          alt="cardimage"
+          alt={`Thumbnail for Article: ${article.title}`}
           className="rounded-lg"
         />
       </div>
       <div className="flex-1 space-y-3">
         <span className="text-primary w-fit px-10 py-2 rounded-md text-center bg-[#00B6590D]">
-          {date}
+          {formateDate(article.createdAt)}
         </span>
         <div className="flex justify-between items-center gap-x-3">
-          <p className="font-bold">{title}</p>
+          <p className="font-bold">{article.title}</p>
           <IoIosArrowRoundUp className="text-primary rotate-45" size={40} />
         </div>
-        <p>{paragraph}</p>
+        <p>{article.excerpt}</p>
       </div>
     </div>
   );
