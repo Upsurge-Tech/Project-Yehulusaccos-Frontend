@@ -23,6 +23,7 @@
     "drizzle-orm": "^0.31.2",
     "embla-carousel-react": "^8.1.3",
     "eslint-config-prettier": "^9.1.0",
+    "framer-motion": "^11.2.10",
     "lucide-react": "^0.390.0",
     "mysql2": "^3.10.0",
     "next": "14.2.3",

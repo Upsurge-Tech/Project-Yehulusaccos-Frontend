@@ -4,17 +4,23 @@ import { FaCheckCircle, FaStoreAlt } from "react-icons/fa";
 import { FaKey } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 
-import plantsWithCents from '@/public/plantsWithCents.svg'
-import curlyarrow from '@/public/curlyarrow.svg'
-
+import plantsWithCents from "@/public/plantsWithCents.svg";
+import curlyarrow from "@/public/curlyarrow.svg";
+import TitleFadeIn from "../animation/TitleFadeIn";
+import SlideFrom from "../animation/SlideFrom";
+import Bounce from "../animation/Bounce";
+import FadeIn from "../animation/FadeIn";
 
 const OurUniqeness = () => {
-
   const tOurUniqueness = useTranslations("Home.OurUniqueness");
-  const tuniqueMap = useTranslations("Home.OurUniqueness.Uniqueness")
+  const tuniqueMap = useTranslations("Home.OurUniqueness.Uniqueness");
 
-  const uniqeness = ['Uniqueness1', 'Uniqueness2', 'Uniqueness3', 'Uniqueness4']
-
+  const uniqeness = [
+    "Uniqueness1",
+    "Uniqueness2",
+    "Uniqueness3",
+    "Uniqueness4",
+  ];
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-20 ">
@@ -27,10 +33,15 @@ const OurUniqeness = () => {
         >
           {tOurUniqueness("Header")}
         </div>
-        <h2 className="font-semibold text-2xl self-center xl:self-auto lg:text-4xl">
-          {tOurUniqueness("Title")}
-        </h2>
-        <div className="flex flex-col gap-y-5 self-center xl:self-auto xl:w-full w-3/4">
+        <TitleFadeIn
+          title={tOurUniqueness("Title")}
+          className="font-semibold text-2xl self-center xl:self-auto lg:text-4xl"
+        />
+
+        <SlideFrom
+          from="left"
+          className="flex flex-col gap-y-5 self-center xl:self-auto xl:w-full w-3/4"
+        >
           {uniqeness.map((unique) => (
             <div key={unique} className="flex  gap-x-5  text-gray-500">
               <div>
@@ -39,9 +50,12 @@ const OurUniqeness = () => {
               <p className=" text-sm">{tuniqueMap(`${unique}`)}</p>
             </div>
           ))}
-        </div>
+        </SlideFrom>
       </div>
-      <div className="place-self-center h-[300px] sm:h-[500px] w-3/4 xl:w-full order-1 xl:order-2 relative flex flex-col items-center justify-center rounded-3xl">
+      <SlideFrom
+        from="right"
+        className="place-self-center h-[300px] sm:h-[500px] w-3/4 xl:w-full order-1 xl:order-2 relative flex flex-col items-center justify-center rounded-3xl"
+      >
         <Image
           src={plantsWithCents}
           fill
@@ -56,15 +70,27 @@ const OurUniqeness = () => {
             height={100}
           />
         </div>
-        <div className=" absolute -left-10 sm:-left-16 top-10 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4">
-          <FaKey className="text-primary text-lg sm:text-2xl" />
-          <p className="font-semibold">{tOurUniqueness('Accessibility')}</p>
-        </div>
-        <div className="absolute bottom-12 -right-10 sm:-right-16 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4">
-          <FaStoreAlt className="text-primary text-lg sm:text-2xl" />
-          <p className="font-semibold">{tOurUniqueness('Collateral')}</p>
-        </div>
-      </div>
+        <FadeIn className="" delay={0.75}>
+          <Bounce
+            duration={3}
+            delay={0.75}
+            className=" absolute -left-10 sm:-left-16 top-10 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4"
+          >
+            <FaKey className="text-primary text-lg sm:text-2xl" />
+            <p className="font-semibold">{tOurUniqueness("Accessibility")}</p>
+          </Bounce>
+        </FadeIn>
+        <FadeIn className="" delay={0.75}>
+          <Bounce
+            duration={3}
+            delay={0.75}
+            className="absolute bottom-12 -right-10 sm:-right-16 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4"
+          >
+            <FaStoreAlt className="text-primary text-lg sm:text-2xl" />
+            <p className="font-semibold">{tOurUniqueness("Collateral")}</p>
+          </Bounce>
+        </FadeIn>
+      </SlideFrom>
     </div>
   );
 };
