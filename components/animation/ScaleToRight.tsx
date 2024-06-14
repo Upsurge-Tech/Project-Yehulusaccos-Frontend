@@ -8,11 +8,23 @@ interface Props {
   className: string;
   duration?: number;
   delay?: number;
+  startImmediately: boolean;
 }
 
-const ScaleToRight = ({ className, children, duration, delay }: Props) => {
+const ScaleToRight = ({
+  className,
+  children,
+  duration,
+  delay,
+  startImmediately,
+}: Props) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  let scaleX: number = 1;
+  if (!startImmediately && !isInView) {
+    scaleX = 0;
+  }
 
   return (
     <motion.div
@@ -21,7 +33,7 @@ const ScaleToRight = ({ className, children, duration, delay }: Props) => {
         scaleX: 0,
       }}
       animate={{
-        scaleX: 1,
+        scaleX,
       }}
       transition={{
         duration: duration ? duration : 1,
