@@ -28,7 +28,7 @@ const PopUp = ({ className, children, duration, delay }: Props) => {
         width: isInView ? 1 : 0.2,
       }}
       transition={{
-        duration: duration ? duration : 2,
+        duration: duration ? duration : 1,
         delay: delay ? delay : 0.3,
         ease: [0, 0.71, 0.2, 1.01],
       }}
