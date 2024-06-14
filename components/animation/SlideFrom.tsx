@@ -17,7 +17,7 @@ const SlideFrom = ({ children, className, from, duration, delay }: Props) => {
 
   const transitionValues = {
     opacity: isInView ? 1 : 0,
-    x: isInView ? 0 : from === "left" ? -475 : 475,
+    x: isInView ? 0 : from === "left" ? -275 : 275,
   };
 
   return (
