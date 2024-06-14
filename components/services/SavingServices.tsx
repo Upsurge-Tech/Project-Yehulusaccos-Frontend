@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import FadeIn from "../animation/FadeIn";
+import SlideFrom from "../animation/SlideFrom";
 
 const SavingServices = () => {
   const tSavingServices = useTranslations("Services.SavingServices");
@@ -17,9 +18,6 @@ const SavingServices = () => {
     "service7",
     "service8",
   ];
-  const midPoint = Math.ceil(savingServices.length / 2);
-  const firstHalf = savingServices.slice(0, midPoint);
-  const secondHalf = savingServices.slice(midPoint);
 
   return (
     <div className="flex flex-col w-full gap-y-10 mt-16">
@@ -40,35 +38,36 @@ const SavingServices = () => {
             height={100}
           />
         </div>
-        {/* <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5 lg:gap-10 mt-10  gap-y-7 xl:gap-x-36 xl:gap-y-16"> */}
-        <div className="w-full flex flex-col xl:flex-row gap-5 lg:gap-10 mt-10 xl:gap-36 ">
-          {[firstHalf, secondHalf].map((half, i) => (
-            <div className="flex flex-col lg:gap-10 gap-7 xl:gap-y-16" key={i}>
-              {half.map((ss, i) => (
-                <div
-                  key={tSavingList(`${ss}.title`)}
-                  className="flex justify-center  items-center lg:items-start gap-5 xl:gap-y-20 w-full "
-                >
-                  <div className=" flex w-3/4 xl:w-full gap-x-4">
-                    <Image
-                      src={tSavingList(`${ss}.image`)}
-                      width={40}
-                      height={30}
-                      className="self-start"
-                      alt="three circles"
-                    />
-                    <div className="flex flex-col gap-y-2">
-                      <h3 className="text-lg font-semibold">
-                        {tSavingList(`${ss}.title`)}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {tSavingList(`${ss}.desc`)}
-                      </p>
-                    </div>
+        <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5 lg:gap-10 mt-10  gap-y-7 xl:gap-x-36 xl:gap-y-16">
+          {savingServices.map((ss, i) => (
+            <SlideFrom
+              className=""
+              key={i}
+              from={i % 2 === 0 ? "left" : "right"}
+            >
+              <div
+                key={tSavingList(`${ss}.title`)}
+                className="flex justify-center  items-center lg:items-start gap-5 xl:gap-y-20 w-full "
+              >
+                <div className=" flex w-3/4 xl:w-full gap-x-4">
+                  <Image
+                    src={tSavingList(`${ss}.image`)}
+                    width={40}
+                    height={30}
+                    className="self-start"
+                    alt="three circles"
+                  />
+                  <div className="flex flex-col gap-y-2">
+                    <h3 className="text-lg font-semibold">
+                      {tSavingList(`${ss}.title`)}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {tSavingList(`${ss}.desc`)}
+                    </p>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            </SlideFrom>
           ))}
         </div>
       </div>
