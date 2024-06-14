@@ -1,7 +1,8 @@
+import { Article } from "@/data-types/Article";
 import { articles } from "@/data/articles";
 import { NextRequest } from "next/server";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async (request: NextRequest): Promise<Response> => {
   //not yet connected to backend
   const params = request.nextUrl.searchParams;
   const pageParam = params.get("page");

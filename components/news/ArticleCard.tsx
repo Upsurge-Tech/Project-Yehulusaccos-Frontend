@@ -1,7 +1,6 @@
-import React from "react";
-import Image from "next/image";
-import { Article, ParagraphContent } from "@/data-types/Article";
+import { Article } from "@/data-types/Article";
 import formateDate from "@/utils/dateFormatter";
+import Image from "next/image";
 
 interface Props {
   article: Article;
@@ -25,11 +24,7 @@ const ArticleCard = ({ article }: Props) => {
         {article.title}
       </h2>
       <p className="text-gray-600 text-[11px] sm:text-xs line-clamp-3 sm:line-clamp-none">
-        {
-          (article.contents.find(
-            (content) => content.type === "paragraph"
-          ) as ParagraphContent)!.paragraph
-        }
+        {article.excerpt}
       </p>
     </div>
   );

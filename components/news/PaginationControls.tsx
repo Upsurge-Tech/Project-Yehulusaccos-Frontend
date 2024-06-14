@@ -1,5 +1,4 @@
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 const Pagination = ({
   numPages,
@@ -11,8 +10,12 @@ const Pagination = ({
   onPageChange: (page: number) => void;
 }) => {
   const pages = Array.from({ length: numPages }, (_, i) => i + 1);
-  const leftPages = pages.slice(0, 2);
-  const rightPages = pages.slice(numPages - 2, numPages);
+  console.log(pages);
+  const maxPages = 6;
+  const midPoint = Math.ceil(numPages / 2);
+  const span = Math.min(midPoint, Math.floor(maxPages / 2));
+  const leftPages = pages.slice(0, span);
+  const rightPages = pages.slice(numPages - span, numPages);
 
   return (
     <div className="w-full flex justify-between items-center text-primary">
@@ -29,17 +32,17 @@ const Pagination = ({
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={page === currentPage ? "active" : ""}
+            className={page === currentPage ? "active font-bold" : ""}
           >
             {page}
           </button>
         ))}
-        {numPages > 4 && <span>...</span>}
+        {pages.length > maxPages && <span>...</span>}
         {rightPages.map((page) => (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={page === currentPage ? "active" : ""}
+            className={page === currentPage ? "active font-bold" : ""}
           >
             {page}
           </button>
