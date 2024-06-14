@@ -8,7 +8,7 @@ const HorizontalStepper = () => {
   return (
     <ol className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-5 md:gap-y-10 items-center w-full text-xs text-gray-900 font-medium sm:text-base">
       {steps.map((step, index) => (
-        <StepsLi index={index}>
+        <StepsLi index={index} key={index}>
           <div className="flex flex-col w-full  whitespace-nowrap z-10">
             <span className="font-bold text-xl text-black  bg-white border-primary border-2  rounded-full flex justify-center items-center mx-auto mb-3  w-12 h-12">
               {tHorStepper(`${steps[index]}.id`)}
