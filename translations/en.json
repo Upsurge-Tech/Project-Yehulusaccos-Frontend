@@ -201,7 +201,7 @@
         }
     },
 
-    
+
     "AboutUs":{
         "Header": "ABOUT US",
         "Question": "Who are we?",
@@ -243,5 +243,30 @@
                 }
             }
         }
+    },
+
+    "ContactUs":{
+        "Header":"CONTACT US",
+        "Title":"Get in touch",
+        "Sending":"Sending...",
+        "Calling":"Calling...",
+        "ContactForm":{
+            "FullName":"Full Name",
+            "Email":"Email",
+            "PhoneNumber":"Phone Number",
+            "City":"City",
+            "Reason":"Reason",
+            "YourMessage":"Your Message",
+            "Button":"Send message"
+        },
+        "InfoBox":{
+            "Office":"Main Office",
+            "OfficeParagraph":"Hawassa Nib Bank Bldg 5th floor",
+            "Branches":"Branch Offices",
+            "BranchesParagraph": "Atote Yoseph Building 1st floor",
+            "Address":"Tirufat Admas Mall 4th floor",
+            "Address2":"Arab Sefer Midregenet Building 1st floor"
+        }
     }
+
 }

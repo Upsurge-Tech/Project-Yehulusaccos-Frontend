@@ -3,11 +3,10 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const LoanServices = () => {
-
   const tLoanServices = useTranslations("Services.LoanServices");
   const tLoanList = useTranslations("Services.LoanServices.LoanServicesList");
 
-  const loanServices = ['service1', 'service2', 'service3', 'service4']
+  const loanServices = ["service1", "service2", "service3", "service4"];
 
   return (
     <div className="flex flex-col w-full gap-y-10 mt-16">
@@ -29,7 +28,10 @@ const LoanServices = () => {
       </div>
       <div className="w-full place-items-center grid grid-cols-1 md:grid-cols-2 xl:flex  gap-5 lg:gap-10 mt-2 gap-y-7 xl:gap-x-24 xl:gap-y-16">
         {loanServices.map((ls) => (
-          <div key={tLoanList(`${ls}.title`)} className="flex w-[220px] gap-4 items-center ">
+          <div
+            key={tLoanList(`${ls}.title`)}
+            className="flex w-[220px] gap-4 items-center "
+          >
             <Image
               src={tLoanList(`${ls}.image`)}
               width={30}

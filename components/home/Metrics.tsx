@@ -6,10 +6,9 @@ import { GiMoneyStack } from "react-icons/gi";
 import { LiaCoinsSolid } from "react-icons/lia";
 
 import { useTranslations } from "next-intl";
-import curlyarrow from '@/public/curlyarrow.svg'
+import curlyarrow from "@/public/curlyarrow.svg";
 
 const Metrics = () => {
-
   const tMetrics = useTranslations("Home.Metrices");
 
   return (
@@ -17,7 +16,9 @@ const Metrics = () => {
       <div className="bg-primarySoft w-48 mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
         {tMetrics("Header")}
       </div>
-      <h2 className="font-semibold text-2xl lg:text-4xl">{tMetrics('Title')}</h2>
+      <h2 className="font-semibold text-2xl lg:text-4xl">
+        {tMetrics("Title")}
+      </h2>
       <div className="hidden lg:flex relative  -rotate-45  lg:-top-2 left-32 ">
         <Image
           src={curlyarrow}
@@ -37,7 +38,7 @@ const Metrics = () => {
             <FaPeopleGroup size={50} className="text-primary text-2xl" />
           </div>
           <p className="text-xl font-semibold">3600+</p>
-          <p>{tMetrics('Members')}</p>
+          <p>{tMetrics("Members")}</p>
         </div>
         <div className="flex flex-col gap-y-5 w-full items-center">
           <div
@@ -49,7 +50,7 @@ const Metrics = () => {
             <FaUsersRays size={50} className="text-primary text-2xl" />
           </div>
           <p className="text-xl font-semibold">86+</p>
-          <p>{tMetrics('Employees')}</p>
+          <p>{tMetrics("Employees")}</p>
         </div>
         <div className="flex flex-col gap-y-5 w-full items-center">
           <div
@@ -61,7 +62,7 @@ const Metrics = () => {
             <GiMoneyStack size={50} className="text-primary text-2xl" />
           </div>
           <p className="text-xl font-semibold">400M+</p>
-          <p>{tMetrics('Customers')}</p>
+          <p>{tMetrics("Customers")}</p>
         </div>
         <div className="flex flex-col gap-y-5 w-full items-center">
           <div
@@ -73,7 +74,7 @@ const Metrics = () => {
             <LiaCoinsSolid size={50} className="text-primary text-2xl" />
           </div>
           <p className="text-xl font-semibold">490B+</p>
-          <p>{tMetrics('Finance')}</p>
+          <p>{tMetrics("Finance")}</p>
         </div>
       </div>
     </div>

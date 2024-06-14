@@ -3,12 +3,21 @@ import React from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-
 const SavingServices = () => {
-
   const tSavingServices = useTranslations("Services.SavingServices");
-  const tSavingList = useTranslations("Services.SavingServices.SavingServicesList");
-  const savingServices = ['service1', 'service2', 'service3', 'service4', 'service5', 'service6', 'service7', 'service8']
+  const tSavingList = useTranslations(
+    "Services.SavingServices.SavingServicesList"
+  );
+  const savingServices = [
+    "service1",
+    "service2",
+    "service3",
+    "service4",
+    "service5",
+    "service6",
+    "service7",
+    "service8",
+  ];
 
   return (
     <div className="flex flex-col w-full gap-y-10 mt-16">
@@ -42,8 +51,12 @@ const SavingServices = () => {
                   alt="three circles"
                 />
                 <div className="flex flex-col gap-y-2">
-                  <h3 className="text-lg font-semibold">{tSavingList(`${ss}.title`)}</h3>
-                  <p className="text-gray-600 text-sm">{tSavingList(`${ss}.desc`)}</p>
+                  <h3 className="text-lg font-semibold">
+                    {tSavingList(`${ss}.title`)}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {tSavingList(`${ss}.desc`)}
+                  </p>
                 </div>
               </div>
             </div>

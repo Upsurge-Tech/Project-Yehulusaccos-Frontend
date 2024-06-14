@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Spinner from "./Spinner";
+import { useTranslations } from "next-intl";
 
 const ContactForm = () => {
+  const tContactForm = useTranslations("ContactUs.ContactForm");
+
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -10,6 +13,8 @@ const ContactForm = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
+
+  const ButtonText = tContactForm("Button");
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -57,7 +62,9 @@ const ContactForm = () => {
         method="POST"
       >
         <div className="mb-4 space-y-3">
-          <label className="block text-gray-700">Full Name</label>
+          <label className="block text-gray-700">
+            {tContactForm("FullName")}
+          </label>
           <input
             type="text"
             placeholder="Your fullname"
@@ -69,7 +76,7 @@ const ContactForm = () => {
           />
         </div>
         <div className="mb-4 space-y-3">
-          <label className="block text-gray-700">Email</label>
+          <label className="block text-gray-700">{tContactForm("Email")}</label>
           <input
             type="email"
             placeholder="Your email"
@@ -81,7 +88,9 @@ const ContactForm = () => {
           />
         </div>
         <div className="mb-4 space-y-3">
-          <label className="block text-gray-700">Phone Number</label>
+          <label className="block text-gray-700">
+            {tContactForm("PhoneNumber")}
+          </label>
           <input
             type="tel"
             placeholder="Your phone number"
@@ -93,7 +102,7 @@ const ContactForm = () => {
           />
         </div>
         <div className="mb-4 space-y-3">
-          <label className="block text-gray-700">City</label>
+          <label className="block text-gray-700">{tContactForm("City")}</label>
           <input
             type="text"
             placeholder="Your city"
@@ -105,7 +114,9 @@ const ContactForm = () => {
           />
         </div>
         <div className="mb-4 space-y-3">
-          <label className="block text-gray-700">Reason</label>
+          <label className="block text-gray-700">
+            {tContactForm("Reason")}
+          </label>
           <input
             type="text"
             placeholder="Your reason"
@@ -117,7 +128,9 @@ const ContactForm = () => {
           />
         </div>
         <div className="mb-4 space-y-3">
-          <label className="block text-gray-700">Your message</label>
+          <label className="block text-gray-700">
+            {tContactForm("YourMessage")}
+          </label>
           <textarea
             placeholder="Your message"
             name="message"
@@ -132,7 +145,7 @@ const ContactForm = () => {
           type="submit"
           className="w-full bg-primary text-white p-2 rounded"
         >
-          {loading ? <Spinner /> : "Send message"}
+          {loading ? <Spinner /> : ButtonText}
         </button>
       </form>
       {status && (

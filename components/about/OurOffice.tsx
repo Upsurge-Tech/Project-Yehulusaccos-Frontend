@@ -11,7 +11,7 @@ import {
 } from "../ui/carousel";
 
 const OurOffice = () => {
-  const tOffice = useTranslations("AboutUs.Office")
+  const tOffice = useTranslations("AboutUs.Office");
   return (
     <div className="flex flex-col h-full items-start place-self-center justify-center py-5 gap-y-5 xl:gap-y-14 w-3/4 xl:w-full">
       <div className="flex flex-col xl:self-center">

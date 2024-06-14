@@ -12,13 +12,12 @@ import {
   CarouselNext,
 } from "../ui/carousel";
 
-import curlyarrow from '@/public/curlyarrow.svg';
-import unequalStripes from '@/public/unequalStripes.svg';
+import curlyarrow from "@/public/curlyarrow.svg";
+import unequalStripes from "@/public/unequalStripes.svg";
 
 const Testimonials = () => {
-
   const tTestimonials = useTranslations("Home.Testimonials");
-  const tCarousel = useTranslations("Home.Testimonials.Statements")
+  const tCarousel = useTranslations("Home.Testimonials.Statements");
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -38,20 +37,10 @@ const Testimonials = () => {
       </div>
       <Carousel className="w-full ">
         <div className="hidden xl:flex absolute -bottom-12 left-[230px] ">
-          <Image
-            src={unequalStripes}
-            alt="strokes"
-            width={100}
-            height={100}
-          />
+          <Image src={unequalStripes} alt="strokes" width={100} height={100} />
         </div>
         <div className="hidden xl:flex absolute top-4 rotate-180 right-[160px] ">
-          <Image
-            src={unequalStripes}
-            alt="strokes"
-            width={100}
-            height={100}
-          />
+          <Image src={unequalStripes} alt="strokes" width={100} height={100} />
         </div>
         <CarouselContent className="-ml-1 py-3">
           {Array.from({ length: 5 }).map((_, index) => (

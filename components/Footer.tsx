@@ -15,7 +15,6 @@ import { FiPhoneCall } from "react-icons/fi";
 import { useTranslations } from "next-intl";
 
 const Footer = () => {
-
   const tFooter = useTranslations("Footer");
 
   return (
@@ -29,7 +28,8 @@ const Footer = () => {
             {tFooter("AboutCompany")}
           </h2>
           <p className="text-center md:text-start">
-            {tFooter("Paragraph1")}<br/>
+            {tFooter("Paragraph1")}
+            <br />
             {tFooter("Paragraph2")}
           </p>
           <div className="flex gap-x-4 justify-center md:justify-start">
@@ -70,71 +70,71 @@ const Footer = () => {
           </div>
         </div>
         <div className="md:space-y-4">
-          <h2 className="text-lg font-semibold">{tFooter('Pages')}</h2>
+          <h2 className="text-lg font-semibold">{tFooter("Pages")}</h2>
           <ul className="space-y-2">
             <li>
               <Link href="/services" className="hover:text-green-600">
-                {tFooter('Services')}
+                {tFooter("Services")}
               </Link>
             </li>
             <li>
               <Link href="/faq" className="hover:text-green-600">
-                {tFooter('Faq')}
+                {tFooter("Faq")}
               </Link>
             </li>
             <li>
               <Link href="/news" className="hover:text-green-600">
-                {tFooter('News')}
+                {tFooter("News")}
               </Link>
             </li>
             <li>
               <Link href="/contact" className="hover:text-green-600">
-                {tFooter('Contactus')}
+                {tFooter("Contactus")}
               </Link>
             </li>
           </ul>
         </div>
         <div className="md:space-y-4">
-          <h2 className="text-lg font-semibold">{tFooter('GetStarted')}</h2>
+          <h2 className="text-lg font-semibold">{tFooter("GetStarted")}</h2>
           <ul className="space-y-2">
             <li>
               <Link href="/careers" className="hover:text-green-600">
-                {tFooter('Careers')}
+                {tFooter("Careers")}
               </Link>
             </li>
             <li>
               <Link href="/contact" className="hover:text-green-600">
-                {tFooter('contact')}
+                {tFooter("contact")}
               </Link>
             </li>
             <li>
               <Link href="/legal-documents" className="hover:text-green-600">
-                {tFooter('Legal')}
+                {tFooter("Legal")}
               </Link>
             </li>
           </ul>
         </div>
         <div className="md:space-y-4">
-          <h2 className="text-lg font-semibold">{tFooter('About')}</h2>
+          <h2 className="text-lg font-semibold">{tFooter("About")}</h2>
           <ul className="space-y-2">
             <li>
               <Link href="/about" className="hover:text-green-600">
-                {tFooter('Glance')}
+                {tFooter("Glance")}
               </Link>
             </li>
             <li>
               <Link href="/mission" className="hover:text-green-600">
-                {tFooter('Mission')}
+                {tFooter("Mission")}
               </Link>
             </li>
             <li>
               <Link href="/shareholders" className="hover:text-green-600">
-                {tFooter('Shareholders')}
+                {tFooter("Shareholders")}
               </Link>
             </li>
             <li>
               <Link href="/investor-relations" className="hover:text-green-600">
-                {tFooter('Investors')}
+                {tFooter("Investors")}
               </Link>
             </li>
           </ul>

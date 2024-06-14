@@ -4,12 +4,10 @@ import Image from "next/image";
 import CustomAvatar from "./CustomAvatar";
 import { useTranslations } from "next-intl";
 
-
 const Team = () => {
-
-  const tTeam = useTranslations("AboutUs.Team")
-  const tTeamMembers = useTranslations("AboutUs.Team.Members")
-  const teamMembers = ["Person1", "Person2", "Person3", "Person4", "Person5" ]
+  const tTeam = useTranslations("AboutUs.Team");
+  const tTeamMembers = useTranslations("AboutUs.Team.Members");
+  const teamMembers = ["Person1", "Person2", "Person3", "Person4", "Person5"];
   return (
     <div className="flex flex-col h-full items-start place-self-center justify-center py-5 gap-y-5 xl:gap-y-14 w-3/4 xl:w-full">
       <div className="flex flex-col xl:self-center">

@@ -4,17 +4,19 @@ import { FaCheckCircle, FaStoreAlt } from "react-icons/fa";
 import { FaKey } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 
-import plantsWithCents from '@/public/plantsWithCents.svg'
-import curlyarrow from '@/public/curlyarrow.svg'
-
+import plantsWithCents from "@/public/plantsWithCents.svg";
+import curlyarrow from "@/public/curlyarrow.svg";
 
 const OurUniqeness = () => {
-
   const tOurUniqueness = useTranslations("Home.OurUniqueness");
-  const tuniqueMap = useTranslations("Home.OurUniqueness.Uniqueness")
+  const tuniqueMap = useTranslations("Home.OurUniqueness.Uniqueness");
 
-  const uniqeness = ['Uniqueness1', 'Uniqueness2', 'Uniqueness3', 'Uniqueness4']
-
+  const uniqeness = [
+    "Uniqueness1",
+    "Uniqueness2",
+    "Uniqueness3",
+    "Uniqueness4",
+  ];
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-20 ">
@@ -58,11 +60,11 @@ const OurUniqeness = () => {
         </div>
         <div className=" absolute -left-10 sm:-left-16 top-10 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4">
           <FaKey className="text-primary text-lg sm:text-2xl" />
-          <p className="font-semibold">{tOurUniqueness('Accessibility')}</p>
+          <p className="font-semibold">{tOurUniqueness("Accessibility")}</p>
         </div>
         <div className="absolute bottom-12 -right-10 sm:-right-16 h-10 sm:h-14 rounded-lg items-center px-2 sm:px-4 shadow-xl bg-white flex gap-4">
           <FaStoreAlt className="text-primary text-lg sm:text-2xl" />
-          <p className="font-semibold">{tOurUniqueness('Collateral')}</p>
+          <p className="font-semibold">{tOurUniqueness("Collateral")}</p>
         </div>
       </div>
     </div>

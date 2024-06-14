@@ -3,14 +3,13 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const AboutUs = () => {
-
-  const tAbout = useTranslations("AboutUs")
+  const tAbout = useTranslations("AboutUs");
   return (
     <div className=" grid grid-cols-1 xl:grid-cols-2 gap-x-10 xl:gap-x-36 gap-y-10">
       <div className=" order-2 xl:order-1 flex h-full flex-col items-start place-self-center justify-center py-5 gap-y-5 xl:gap-y-14 w-3/4 xl:w-full">
         <div className="flex flex-col gap-y-1">
           <div className="bg-primarySoft lg:mb-10 self-start text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
-            {tAbout('Header')}
+            {tAbout("Header")}
           </div>
           <h2 className="font-semibold text-3xl lg:text-5xl mt-2 lg:mt-0">
             {tAbout("Question")}
@@ -19,11 +18,10 @@ const AboutUs = () => {
 
         <div className="flex flex-col gap-y-2 text-xs md:text-sm lg:text-lg text-gray-600 z-10">
           <p>
-            <span className="font-semibold">{tAbout("InnerParagraph1")}{" "}</span>{tAbout("Paragraph1")}
+            <span className="font-semibold">{tAbout("InnerParagraph1")} </span>
+            {tAbout("Paragraph1")}
           </p>
-          <p>
-            {tAbout("Paragraph2")}
-          </p>
+          <p>{tAbout("Paragraph2")}</p>
         </div>
       </div>
       <div className=" place-self-center mx-5 order-1 xl:order-2 relative h-[300px] sm:h-[500px] w-4/5 xl:w-full  flex items-center justify-center rounded-3xl">

@@ -4,7 +4,6 @@ import HorizontalStepper from "./HorizontalStepper";
 import { useTranslations } from "next-intl";
 
 const LoanSavingServices = () => {
-
   const tLoanSavingServices = useTranslations("Services.LoanSaving");
   return (
     <>
@@ -25,7 +24,7 @@ const LoanSavingServices = () => {
         </div>
       </div>
       <div className="w-full">
-        <HorizontalStepper/>
+        <HorizontalStepper />
       </div>
     </>
   );

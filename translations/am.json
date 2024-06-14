@@ -239,5 +239,31 @@
                 }
             }
         }
+    },
+
+    "ContactUs":{
+        "Header":"አግኙን",
+        "Title":"መልዕክትዎን ያስቀምጡልን",
+        "Sending":"በመላክ ላይ",
+        "Calling":"በመደወል ላይ",
+        "ContactForm":{
+            "FullName":"ሙሉ ስም",
+            "Email":"ኢሜይል",
+            "PhoneNumber":"ስልክ ቁጥር",
+            "City":"ከተማ",
+            "Reason":"ጉዳይ",
+            "YourMessage":"መልዕክትዎን እዚህ ጋር ይጻፉልን",
+            "Button":"መልዕክት ላክ"
+        },
+        "InfoBox":{
+            "Office":"ዋና መ/ቤት :-",
+            "OfficeParagraph":"ሀዋሳ ፒያሳ ንብ ባንክ ህንፃ 5ኛ ፎቅ",
+            "Branches":"ቅርንጫፍ ቢሮ :-",
+            "BranchesParagraph": "አቶቴ ዮሴፍ ህንፃ 1ኛ ፎቅ",
+            "Address":"ትሩፋት አድማስ ሞል 4ተኛ ፎቅ",
+            "Address2":"አረብ ሰፈር ሞድረገነት ህንፃ 1ኛ ፎቅ"
+        }
     }
 }
+
+
