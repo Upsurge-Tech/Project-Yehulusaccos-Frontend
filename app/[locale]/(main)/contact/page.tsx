@@ -10,6 +10,7 @@ import Vector from "@/public/Vector.svg";
 import GoogleMap from "@/components/contact/GoogleMap";
 import InfoBoard from "@/components/contact/InfoBoard";
 
+
 const ContactPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
