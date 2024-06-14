@@ -1,17 +1,16 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-import { signIn } from "next-auth/react";
-import { stringify } from "querystring";
-import { handleClientScriptLoad } from "next/script";
+import Spinner from "@/components/Spinner";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import Image from "next/image";
 import Logo2 from "@/public/assets/Logo2.png";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/Spinner";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 
+console.log("here");
 const Login = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -29,6 +28,7 @@ const Login = () => {
         ...formState,
         redirect: false,
       })) as { status: number; error?: string };
+      console.log("res", res);
       if (res.error) {
         const errorString =
           res.error === "CredentialsSignin" ? "Invalid Credentials" : res.error;

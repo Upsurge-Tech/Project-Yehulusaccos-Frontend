@@ -1,3 +1,9 @@
+export const contentTypeStrings = [
+  "heading",
+  "paragraph",
+  "image",
+  "youtube",
+] as const;
 export interface HeadingContent {
   type: "heading";
   id: number;
@@ -39,4 +45,38 @@ export interface Article {
     | ImageContent
     | YouTubeContent
   )[];
+}
+
+export interface HeadingFormContent {
+  type: "heading";
+  heading: string;
+}
+
+export interface ParagraphFormContent {
+  type: "paragraph";
+  paragraph: string;
+}
+export interface ImageFormContent {
+  type: "image";
+  alt: string;
+  file: File | null;
+}
+export interface YouTubeFormContent {
+  elementId: string;
+  type: "youtube";
+  youtubeLink: string;
+  error: string;
+}
+
+export type FormContent =
+  | HeadingFormContent
+  | ParagraphFormContent
+  | ImageFormContent
+  | YouTubeFormContent;
+
+export interface ArticleFormState {
+  title: string;
+  thumbnail: { file: File | null; alt: string };
+  unknown: string;
+  contents: FormContent[];
 }
