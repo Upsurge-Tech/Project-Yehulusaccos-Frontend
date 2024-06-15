@@ -18,9 +18,12 @@ const EditPost = async ({ params: { id } }: Props) => {
   const formState: ArticleFormState = {
     title: article.title,
     thumbnail: {
+      elementId: "thumbnail",
+      type: "image",
       file: null,
       previousSrc: article.thumbnail,
       alt: article.title,
+      error: "",
     },
     unknown: "",
     contents: article.contents.map((c, i) => {
@@ -35,6 +38,7 @@ const EditPost = async ({ params: { id } }: Props) => {
           file: null,
           previousSrc: c.src,
           elementId: `img_${c.src}`,
+          error: "",
         };
       } else if (c.type === "youtube") {
         return {

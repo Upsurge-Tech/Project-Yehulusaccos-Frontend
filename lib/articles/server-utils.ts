@@ -54,14 +54,16 @@ export const insertContents = async (
   imagePaths: string[]
 ): Promise<{ error: string } | void> => {
   try {
+    let imageIndex = 1;
     await db.insert(contentTable).values(
       article.contents.map((content, i) => {
         const type = content.type;
         let data: string = "";
         let alt: string = "";
         if (type === "image") {
-          data = imagePaths[i + 1];
+          data = imagePaths[imageIndex];
           alt = content.alt;
+          imageIndex++;
         } else if (type === "heading") {
           data = content.heading;
         } else if (type === "paragraph") {
@@ -143,5 +145,6 @@ export const extractArticles = (res: Res[]): Article[] | { error: string } => {
   }
 
   articles.map(attachExcrept);
+  articles.forEach((a) => a.contents.sort((a, b) => a.id - b.id));
   return articles;
 };

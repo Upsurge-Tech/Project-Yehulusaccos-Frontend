@@ -4,7 +4,13 @@ import { ArticleFormState } from "@/data-types/Article";
 const NewPost = () => {
   const state: ArticleFormState = {
     title: "title",
-    thumbnail: { file: null, alt: "" },
+    thumbnail: {
+      type: "image",
+      elementId: "thumbnail",
+      file: null,
+      alt: "",
+      error: "",
+    },
     unknown: "",
     contents: [
       { type: "heading", heading: "heading" },

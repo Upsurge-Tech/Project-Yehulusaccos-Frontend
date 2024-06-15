@@ -47,9 +47,11 @@ const AddBlock = ({ formState, setFormState }: Props) => {
                     };
                   } else if (type === "image") {
                     content = {
+                      error: "",
                       type,
                       alt: "",
                       file: null,
+                      localUrl: null,
                       elementId: `img_${Math.round(Math.random() * 10000)}`,
                     };
                   } else {

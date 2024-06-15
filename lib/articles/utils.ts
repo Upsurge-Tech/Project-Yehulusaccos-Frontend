@@ -1,4 +1,4 @@
-import { Article } from "@/data-types/Article";
+import { Article, ArticleFormState } from "@/data-types/Article";
 
 export const getVideoId = (link: string): string | null => {
   try {
@@ -35,4 +35,48 @@ export const attachExcrept = (article: Article) => {
 
   article.excerpt =
     article.title.split(" ").slice(0, maxWords).join(" ") + "...";
+};
+
+const toFile = async (url: string | null): Promise<File | null> => {
+  if (!url) return null;
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error("Failed to load image" + url);
+  }
+  const blob = await res.blob();
+  const fileName = url.split("/").pop();
+  const name = `${Math.round(Math.random() * 1000000)}_${fileName}`;
+  const file = new File([blob], name, { type: blob.type });
+  return file;
+};
+
+export const withPrevImages = async (
+  article: ArticleFormState
+): Promise<ArticleFormState> => {
+  const thumbnailFile = await toFile(article.thumbnail.previousSrc || null);
+  const thumbnailLocalUrl = article.thumbnail.previousSrc || null;
+
+  const contents = await Promise.all(
+    article.contents.map(async (c, i) => {
+      if (c.type !== "image") {
+        return { ...c };
+      } else {
+        const file = await toFile(c.previousSrc || null);
+        const localUrl = c.previousSrc || null;
+        return { ...c, file, localUrl };
+      }
+    })
+  );
+
+  const copy: ArticleFormState = {
+    ...article,
+    thumbnail: {
+      ...article.thumbnail,
+      file: thumbnailFile,
+      localUrl: thumbnailLocalUrl,
+    },
+    contents,
+  };
+  return copy;
 };

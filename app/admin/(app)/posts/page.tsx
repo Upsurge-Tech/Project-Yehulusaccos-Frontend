@@ -25,7 +25,7 @@ const Posts = async ({
       page = 1;
     }
   }
-  const size = 5;
+  const size = 10;
 
   const res = await getArticles({ page, size, offset: 0 });
   if ("error" in res) {
@@ -57,8 +57,8 @@ const Posts = async ({
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Link href={`/news/${article.id}`} className="hidden">
-                    <Button size={"sm"} variant={"ghost"}>
+                  <Link href={`/news/${article.id}`}>
+                    <Button size={"sm"} variant={"outline"}>
                       Read
                     </Button>
                   </Link>

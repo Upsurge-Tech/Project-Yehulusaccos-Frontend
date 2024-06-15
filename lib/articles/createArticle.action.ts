@@ -15,6 +15,19 @@ export const createArticle = async (
   article: ArticleFormState
 ): Promise<{ error: string } | number> => {
   const imageFiles = [...(formData.getAll("images") as File[])];
+  if (
+    imageFiles.length - 1 !==
+    article.contents.filter((c) => c.type === "image").length
+  ) {
+    console.error(
+      "files",
+      imageFiles.length,
+      "vs",
+      "image in form data",
+      article.contents.filter((c) => c.type === "image").length
+    );
+    return { error: "Missing images, Please try again later." };
+  }
   const filePaths = createImagePaths(imageFiles);
   console.log("image paths", filePaths);
 

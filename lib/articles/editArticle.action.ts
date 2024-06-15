@@ -16,6 +16,13 @@ export const editArticle = async (
   article: ArticleFormState
 ): Promise<{ error: string } | void> => {
   const imageFiles = [...(formData.getAll("images") as File[])];
+  if (
+    imageFiles.length - 1 !==
+    article.contents.filter((c) => c.type === "image").length
+  ) {
+    return { error: "Missing images, Please try again later." };
+  }
+
   const oldFilePaths = article.contents
     .map((c) => (c.type === "image" ? c.previousSrc ?? "" : ""))
     .filter((s) => s !== "");
@@ -25,7 +32,8 @@ export const editArticle = async (
     //update article, replace contents
     await db
       .update(articleTable)
-      .set({ title: article.title, thumbnail: filePaths[0] });
+      .set({ title: article.title, thumbnail: filePaths[0] })
+      .where(eq(articleTable.id, articleId));
 
     await db.delete(contentTable).where(eq(contentTable.articleId, articleId));
     await insertContents(articleId, article, filePaths);

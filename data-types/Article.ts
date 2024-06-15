@@ -62,7 +62,9 @@ export interface ImageFormContent {
   elementId: string;
   alt: string;
   file: File | null;
+  localUrl: string | null;
   previousSrc?: string; //string if editing image
+  error: string;
 }
 export interface YouTubeFormContent {
   elementId: string;
@@ -79,7 +81,7 @@ export type FormContent =
 
 export interface ArticleFormState {
   title: string;
-  thumbnail: { file: File | null; previousSrc?: string; alt: string };
+  thumbnail: ImageFormContent;
   unknown: string;
   contents: FormContent[];
 }

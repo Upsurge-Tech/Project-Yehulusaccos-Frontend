@@ -11,8 +11,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArticleFormState, FormContent } from "@/data-types/Article";
 import { createArticle } from "@/lib/articles/createArticle.action";
 import { editArticle } from "@/lib/articles/editArticle.action";
+import { getVideoId, withPrevImages } from "@/lib/articles/utils";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { MdCancel } from "react-icons/md";
 
 const ArticleForm = ({
@@ -31,27 +32,71 @@ const ArticleForm = ({
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  useEffect(() => {
+    withPrevImages(formState).then((newState) => setFormState(newState));
+  }, []);
+
+  const replaceContent = (content: FormContent, i: number) => {
+    setFormState((formState) => {
+      const newContents = [
+        ...formState.contents.slice(0, i),
+        content,
+        ...formState.contents.slice(i + 1),
+      ];
+      return {
+        ...formState,
+        contents: newContents,
+      };
+    });
+  };
+
+  const validateYoutube = (youtubeLink: string): string => {
+    if (!youtubeLink) return "Can not be empty";
+    if (!getVideoId(youtubeLink))
+      return "Please paste a valid youtube link (eg: https://www.youtube.com/watch?v=Abc123Abc )";
+    else return "";
+  };
+  const validateImage = (file: File | null): string => {
+    if (!file) return "Can not be empty";
+    else return "";
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const state = formState;
-    if (!state.thumbnail.file) {
-      document.getElementById("thumb")?.focus();
+
+    //ensure required* and other unresolved errors
+    if (validateImage(state.thumbnail.file)) {
+      document.getElementById(state.thumbnail.elementId)?.focus();
+      setFormState({
+        ...formState,
+        thumbnail: {
+          ...formState.thumbnail,
+          error: validateImage(state.thumbnail.file),
+        },
+      });
       return;
     }
 
-    for (const content of state.contents) {
-      if (content.type === "youtube" && content.error) {
-        document.getElementById(content.elementId)?.focus();
-        return;
+    for (let i = 0; i < state.contents.length; i++) {
+      const content = state.contents[i];
+      let error: string = "";
+      let elementId: string = "";
+      if (content.type === "youtube") {
+        error = validateYoutube(content.youtubeLink);
+        elementId = content.elementId;
+      } else if (content.type === "image") {
+        error = validateImage(content.file);
+        elementId = content.elementId;
       }
-
-      if (content.type === "image" && !content.file) {
-        document.getElementById(content.elementId)?.focus();
+      if (error && (content.type === "youtube" || content.type === "image")) {
+        document.getElementById(elementId)?.focus();
+        replaceContent({ ...content, error }, i);
         return;
       }
     }
 
+    //create form data
     const formData = new FormData();
     formData.append("images", state.thumbnail.file as File);
     for (const content of state.contents) {
@@ -61,10 +106,17 @@ const ArticleForm = ({
     }
 
     console.log("submitting", state);
+
+    //create alt and also remove files from content
     let nearestHeading: string = formState.title;
-    const copy = {
+    const copy: ArticleFormState = {
       ...state,
-      thumbnail: { file: null, alt: `Image describing ${nearestHeading}` },
+      thumbnail: {
+        ...state.thumbnail,
+        file: null,
+        localUrl: null,
+        alt: `Image describing ${nearestHeading}`,
+      },
       contents: state.contents.map((c) => {
         if (c.type === "heading") {
           nearestHeading = c.heading;
@@ -73,6 +125,7 @@ const ArticleForm = ({
           return {
             ...c,
             file: null,
+            localUrl: null,
             alt: `Image describing ${nearestHeading}`,
           };
         } else {
@@ -81,11 +134,13 @@ const ArticleForm = ({
       }),
     };
     console.log(formData, copy);
+
+    //start networking
     setError("");
     try {
       setIsLoading(true);
       if (isEdit) {
-        const res = await editArticle(articleId as number, formData, formState);
+        const res = await editArticle(articleId as number, formData, copy);
         if (!res) {
           router.push("/admin/posts");
           router.refresh();
@@ -151,20 +206,6 @@ const ArticleForm = ({
           ". " +
           addContentButtonProps.find((b) => b.type === content.type)?.label;
 
-        const replaceContent = (content: FormContent) => {
-          setFormState((formState) => {
-            const newContents = [
-              ...formState.contents.slice(0, i),
-              content,
-              ...formState.contents.slice(i + 1),
-            ];
-            return {
-              ...formState,
-              contents: newContents,
-            };
-          });
-        };
-
         return (
           <div key={i} className="relative">
             <button
@@ -186,10 +227,13 @@ const ArticleForm = ({
                 id={id}
                 value={content.heading}
                 onChange={(e) => {
-                  replaceContent({
-                    type: content.type,
-                    heading: e.target.value,
-                  });
+                  replaceContent(
+                    {
+                      type: content.type,
+                      heading: e.target.value,
+                    },
+                    i
+                  );
                 }}
               />
             )}
@@ -200,10 +244,10 @@ const ArticleForm = ({
                 value={content.paragraph}
                 rows={5}
                 onChange={(e) => {
-                  replaceContent({
-                    type: content.type,
-                    paragraph: e.target.value,
-                  });
+                  replaceContent(
+                    { type: content.type, paragraph: e.target.value },
+                    i
+                  );
                 }}
               />
             )}
@@ -213,13 +257,21 @@ const ArticleForm = ({
                   previousSrc={content.previousSrc}
                   id={content.elementId}
                   file={content.file}
-                  onFile={(file) => {
-                    replaceContent({
-                      type: content.type,
-                      file,
-                      alt: "",
-                      elementId: content.elementId,
-                    });
+                  localUrl={content.localUrl}
+                  onFileChange={(file, localUrl) => {
+                    replaceContent(
+                      {
+                        ...content,
+                        file,
+                        error: validateImage(file),
+                        localUrl,
+                      },
+                      i
+                    );
+                  }}
+                  error={content.error}
+                  onError={(error) => {
+                    replaceContent({ ...content, error }, i);
                   }}
                 />
               </div>
@@ -228,13 +280,15 @@ const ArticleForm = ({
               <YoutubeInput
                 id={content.elementId}
                 error={content.error}
-                onLinkChange={(youtubeLink: string, error: string) => {
-                  replaceContent({
-                    elementId: content.elementId,
-                    type: content.type,
-                    youtubeLink,
-                    error,
-                  });
+                onLinkChange={(youtubeLink) => {
+                  replaceContent(
+                    {
+                      ...content,
+                      youtubeLink,
+                      error: validateYoutube(youtubeLink),
+                    },
+                    i
+                  );
                 }}
                 link={content.youtubeLink}
               />
@@ -248,12 +302,25 @@ const ArticleForm = ({
       <div className="pt-9 ">
         <Label htmlFor="thumb">Thumbnail *</Label>
         <ImageInput
-          id="thumb"
-          previousSrc={formState.thumbnail.previousSrc}
-          onFile={(file) => {
+          error={formState.thumbnail.error}
+          localUrl={formState.thumbnail.localUrl}
+          onError={(error) =>
             setFormState({
               ...formState,
-              thumbnail: { ...formState.thumbnail, file },
+              thumbnail: { ...formState.thumbnail, error },
+            })
+          }
+          id={formState.thumbnail.elementId}
+          previousSrc={formState.thumbnail.previousSrc}
+          onFileChange={(file, url) => {
+            setFormState({
+              ...formState,
+              thumbnail: {
+                ...formState.thumbnail,
+                file,
+                localUrl: url,
+                error: validateImage(file),
+              },
             });
           }}
           file={formState.thumbnail.file}
