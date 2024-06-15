@@ -11,6 +11,10 @@ import { BiSolidMessageRounded } from "react-icons/bi";
 import Vector from "@/public/Vector.svg";
 import GoogleMap from "@/components/contact/GoogleMap";
 import InfoBoard from "@/components/contact/InfoBoard";
+import TitleFadeIn from "@/components/animation/TitleFadeIn";
+import SlideFrom from "@/components/animation/SlideFrom";
+import FadeIn from "@/components/animation/FadeIn";
+import PopUp from "@/components/animation/PopUp";
 
 const ContactPage = () => {
   const tContactPage = useTranslations("ContactUs");
@@ -22,7 +26,10 @@ const ContactPage = () => {
           {tContactPage("Header")}
         </div>
         <div className="flex md:translate-x-10">
-          <p className="text-4xl font-semibold">{tContactPage("Title")}</p>
+          <TitleFadeIn
+            className="font-semibold text-3xl lg:text-5xl mt-2 lg:mt-0"
+            title={tContactPage("Title")}
+          />
           <Image
             src={Vector}
             alt="vectorimage"
@@ -32,7 +39,7 @@ const ContactPage = () => {
       </div>
       <div className="flex flex-col md:flex-row justify-between gap-x-10 md:w-[75%] w-[90%] py-10">
         <div className="md:inline-block flex-1 flex-col">
-          <div className="relative w-full h-64 md:h-full">
+          <SlideFrom from="left" className="relative w-full h-64 md:h-full">
             <Image
               src={plant}
               fill
@@ -55,16 +62,20 @@ const ContactPage = () => {
               <FaPhoneVolume className="text-primary translate-x-[120px]" />
               <p className="mx-auto">+251937999995 / +251937999996</p>
             </div>
-          </div>
+          </SlideFrom>
         </div>
-        <div className="flex-1 ">
+        <SlideFrom from="right" className="flex-1 ">
           <ContactForm />
-        </div>
+        </SlideFrom>
       </div>
       <div className="md:h-[100px] sm:h-[50px] lg:h-[150px]" />
       <div className="relative w-full py-20">
-        <GoogleMap />
-        <InfoBoard />
+        <FadeIn className="">
+          <GoogleMap />
+        </FadeIn>
+        <PopUp className="" delay={0}>
+          <InfoBoard />
+        </PopUp>
       </div>
     </div>
   );
