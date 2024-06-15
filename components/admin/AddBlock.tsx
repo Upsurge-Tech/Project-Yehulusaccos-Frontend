@@ -46,7 +46,12 @@ const AddBlock = ({ formState, setFormState }: Props) => {
                       error: "",
                     };
                   } else if (type === "image") {
-                    content = { type, alt: "", file: null };
+                    content = {
+                      type,
+                      alt: "",
+                      file: null,
+                      elementId: `img_${Math.round(Math.random() * 10000)}`,
+                    };
                   } else {
                     throw new Error(`unknown content type ${type}`);
                   }

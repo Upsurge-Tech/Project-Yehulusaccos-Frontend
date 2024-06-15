@@ -14,7 +14,7 @@ export const editArticle = async (
   articleId: number,
   formData: FormData,
   article: ArticleFormState
-): Promise<{ error: string } | number> => {
+): Promise<{ error: string } | void> => {
   const imageFiles = [...(formData.getAll("images") as File[])];
   const oldFilePaths = article.contents
     .map((c) => (c.type === "image" ? c.previousSrc ?? "" : ""))
@@ -39,5 +39,4 @@ export const editArticle = async (
     return { error: "Failed to save images" };
   }
   console.log("Successful edit articleId =", articleId);
-  return articleId;
 };

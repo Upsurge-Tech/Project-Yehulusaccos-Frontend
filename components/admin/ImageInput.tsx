@@ -3,14 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
 
-const urlToImage = async (url: string) => {
-  const res = await fetch(url);
-  const blob = await res.blob();
-  const name = url.slice(10) + Math.round(Math.random() * 1000);
-  const file = new File([blob], name, { type: blob.type });
-  return { file, url };
-};
-
 const ImageInput = ({
   previousSrc,
   id,
@@ -27,12 +19,24 @@ const ImageInput = ({
 
   useEffect(() => {
     if (!previousSrc) return;
-    urlToImage(previousSrc).then(({ file }) => {
+    const setFileFromPrevSrc = async (src: string) => {
+      const res = await fetch(src);
+      if (!res.ok) {
+        throw new Error("Failed to load image, Please try again.");
+      }
+      const blob = await res.blob();
+      const name = src.slice(10) + Math.round(Math.random() * 1000);
+      const file = new File([blob], name, { type: blob.type });
       onFile(file);
-    });
+    };
+    setFileFromPrevSrc(previousSrc);
   }, [previousSrc]);
+
   useEffect(() => {
-    if (!file) return;
+    if (!file) {
+      setLocalUrl(null);
+      return;
+    }
 
     const reader = new FileReader();
     console.log("here");
@@ -45,17 +49,18 @@ const ImageInput = ({
     return () => reader.abort();
   }, [file]);
 
+  const onErase = (e: InputEvent) => {
+    console.log("here");
+    e.preventDefault();
+    // ref.current?.value && (ref.current.value = "");
+    onFile(null);
+  };
+
   return (
     <div className="relative max-w-[200px] border rounded">
       <button
         className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
-        onClick={(e) => {
-          console.log("here");
-          e.preventDefault();
-          ref.current?.value && (ref.current.value = "");
-          onFile(null);
-          setLocalUrl(null);
-        }}
+        onClick={(e) => onErase}
       >
         <MdOutlineCleaningServices />
       </button>
@@ -74,7 +79,6 @@ const ImageInput = ({
         type="file"
         accept="image/*"
         onChange={(e) => onFile(e.target.files?.[0] || null)}
-        required
         className="w-1 h-1 opacity-0 absolute right-1/2 bottom-0 "
       />
       {localUrl && (

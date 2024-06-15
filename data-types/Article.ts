@@ -59,6 +59,7 @@ export interface ParagraphFormContent {
 }
 export interface ImageFormContent {
   type: "image";
+  elementId: string;
   alt: string;
   file: File | null;
   previousSrc?: string; //string if editing image
@@ -78,7 +79,7 @@ export type FormContent =
 
 export interface ArticleFormState {
   title: string;
-  thumbnail: { file: File | null; alt: string };
+  thumbnail: { file: File | null; previousSrc?: string; alt: string };
   unknown: string;
   contents: FormContent[];
 }
