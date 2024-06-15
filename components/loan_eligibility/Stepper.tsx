@@ -3,8 +3,12 @@ import { FaThumbsUp } from "react-icons/fa";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { ImLocation2 } from "react-icons/im";
 import { IoDocumentText } from "react-icons/io5";
+import { useTranslations } from "next-intl";
 
 const Stepper = () => {
+
+  const tStepper = useTranslations("Loan.Stepper");
+
   return (
     <ol className="w-full mt-10 relative left-36 lg:left-52 border-s-2 border-gray-300 ">
       <li className="mb-10 ms-6 h-24">
@@ -17,8 +21,7 @@ const Stepper = () => {
             className="self-center text-primary font-medium leading-tight"
           />
           <p className="text-xs lg:text-sm self-end">
-            Check the above eligibility documents and request by loan processing
-            unit
+            {tStepper("Step1")}
           </p>
         </div>
       </li>
@@ -32,7 +35,7 @@ const Stepper = () => {
             className="font-medium leading-tight text-primary"
           />
           <p className="text-xs lg:text-sm max-w-24 lg:max-w-xs">
-            Business place visit by committee
+            {tStepper("Step2")}
           </p>
         </div>
       </li>
@@ -46,7 +49,7 @@ const Stepper = () => {
             className="self-center text-primary font-medium leading-tight"
           />
           <p className="text-xs lg:text-sm self-end">
-            Check and approve or/ Send back to fulfill or correct
+            {tStepper("Step3")}
           </p>
         </div>
       </li>
@@ -59,7 +62,7 @@ const Stepper = () => {
             size={35}
             className="font-medium leading-tight text-primary"
           />
-          <p className="text-xs lg:text-sm">Transfer</p>
+          <p className="text-xs lg:text-sm">{tStepper("Step4")}</p>
         </div>
       </li>
     </ol>

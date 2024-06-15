@@ -1,15 +1,14 @@
-import React from "react";
 import Image from "next/image";
 
 import { FaPeopleGroup, FaUsersRays } from "react-icons/fa6";
 import { GiMoneyStack } from "react-icons/gi";
 import { LiaCoinsSolid } from "react-icons/lia";
 
-import { useTranslations } from "next-intl";
 import curlyarrow from "@/public/curlyarrow.svg";
-import TitleFadeIn from "../animation/TitleFadeIn";
-import CardFadeIn from "../animation/FadeIn";
+import { useTranslations } from "next-intl";
 import Counter from "../animation/Counter";
+import CardFadeIn from "../animation/FadeIn";
+import TitleFadeIn from "../animation/TitleFadeIn";
 
 const Metrics = () => {
   const tMetrics = useTranslations("Home.Metrices");
