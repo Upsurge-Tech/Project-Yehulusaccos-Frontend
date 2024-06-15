@@ -9,11 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Article } from "@/data-types/Article";
+import getArticles from "@/lib/articles/getArticles";
 import dateFormat from "dateformat";
 import Link from "next/link";
-
-type Response = { error: string } | { data: Article[]; numPages: number };
 
 const Posts = async ({
   searchParams,
@@ -29,16 +27,12 @@ const Posts = async ({
   }
   const size = 5;
 
-  const res = await fetch(
-    `${"http://localhost:3000"}/api/articles?page=${page}&size=${size}`
-  );
-  const data = (await res.json()) as Response;
-  if ("error" in data) {
-    throw new Error(data.error);
+  const res = await getArticles({ page, size, offset: 0 });
+  if ("error" in res) {
+    throw new Error(res.error);
   }
-  const numPages = data.numPages;
-
-  console.log(data);
+  const { articles, numPages } = res;
+  console.log("articles", articles);
 
   return (
     <main className="">
@@ -55,7 +49,7 @@ const Posts = async ({
           </TableRow>
         </TableHeader>
         <TableBody className="overflow-auto">
-          {data.data.map((article, i) => (
+          {articles.map((article, i) => (
             <TableRow key={article.id} className="flex flex-col sm:table-row">
               <TableCell className="font-medium">{article.title}</TableCell>
               <TableCell>

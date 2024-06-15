@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import deleteArticle from "@/lib/admin/deleteArticle";
+import deleteArticle from "@/lib/articles/deleteArticle.action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

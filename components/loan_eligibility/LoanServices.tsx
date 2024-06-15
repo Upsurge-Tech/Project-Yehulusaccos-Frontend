@@ -3,29 +3,23 @@ import Image from "next/image";
 import { FaCheckCircle } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import LoanSavingTable from "./LoanSavingTable";
+import { useTranslations } from "next-intl";
 
-const typeOfLoans = [
-  "A day",
-  "Three days",
-  "Seven days",
-  "Thirty days",
-  "Sixty days",
-  "One hundred days",
-  "Two hundred days",
-  "Three hundred days",
-  "One year",
-  "Two years",
-  "Three years",
-];
 
 const LoanServices = () => {
+
+  const tLoanTypes = useTranslations("Loan.LoanTypes");
+  const tLoanTypesList = useTranslations("Loan.LoanTypes.TypesOfLoans");
+
+  const typeOfLoans = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6", "Type7", "Type8", "Type9", "Type10", "Type11"]
+
   return (
     <div className="flex flex-col  gap-y-5 lg:gap-y-10 items-center w-full">
       <div className="bg-primarySoft lg:mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
-        LOAN SERVICES
+        {tLoanTypes("Header")}
       </div>
       <h2 className="font-semibold text-center text-2xl lg:text-4xl max-w-xl">
-        Different types of loan services we offer
+        {tLoanTypes("Statement")}
       </h2>
       <div className="hidden lg:flex relative -rotate-45 bottom-10 left-16 ">
         <Image
@@ -41,7 +35,7 @@ const LoanServices = () => {
             <FaCheckCircle size={20} />
           </div>
           <p className="font-semibold text-black text-md lg:text-xl">
-            Loan saving 30%
+            {tLoanTypes("LoanSaving")}
           </p>
         </div>
         <div className="flex items-center   gap-x-5 text-gray-500">
@@ -49,7 +43,7 @@ const LoanServices = () => {
             <FaCheckCircle size={20} />
           </div>
           <p className="font-semibold text-black text-md lg:text-xl">
-            Daily income buisness type
+            {tLoanTypes("DailyIncome")}
           </p>
         </div>
         <div className="flex flex-col text-gray-500 gap-y-5 ">
@@ -58,7 +52,7 @@ const LoanServices = () => {
               <FaCheckCircle size={20} />
             </div>
             <p className="font-semibold text-black text-md lg:text-xl">
-              Types of loan
+              {tLoanTypes("LoanType")}
             </p>
           </div>
         </div>
@@ -68,7 +62,7 @@ const LoanServices = () => {
               <FaCheckCircle size={20} />
             </div>
             <p className="font-semibold text-black text-md lg:text-xl">
-              Loan saving
+              {tLoanTypes("LoanSaving2")}
             </p>
           </div>
         </div>
@@ -78,7 +72,7 @@ const LoanServices = () => {
               <div>
                 <GoDotFill />
               </div>
-              <p>{loan} loan</p>
+              <p>{tLoanTypesList(`${loan}`)}</p>
             </div>
           ))}
         </div>

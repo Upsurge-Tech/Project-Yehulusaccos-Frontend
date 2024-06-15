@@ -74,7 +74,7 @@
       }
     },
     "OurUniqueness": {
-      "Header": "OUR UNIQUENESS",
+      "Header": "OUR BELIEVE",
       "Title": "What makes us different ?",
       "Accessibility": "Accessibile",
       "Collateral": "No Material collateral",
@@ -212,6 +212,132 @@
           "image": "/home.svg"
         }
       }
+    }
+  },
+
+  "AboutUs": {
+    "Header": "ABOUT US",
+    "Question": "Who are we?",
+    "Paragraph1": "is a financial cooperative established in 2015 EC with a mission to provide easy access to savings and credit services for all, especially those who might not qualify for traditional banking options. We offer a variety of savings plans, including regular savings, time deposits, and home and vehicle purchase savings accounts",
+    "InnerParagraph1": "Yehulu",
+    "Paragraph2": "Traditional banks can feel intimidating, with complex processes and high barriers to entry. We knew there had to be a better way! That is where Yehulu comes in. We are here to make saving and getting credit straightforward and accessible for everyone.",
+    "Office": {
+      "Header": "OUR OFFICE",
+      "Title": "Visit our office"
+    },
+    "Team": {
+      "Header": "TEAM",
+      "Title": "Meet the team",
+      "Members": {
+        "Person1": {
+          "name": "Mesafint Debebe",
+          "role": "Board chair person",
+          "src": "/assets/MesafinitDebebe.jpg"
+        },
+        "Person2": {
+          "name": "Workineh Jima",
+          "role": "General Operation Manager",
+          "src": "/assets/WorkinehJima.jpg"
+        },
+        "Person3": {
+          "name": "Yegetaneh Assefa",
+          "role": "Loan Dep't Head",
+          "src": "/assets/YegetanehAssefa.jpg"
+        },
+        "Person4": {
+          "name": "Anbesa Egata",
+          "role": "Media Dep't Head",
+          "src": "/assets/AnbesaEgata.jpg"
+        },
+        "Person5": {
+          "name": "Wendifraw Ayenew",
+          "role": "Finance Dep't Head",
+          "src": "/assets/WendifrawAyenew.jpg"
+        }
+      }
+    }
+  },
+
+  "ContactUs": {
+    "Header": "CONTACT US",
+    "Title": "Get in touch",
+    "Sending": "Sending...",
+    "Calling": "Calling...",
+    "ContactForm": {
+      "FullName": "Full Name",
+      "Email": "Email",
+      "PhoneNumber": "Phone Number",
+      "City": "City",
+      "Reason": "Reason",
+      "YourMessage": "Your Message",
+      "Button": "Send message"
+    },
+    "InfoBox": {
+      "Office": "Main Office",
+      "OfficeParagraph": "Hawassa Nib Bank Bldg 5th floor",
+      "Branches": "Branch Offices",
+      "BranchesParagraph": "Atote Yoseph Building 1st floor",
+      "Address": "Tirufat Admas Mall 4th floor",
+      "Address2": "Arab Sefer Midregenet Building 1st floor"
+    }
+  },
+
+  "Loan": {
+    "EligibilityCriteria": {
+      "Header": "LOAN AND ELIGIBILITY CRITERIA",
+      "Statement": "What do you need to fulfill to become eligible for loan services",
+      "Criterias": {
+        "Criteria1": "30% of requested loan amount personal contribution account maintained Loan saving account for 30 consecutive days for 100 & 200 days loan and 16 week for 350 days loan without fail.",
+        "Criteria2": "The account ledger should checked by credit department for further loan process.",
+        "Criteria3": "If loan saving account deposit fails/ deteriorated the daily or weekly schedule, loan processing and disbursement date increase by same date.",
+        "Criteria4": "Loan application, it should disclose purpose of the loan, loan request amount, and loan period and repayment mode.",
+        "Criteria5": "Personal identification of renewed ID, TIN, Passport etc",
+        "Criteria6": "Mirage Certificate, TIN number, Renewed Trade Licenses and Registration, Tax Clearance.",
+        "Criteria7": "Presentation of Collateral.",
+        "Criteria8": "Purchasing of 50 shares, with the value of 5,000 Birr.",
+        "Criteria9": "The loan customer/members have 50% borrowing capacity of Demand (Filagot) saving account turnover.",
+        "Criteria10": "Signed loan contract format between Yehulu and loan customer/members."
+      }
+    },
+
+    "ApprovalProcess": {
+      "Header": "APPROVAL PROCESS",
+      "Statement": "Loan approval process"
+    },
+
+    "LoanTypes": {
+      "Header": "LOAN SERVICES",
+      "Statement": "Different types of loan services we offer",
+      "LoanSaving": "Loan saving 30%",
+      "DailyIncome": "Daily income buisness type",
+      "LoanType": "Types of loan",
+      "LoanSaving2": "Loan saving",
+      "TypesOfLoans": {
+        "Type1": "A day Loan",
+        "Type2": "Three days Loan",
+        "Type3": "Seven days Loan",
+        "Type4": "Thirty days Loan",
+        "Type5": "Sixty days Loan",
+        "Type6": "One hundred days Loan",
+        "Type7": "Two hundred days Loan",
+        "Type8": "Three hundred days Loan",
+        "Type9": "One year Loan",
+        "Type10": "Two years Loan",
+        "Type11": "Three years Loan"
+      }
+    },
+
+    "Stepper": {
+      "Step1": "Check the above eligibility documents and request by loan processing unit",
+      "Step2": "Business place visit by committee",
+      "Step3": "Check and approve or/ Send back to fulfill or correct",
+      "Step4": "Transfer"
+    },
+
+    "LoanTable": {
+      "Days": "Days",
+      "Interest": "Interest",
+      "Insurance": "Insurance"
     }
   }
 }

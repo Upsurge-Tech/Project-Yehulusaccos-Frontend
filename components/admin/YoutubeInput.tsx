@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import getVideoId from "@/lib/admin/getVideoId";
+import { getVideoId } from "@/lib/articles/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { FaYoutube } from "react-icons/fa6";

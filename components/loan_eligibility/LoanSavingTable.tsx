@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslations } from "next-intl";
 
 const rows = [
   { days: 100, interest: 5, insurance: 1 },
@@ -8,6 +9,7 @@ const rows = [
 ];
 
 const LoanSavingTable = () => {
+  const tLoanTable = useTranslations("Loan.LoanTable");
   return (
     <div className="relative  border-[1px] border-primary/90 rounded-md overflow-x-auto place-self-center md:mr-5 lg:mr-0 lg:place-self-end w-full sm:w-[400px] lg:w-[500px] xl:w-[600px]">
       <table className="w-full text-sm text-left rtl:text-right  border-[1px] border-primary/90">
@@ -17,19 +19,19 @@ const LoanSavingTable = () => {
               scope="col"
               className="px-6 py-3 border-[1px] border-primary/90"
             >
-              Days
+              {tLoanTable("Days")}
             </th>
             <th
               scope="col"
               className="px-6 py-3 border-[1px] border-primary/90"
             >
-              Interest(%)
+              {tLoanTable("Interest")}(%)
             </th>
             <th
               scope="col"
               className="px-6 py-3 border-[1px] border-primary/90"
             >
-              Insurance(%)
+              {tLoanTable("Insurance")}(%)
             </th>
           </tr>
         </thead>

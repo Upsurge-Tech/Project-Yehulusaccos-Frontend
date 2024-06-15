@@ -3,8 +3,8 @@ import { ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import getVideoId from "./getVideoId";
-import { removeFilesIfExist, saveFiles } from "./image";
+import { saveFiles, removeFilesIfExist } from "./server-utils";
+import { getVideoId } from "./utils";
 
 export const saveArticle = async (
   formData: FormData,
