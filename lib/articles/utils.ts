@@ -1,4 +1,4 @@
-const getVideoId = (link: string): string | null => {
+export const getVideoId = (link: string): string | null => {
   try {
     if (!link.includes("https://www.youtube.com/watch?v")) {
       return null;
@@ -12,4 +12,3 @@ const getVideoId = (link: string): string | null => {
     return null;
   }
 };
-export default getVideoId;

@@ -4,7 +4,7 @@ import db from "@/db";
 import { ContentSQL, articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import path from "path";
-import { removeFilesIfExist } from "./image";
+import { removeFilesIfExist } from "./server-utils";
 
 const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
   let contents: ContentSQL[];

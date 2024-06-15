@@ -1,10 +1,9 @@
 import ArticlesGrid from "@/components/news/ArticlesGrid";
-import { Article } from "@/data-types/Article";
 import Image from "next/image";
-import React from "react";
 
-import formateDate from "@/utils/dateFormatter";
 import Contents from "@/components/news/Contents";
+import getArticle from "@/lib/articles/getArticle";
+import formateDate from "@/utils/dateFormatter";
 
 interface Props {
   params: {
@@ -12,18 +11,12 @@ interface Props {
   };
 }
 
-interface FetchArticle {
-  data: {
-    article: Article;
-    relatedArticles: Article[];
-  };
-}
-
 const NewsDetailPage = async ({ params: { id } }: Props) => {
-  const res = await fetch(`http://localhost:3000/api/articles/${id}`);
-  const {
-    data: { article, relatedArticles },
-  }: FetchArticle = await res.json();
+  const res = await getArticle(Number(id));
+  if ("error" in res) {
+    throw new Error("Article not found");
+  }
+  const { article, relatedArticles } = res;
 
   return (
     <div className="container my-5 md:my-10 lg:my-16 xl:my-24 flex flex-col items-center w-full overflow-hidden gap-y-10  min-h-screen ">
