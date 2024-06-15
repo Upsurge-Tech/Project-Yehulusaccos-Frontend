@@ -19,19 +19,30 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <label className="flex items-center justify-between px-2 focus:outline-none focus-within:outline-none">
+    <label className="flex items-center justify-between p-1 focus:outline-none focus-within:outline-none rounded-md">
       <select
         defaultValue={localeActive}
-        className="bg-transparent py-2"
+        className=" text-green-900 bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer"
         onChange={onSelectChange}
         disabled={isPending}
       >
         <option value="en">EN</option>
         <option value="am">አማ</option>
       </select>
-      <FaGlobe className="ml-2 cursor-pointer" />
+      <FaGlobe className="ml-2 text-green-500" />
     </label>
   );
 };
 
 export default LanguageSwitcher;
+
+
+
+
+
+
+
+
+
+
+
