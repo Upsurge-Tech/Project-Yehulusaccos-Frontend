@@ -28,90 +28,75 @@
     "Investors": "Investor relations"
   },
 
-  "Home": {
-    "Intro": {
-      "Title": "Inclusive development to all & for all!",
-      "Span": "Yehulu",
-      "Paragraph": "Yehulu is a financial cooperative established in 2015 EC with a mission to provide easy access to savings and credit services for all, especially those who might not qualify for traditional banking options",
-      "ContactButton": "Contact Us",
-      "SmallBusiness": "Small business",
-      "SmallBusinessThrive": "Small businesses thrive",
-      "Individuals": "Individuals"
-    },
-    "OurBelieve": {
-      "Header": "OUR BELIEVE",
-      "Title": "Our guiding principles",
-      "Vision": "Vision",
-      "VisionParagraph": "Access to finance for all",
-      "Mission": "Mission",
-      "MissionParagraph": "Providing savings and credit services easily with modern technology",
-      "Values": "Values",
-      "OurValues": {
-        "Values1": {
-          "name": "Helping members achieve financial freedom, simplify their lives and live their dreams."
+
+    "Home":{
+        "Intro":{
+            "Title":"Inclusive development to all & for all!",
+            "Span":"Yehulu",
+            "Paragraph":"is a financial cooperative established in 2015 EC with a mission to provide easy access to savings and credit services for all, especially those who might not qualify for traditional banking options",
+            "ContactButton":"Contact Us",
+            "SmallBusiness":"Small business",
+            "SmallBusinessThrive":"Small businesses thrive",
+            "Individuals":"Individuals"
         },
-        "Values2": {
-          "name": "Being able to support hardworking employees with low income sources will enable them to reach their earning potential."
+        "OurBelieve":{
+            "Header":"OUR BELIEVE",
+            "Title":"Our guiding principles",
+            "Vision":"Vision",
+            "VisionParagraph":"Access to finance for all",
+            "Mission":"Mission",
+            "MissionParagraph":"Providing savings and credit services easily with modern technology",
+            "Values":"Values",
+            "OurValues":{
+                "Values1":{"name" :"Helping members achieve financial freedom, simplify their lives and live their dreams." },
+                "Values2":{"name" :"Being able to support hardworking employees with low income sources will enable them to reach their earning potential." },
+                "Values3":{"name" :"Meet the needs of the user society by generating long-term financial reserves." },
+                "Values4":{"name" :"Reducing unemployment and economic problems as a responsible stakeholder." },
+                "Values5":{"name" :"To develop and expand savings and loan services among members and the community." },
+                "Values6":{"name" :"Build a large-scale membership of the largest financial provider association in Ethiopia." },
+                "Values7":{"name" :"Providing loan services by encouraging unsecured workers who wanted to use loan services." },
+                "Values8":{"name" :"Being able to make a positive impact in the financial sector." }
+            }
         },
-        "Values3": {
-          "name": "Meet the needs of the user society by generating long-term financial reserves."
+        "OurUniqueness":{
+            "Header":"OUR BELIEVE",
+            "Title":"What makes us different ?",
+            "Accessibility":"Accessibile",
+            "Collateral":"No Material collateral",
+            "Uniqueness":{
+                "Uniqueness1":"Our accessibility for all type and level of businesses.",
+                "Uniqueness2":"Outdoor to door services.",
+                "Uniqueness3":"Providing loan without any material collaterals.",
+                "Uniqueness4":"Daily base cash collection."
+            }
         },
-        "Values4": {
-          "name": "Reducing unemployment and economic problems as a responsible stakeholder."
+        "Testimonials":{
+            "Header":"TESTIMONIALS",
+            "Title":"What our customers say about us",
+            "Statements":{
+                "statement1":{
+                    "name":"Ato Alemneh mengesha",
+                    "text":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
+                },
+                "statement2":{
+                    "name":"Ato Alemneh mengesha",
+                    "text":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
+                },
+                "statement3":{
+                    "name":"Ato Alemneh mengesha",
+                    "text":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
+                }
+            }
         },
-        "Values5": {
-          "name": "To develop and expand savings and loan services among members and the community."
-        },
-        "Values6": {
-          "name": "Build a large-scale membership of the largest financial provider association in Ethiopia."
-        },
-        "Values7": {
-          "name": "Providing loan services by encouraging unsecured workers who wanted to use loan services."
-        },
-        "Values8": {
-          "name": "Being able to make a positive impact in the financial sector."
+        "Metrices":{
+            "Header":"SINCE WE STARTED",
+            "Title":"Current metrices",
+            "Members":"Number of members",
+            "Employees":"Permanent and contract employees",
+            "Customers":"Lent to customers",
+            "Finance":"Financial capital"
         }
-      }
     },
-    "OurUniqueness": {
-      "Header": "OUR BELIEVE",
-      "Title": "What makes us different ?",
-      "Accessibility": "Accessibile",
-      "Collateral": "No Material collateral",
-      "Uniqueness": {
-        "Uniqueness1": "Our accessibility for all type and level of businesses.",
-        "Uniqueness2": "Outdoor to door services.",
-        "Uniqueness3": "Providing loan without any material collaterals.",
-        "Uniqueness4": "Daily base cash collection."
-      }
-    },
-    "Testimonials": {
-      "Header": "TESTIMONIALS",
-      "Title": "What our customers say about us",
-      "Statements": {
-        "statement1": {
-          "name": "Ato Alemneh mengesha",
-          "Statement": "With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
-        },
-        "statement2": {
-          "name": "Ato Alemneh mengesha",
-          "Statement": "With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
-        },
-        "statement3": {
-          "name": "Ato Alemneh mengesha",
-          "Statement": "With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
-        }
-      }
-    },
-    "Metrices": {
-      "Header": "SINCE WE STARTED",
-      "Title": "Current metrices",
-      "Members": "Number of members",
-      "Employees": "Permanent and contract employees",
-      "Customers": "Lent to customers",
-      "Finance": "Financial capital"
-    }
-  },
 
   "Services": {
     "LoanSaving": {
@@ -338,6 +323,46 @@
       "Days": "Days",
       "Interest": "Interest",
       "Insurance": "Insurance"
+    }
+  },
+
+  "FAQ":{
+    "Header":"Frequently asked questions",
+    "Questions":{
+      "Question1":{
+        "id":"1",
+        "question":"What do we do?",
+        "answer":"We provide accessible savings and credit services to all, utilizing modern technology to facilitate financial inclusion. Our unique offerings include no-collateral loans, personalized savings plans, and door-to-door services, ensuring comprehensive financial support for individuals and businesses."
+      },
+      "Question2":{
+        "id":"2",
+        "question":"Do I need collateral for all loan services provided by Yehulu?",
+        "answer":"No, we offer loan packages where collateral aren’t needed depending on the business profitability and if the customer is a member of our organization. contact us or see the loan and eligibility sections to learn more."
+      },
+      "Question3":{
+        "id":"3",
+        "question":"What kind of business ventures and expansions does Yehulu support?",
+        "answer":"Yehulu supports various business ventures and expansions including social services, business expansion projects, vehicle purchases, and home purchases. Our loan services are designed to cater to these needs, offering flexible repayment terms and accessible financial support to help businesses and individuals achieve their goals."
+      },
+      "Question4":{
+        "id":"4",
+        "question":"Does Yehulu have interest rates?",
+        "answer":"Yes, Yehulu offers loans with interest rates that vary based on the loan duration. For example, loans with a duration of 100 days or less have an interest rate of 5%, while loans for 200 days have an interest rate of 9%. Longer-term loans, such as those up to 300 days, have an interest rate of 11%, and loans for one year or more also have an interest rate of 11%."
+      },
+      "Question5":{
+        "id":"5",
+        "question":"How much time do I need to wait after becoming a member to get loans?",
+        "answer":"After becoming a member of Yehulu, you need to maintain a loan saving account for 30 consecutive days to qualify for loans of 100 and 200 days, and for 16 weeks to qualify for a 350-day loan. During this period, you must consistently save 30% of the requested loan amount."
+      }
+    }
+  },
+
+  "News":{
+    "Header": "WHATS NEW",
+    "RecentNews": "Recent News",
+    "OlderNews":"Older News",
+    "SingleNews":{
+      "Header":"Related News"
     }
   }
 }

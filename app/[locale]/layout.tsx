@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import "../globals.css";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
+import React, { ReactNode } from "react";
+
 
 const font = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -30,7 +34,11 @@ export default function RootLayout({
     <html lang={locale}>
       <body className={font.className}>
         <NextIntlClientProvider messages={messages} locale={locale}>
-          {children}
+          <div className="flex flex-col   bg-stone-50">
+            <NavBar />
+            <div className="mt-[70px]">{children}</div>
+            <Footer />
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>

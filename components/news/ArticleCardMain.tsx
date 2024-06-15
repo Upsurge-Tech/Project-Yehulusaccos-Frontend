@@ -5,9 +5,6 @@ import Link from "next/link";
 import { IoIosArrowRoundUp } from "react-icons/io";
 
 const ArticleCardMain = ({ article }: { article: Article }) => {
-  // const dateval = new Date(date);
-  // const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-  // const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateval);
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex-1 w-full h-full">

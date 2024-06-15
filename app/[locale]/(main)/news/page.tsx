@@ -4,6 +4,7 @@ import ArticleGrid from "@/components/news/ArticleGrid";
 import articles from "@/data/articles";
 import Vector from "@/public/Vector.svg";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const NewsPage = ({
   searchParams,
@@ -12,6 +13,7 @@ const NewsPage = ({
     [key: string]: string | string[] | undefined;
   };
 }) => {
+  const tnews = useTranslations("News");
   const latestArticle1 = articles[0];
   const latestArticles2 = [articles[1], articles[2]];
 
@@ -20,10 +22,10 @@ const NewsPage = ({
       <div className="space-y-16">
         <div className="space-y-7 md:pt-14 pt-8">
           <h2 className="bg-[#00B6590D] text-primary w-fit mx-auto px-6 py-3 text-center">
-            WHATS NEW
+            {tnews("Header")}
           </h2>
           <div className="flex md:translate-x-10 justify-center">
-            <p className="text-3xl font-semibold">Recent News</p>
+            <p className="text-3xl font-semibold">{tnews("RecentNews")}</p>
             <Image
               src={Vector}
               alt="vectorimage"
@@ -43,7 +45,7 @@ const NewsPage = ({
         </div>
       </div>
       <div className="w-[80%] mx-auto py-40 space-y-5">
-        <h1 className="font-bold text-3xl px-3">Older News</h1>
+        <h1 className="font-bold text-3xl px-3">{tnews("OlderNews")}</h1>
         <div className="w-full">
           <ArticleGrid />
         </div>
