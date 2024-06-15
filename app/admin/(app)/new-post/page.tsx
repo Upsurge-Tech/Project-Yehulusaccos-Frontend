@@ -76,6 +76,7 @@ const NewPost = () => {
       if (typeof res === "number") {
         console.log("Article saved with id", res);
         router.push("/admin/posts");
+        router.refresh();
       } else {
         setError(res.error);
         console.log("Friendly error", res.error);
