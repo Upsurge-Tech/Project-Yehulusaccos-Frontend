@@ -1,32 +1,32 @@
 {
-    "NavBar":{
-        "services": "Services",
-        "about": "About us",
-        "faq": "FaQ",
-        "news" : "News and announcements",
-        "loan": "Loan and eligibility",
-        "contactUs": "Contact us"
-    },
+  "NavBar": {
+    "services": "Services",
+    "about": "About us",
+    "faq": "FaQ",
+    "news": "News and announcements",
+    "loan": "Loan and eligibility",
+    "contactUs": "Contact us"
+  },
 
-    "Footer":{
-        "AboutCompany": "About the company",
-        "Paragraph1":"Learn to love growth and change and you",
-        "Paragraph2":"will be a success. Microsoft patch.",
-        "Pages":"Pages",
-        "Services":"Services",
-        "Contactus":"Contact us",
-        "contact":"Contact us",
-        "Faq":"FAQ",
-        "News":"News",
-        "GetStarted":"Get started",
-        "Careers":"Careers",
-        "Legal":"Legal documents",
-        "About":"About",
-        "Glance":"Yehulu at a glance",
-        "Mission":" Mission, vision, and values",
-        "Shareholders":"Shareholders",
-        "Investors":"Investor relations"
-    },
+  "Footer": {
+    "AboutCompany": "About the company",
+    "Paragraph1": "Learn to love growth and change and you",
+    "Paragraph2": "will be a success. Microsoft patch.",
+    "Pages": "Pages",
+    "Services": "Services",
+    "Contactus": "Contact us",
+    "contact": "Contact us",
+    "Faq": "FAQ",
+    "News": "News",
+    "GetStarted": "Get started",
+    "Careers": "Careers",
+    "Legal": "Legal documents",
+    "About": "About",
+    "Glance": "Yehulu at a glance",
+    "Mission": " Mission, vision, and values",
+    "Shareholders": "Shareholders",
+    "Investors": "Investor relations"
+  },
 
 
     "Home":{
@@ -76,15 +76,15 @@
             "Statements":{
                 "statement1":{
                     "name":"Ato Alemneh mengesha",
-                    "Statement":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
+                    "text":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
                 },
                 "statement2":{
                     "name":"Ato Alemneh mengesha",
-                    "Statement":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
+                    "text":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
                 },
                 "statement3":{
                     "name":"Ato Alemneh mengesha",
-                    "Statement":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
+                    "text":"With the money from Yehulu saving and credit association, I was able to streamline my work and manage myself and my family without any trouble."
                 }
             }
         },
@@ -98,236 +98,271 @@
         }
     },
 
-    "Services":{
-        "LoanSaving":{
-            "Header":"LOAN AND SAVING SERVICES",
-            "Title":"To become a member of our service"
+  "Services": {
+    "LoanSaving": {
+      "Header": "LOAN AND SAVING SERVICES",
+      "Title": "To become a member of our service"
+    },
+    "HorizontalStepper": {
+      "Step1": {
+        "id": "1",
+        "step": "1000Birr membership fee"
+      },
+      "Step2": {
+        "id": "2",
+        "step": "Be Willing to save from a minimum of 10 birr a day"
+      },
+      "Step3": {
+        "id": "3",
+        "step": "Be Willing to buy a minimum of 50 lotteries of price 100birr each"
+      },
+      "Step4": {
+        "id": "4",
+        "step": "A Copy of your ID"
+      },
+      "Step5": {
+        "id": "5",
+        "step": "Four passport size photos"
+      },
+      "Step6": {
+        "id": "6",
+        "step": "Be willing to accept and follow terms and conditions"
+      }
+    },
+    "SavingServices": {
+      "Header": "LOAN AND SAVING SERVICES",
+      "Title": "Saving Services",
+      "SavingServicesList": {
+        "service1": {
+          "title": "Regular savings",
+          "desc": "This type of savings allows the members of the association to increase their saving habit by saving at least 10 Birr every day and it is the duty of all members to save accordingly.",
+          "image": "/threecircles.svg"
         },
-        "HorizontalStepper":{
-            "Step1":{
-                "id" : "1",
-                "step":"1000Birr membership fee"
-            },
-            "Step2":{
-                "id" : "2",
-                "step":"Be Willing to save from a minimum of 10 birr a day"
-            },
-            "Step3":{
-                "id" : "3",
-                "step":"Be Willing to buy a minimum of 50 lotteries of price 100birr each"
-            },
-            "Step4":{
-                "id" : "4",
-                "step":"A Copy of your ID"
-            },
-            "Step5":{
-                "id": "5",
-                "step":"Four passport size photos"
-            },
-            "Step6":{
-                "id" : "6",
-                "step":"Be willing to accept and follow terms and conditions"
-            }
+        "service2": {
+          "title": "Time deposit",
+          "desc": "It is a type of savings in which the individual get better interest service by saving time limit deposit up-to 20% of the amount he/she made agreement more than half a year period.",
+          "image": "/briefcase.svg"
         },
-        "SavingServices":{
-            "Header":"LOAN AND SAVING SERVICES",
-            "Title":"Saving Services",
-            "SavingServicesList":{
-                "service1":{
-                    "title": "Regular savings",
-                    "desc": "This type of savings allows the members of the association to increase their saving habit by saving at least 10 Birr every day and it is the duty of all members to save accordingly.",
-                    "image": "/threecircles.svg"
-                },
-                "service2":{
-                    "title": "Time deposit",
-                    "desc": "It is a type of savings in which the individual get better interest service by saving time limit deposit up-to 20% of the amount he/she made agreement more than half a year period.",
-                    "image": "/briefcase.svg"
-                },
-                "service3":{
-                    "title": "Home Purchase Savings",
-                    "desc": "It is a type of savings in which the individual saves 30% to become a home owner.",
-                    "image": "/home.svg"
-                },
-                "service4":{
-                    "title": "Vehicle Purchase Savings",
-                    "desc": "The person can save 50% of the vehicle ownership and get the type of vehicle of their choice.",
-                    "image": "/vehicle.svg"
-                },
-                "service5":{
-                    "title": "Demand Savings",
-                    "desc": "This type of savings is a type of savings in which themembers or non-members willingly deposit their money in the cooperative society and can earn or spend their money at any time and qualify for loan services.",
-                    "image": "/hand.svg"
-                },
-                "service6":{
-                    "title": "Children's Savings",
-                    "desc": "It is a type of savings that parents save for their children under 18 years of age.",
-                    "image": "/children.svg"
-                },
-                "service7":{
-                    "title": "Taxi Savings",
-                    "desc": "This is a type of savings where taxi owners save from their daily income to upgrade their vehicles type.",
-                    "image": "/taxi.svg"
-                },
-                "service8":{
-                    "title": "My Drive Savings",
-                    "desc": "This is a type of savings where taxi owners save from their daily income to upgrade their vehicles type",
-                    "image": "/mydrive.svg"
-                }
-
-            }
+        "service3": {
+          "title": "Home Purchase Savings",
+          "desc": "It is a type of savings in which the individual saves 30% to become a home owner.",
+          "image": "/home.svg"
         },
-
-        "LoanServices":{
-            "Header":"LOAN AND SAVING SERVICES",
-            "Title":"Loan Services",
-            "LoanServicesList":{
-                "service1":{
-                    "title": "For social services",
-                    "image": "/social.svg"
-                },
-                "service2":{
-                    "title": "For the purchase of car",
-                    "image": "/vehicle.svg"
-                },
-                "service3":{
-                    "title": "For business expansion",
-                    "image": "/briefcase.svg"
-                },
-                "service4":{
-                    "title": "For a purchase of a house",
-                    "image": "/home.svg"
-                }
-            }
+        "service4": {
+          "title": "Vehicle Purchase Savings",
+          "desc": "The person can save 50% of the vehicle ownership and get the type of vehicle of their choice.",
+          "image": "/vehicle.svg"
+        },
+        "service5": {
+          "title": "Demand Savings",
+          "desc": "This type of savings is a type of savings in which themembers or non-members willingly deposit their money in the cooperative society and can earn or spend their money at any time and qualify for loan services.",
+          "image": "/hand.svg"
+        },
+        "service6": {
+          "title": "Children's Savings",
+          "desc": "It is a type of savings that parents save for their children under 18 years of age.",
+          "image": "/children.svg"
+        },
+        "service7": {
+          "title": "Taxi Savings",
+          "desc": "This is a type of savings where taxi owners save from their daily income to upgrade their vehicles type.",
+          "image": "/taxi.svg"
+        },
+        "service8": {
+          "title": "My Drive Savings",
+          "desc": "This is a type of savings where taxi owners save from their daily income to upgrade their vehicles type",
+          "image": "/mydrive.svg"
         }
+      }
     },
 
-
-    "AboutUs":{
-        "Header": "ABOUT US",
-        "Question": "Who are we?",
-        "Paragraph1":"is a financial cooperative established in 2015 EC with a mission to provide easy access to savings and credit services for all, especially those who might not qualify for traditional banking options. We offer a variety of savings plans, including regular savings, time deposits, and home and vehicle purchase savings accounts",
-        "InnerParagraph1":"Yehulu",
-        "Paragraph2":"Traditional banks can feel intimidating, with complex processes and high barriers to entry. We knew there had to be a better way! That is where Yehulu comes in. We are here to make saving and getting credit straightforward and accessible for everyone.",
-        "Office":{
-            "Header":"OUR OFFICE",
-            "Title": "Visit our office"
+    "LoanServices": {
+      "Header": "LOAN AND SAVING SERVICES",
+      "Title": "Loan Services",
+      "LoanServicesList": {
+        "service1": {
+          "title": "For social services",
+          "image": "/social.svg"
         },
-        "Team":{
-            "Header":"TEAM",
-            "Title":"Meet the team",
-            "Members":{
-                "Person1": {
-                    "name": "Mesafint Debebe",
-                    "role": "Board chair person",
-                    "src": "/assets/MesafinitDebebe.jpg"
-                },
-                "Person2":{
-                    "name": "Workineh Jima",
-                    "role": "General Operation Manager",
-                    "src": "/assets/WorkinehJima.jpg"
-                },
-                "Person3":{
-                    "name": "Yegetaneh Assefa",
-                    "role": "Loan Dep't Head",
-                    "src": "/assets/YegetanehAssefa.jpg"
-                },
-                "Person4":{
-                    "name": "Anbesa Egata",
-                    "role": "Media Dep't Head",
-                    "src": "/assets/AnbesaEgata.jpg"
-                },
-                "Person5":{
-                    "name": "Wendifraw Ayenew",
-                    "role": "Finance Dep't Head",
-                    "src": "/assets/WendifrawAyenew.jpg"
-                }
-            }
+        "service2": {
+          "title": "For the purchase of car",
+          "image": "/vehicle.svg"
+        },
+        "service3": {
+          "title": "For business expansion",
+          "image": "/briefcase.svg"
+        },
+        "service4": {
+          "title": "For a purchase of a house",
+          "image": "/home.svg"
         }
-    },
-
-    "ContactUs":{
-        "Header":"CONTACT US",
-        "Title":"Get in touch",
-        "Sending":"Sending...",
-        "Calling":"Calling...",
-        "ContactForm":{
-            "FullName":"Full Name",
-            "Email":"Email",
-            "PhoneNumber":"Phone Number",
-            "City":"City",
-            "Reason":"Reason",
-            "YourMessage":"Your Message",
-            "Button":"Send message"
-        },
-        "InfoBox":{
-            "Office":"Main Office",
-            "OfficeParagraph":"Hawassa Nib Bank Bldg 5th floor",
-            "Branches":"Branch Offices",
-            "BranchesParagraph": "Atote Yoseph Building 1st floor",
-            "Address":"Tirufat Admas Mall 4th floor",
-            "Address2":"Arab Sefer Midregenet Building 1st floor"
-        }
-
-    },
-
-
-    "Loan":{
-        "EligibilityCriteria":{
-            "Header":"LOAN AND ELIGIBILITY CRITERIA",
-            "Statement":"What do you need to fulfill to become eligible for loan services",
-            "Criterias":{
-                "Criteria1" : "30% of requested loan amount personal contribution account maintained Loan saving account for 30 consecutive days for 100 & 200 days loan and 16 week for 350 days loan without fail.",
-                "Criteria2" : "The account ledger should checked by credit department for further loan process.",
-                "Criteria3" : "If loan saving account deposit fails/ deteriorated the daily or weekly schedule, loan processing and disbursement date increase by same date.",
-                "Criteria4" : "Loan application, it should disclose purpose of the loan, loan request amount, and loan period and repayment mode.",
-                "Criteria5" : "Personal identification of renewed ID, TIN, Passport etc",
-                "Criteria6" : "Mirage Certificate, TIN number, Renewed Trade Licenses and Registration, Tax Clearance.",
-                "Criteria7" : "Presentation of Collateral.",
-                "Criteria8" : "Purchasing of 50 shares, with the value of 5,000 Birr.",
-                "Criteria9" : "The loan customer/members have 50% borrowing capacity of Demand (Filagot) saving account turnover.",
-                "Criteria10" : "Signed loan contract format between Yehulu and loan customer/members."
-            }
-        },
-
-        "ApprovalProcess":{
-            "Header":"APPROVAL PROCESS",
-            "Statement":"Loan approval process"
-        },
-
-        "LoanTypes":{
-            "Header":"LOAN SERVICES",
-            "Statement":"Different types of loan services we offer",
-            "LoanSaving": "Loan saving 30%",
-            "DailyIncome":"Daily income buisness type",
-            "LoanType":"Types of loan",
-            "LoanSaving2":"Loan saving",
-            "TypesOfLoans":{
-                "Type1":"A day Loan",
-                "Type2":"Three days Loan",
-                "Type3":"Seven days Loan",
-                "Type4":"Thirty days Loan",
-                "Type5":"Sixty days Loan",
-                "Type6":"One hundred days Loan",
-                "Type7":"Two hundred days Loan",
-                "Type8":"Three hundred days Loan",
-                "Type9":"One year Loan",
-                "Type10":"Two years Loan",
-                "Type11":"Three years Loan"
-            }
-        },
-
-        "Stepper":{
-            "Step1":"Check the above eligibility documents and request by loan processing unit",
-            "Step2":"Business place visit by committee",
-            "Step3":"Check and approve or/ Send back to fulfill or correct",
-            "Step4":"Transfer"
-        },
-
-        "LoanTable":{
-            "Days":"Days",
-            "Interest":"Interest",
-            "Insurance":"Insurance"
-        }
+      }
     }
+  },
 
+  "AboutUs": {
+    "Header": "ABOUT US",
+    "Question": "Who are we?",
+    "Paragraph1": "is a financial cooperative established in 2015 EC with a mission to provide easy access to savings and credit services for all, especially those who might not qualify for traditional banking options. We offer a variety of savings plans, including regular savings, time deposits, and home and vehicle purchase savings accounts",
+    "InnerParagraph1": "Yehulu",
+    "Paragraph2": "Traditional banks can feel intimidating, with complex processes and high barriers to entry. We knew there had to be a better way! That is where Yehulu comes in. We are here to make saving and getting credit straightforward and accessible for everyone.",
+    "Office": {
+      "Header": "OUR OFFICE",
+      "Title": "Visit our office"
+    },
+    "Team": {
+      "Header": "TEAM",
+      "Title": "Meet the team",
+      "Members": {
+        "Person1": {
+          "name": "Mesafint Debebe",
+          "role": "Board chair person",
+          "src": "/assets/MesafinitDebebe.jpg"
+        },
+        "Person2": {
+          "name": "Workineh Jima",
+          "role": "General Operation Manager",
+          "src": "/assets/WorkinehJima.jpg"
+        },
+        "Person3": {
+          "name": "Yegetaneh Assefa",
+          "role": "Loan Dep't Head",
+          "src": "/assets/YegetanehAssefa.jpg"
+        },
+        "Person4": {
+          "name": "Anbesa Egata",
+          "role": "Media Dep't Head",
+          "src": "/assets/AnbesaEgata.jpg"
+        },
+        "Person5": {
+          "name": "Wendifraw Ayenew",
+          "role": "Finance Dep't Head",
+          "src": "/assets/WendifrawAyenew.jpg"
+        }
+      }
+    }
+  },
+
+  "ContactUs": {
+    "Header": "CONTACT US",
+    "Title": "Get in touch",
+    "Sending": "Sending...",
+    "Calling": "Calling...",
+    "ContactForm": {
+      "FullName": "Full Name",
+      "Email": "Email",
+      "PhoneNumber": "Phone Number",
+      "City": "City",
+      "Reason": "Reason",
+      "YourMessage": "Your Message",
+      "Button": "Send message"
+    },
+    "InfoBox": {
+      "Office": "Main Office",
+      "OfficeParagraph": "Hawassa Nib Bank Bldg 5th floor",
+      "Branches": "Branch Offices",
+      "BranchesParagraph": "Atote Yoseph Building 1st floor",
+      "Address": "Tirufat Admas Mall 4th floor",
+      "Address2": "Arab Sefer Midregenet Building 1st floor"
+    }
+  },
+
+  "Loan": {
+    "EligibilityCriteria": {
+      "Header": "LOAN AND ELIGIBILITY CRITERIA",
+      "Statement": "What do you need to fulfill to become eligible for loan services",
+      "Criterias": {
+        "Criteria1": "30% of requested loan amount personal contribution account maintained Loan saving account for 30 consecutive days for 100 & 200 days loan and 16 week for 350 days loan without fail.",
+        "Criteria2": "The account ledger should checked by credit department for further loan process.",
+        "Criteria3": "If loan saving account deposit fails/ deteriorated the daily or weekly schedule, loan processing and disbursement date increase by same date.",
+        "Criteria4": "Loan application, it should disclose purpose of the loan, loan request amount, and loan period and repayment mode.",
+        "Criteria5": "Personal identification of renewed ID, TIN, Passport etc",
+        "Criteria6": "Mirage Certificate, TIN number, Renewed Trade Licenses and Registration, Tax Clearance.",
+        "Criteria7": "Presentation of Collateral.",
+        "Criteria8": "Purchasing of 50 shares, with the value of 5,000 Birr.",
+        "Criteria9": "The loan customer/members have 50% borrowing capacity of Demand (Filagot) saving account turnover.",
+        "Criteria10": "Signed loan contract format between Yehulu and loan customer/members."
+      }
+    },
+
+    "ApprovalProcess": {
+      "Header": "APPROVAL PROCESS",
+      "Statement": "Loan approval process"
+    },
+
+    "LoanTypes": {
+      "Header": "LOAN SERVICES",
+      "Statement": "Different types of loan services we offer",
+      "LoanSaving": "Loan saving 30%",
+      "DailyIncome": "Daily income buisness type",
+      "LoanType": "Types of loan",
+      "LoanSaving2": "Loan saving",
+      "TypesOfLoans": {
+        "Type1": "A day Loan",
+        "Type2": "Three days Loan",
+        "Type3": "Seven days Loan",
+        "Type4": "Thirty days Loan",
+        "Type5": "Sixty days Loan",
+        "Type6": "One hundred days Loan",
+        "Type7": "Two hundred days Loan",
+        "Type8": "Three hundred days Loan",
+        "Type9": "One year Loan",
+        "Type10": "Two years Loan",
+        "Type11": "Three years Loan"
+      }
+    },
+
+    "Stepper": {
+      "Step1": "Check the above eligibility documents and request by loan processing unit",
+      "Step2": "Business place visit by committee",
+      "Step3": "Check and approve or/ Send back to fulfill or correct",
+      "Step4": "Transfer"
+    },
+
+    "LoanTable": {
+      "Days": "Days",
+      "Interest": "Interest",
+      "Insurance": "Insurance"
+    }
+  },
+
+  "FAQ":{
+    "Header":"Frequently asked questions",
+    "Questions":{
+      "Question1":{
+        "id":"1",
+        "question":"What do we do?",
+        "answer":"We provide accessible savings and credit services to all, utilizing modern technology to facilitate financial inclusion. Our unique offerings include no-collateral loans, personalized savings plans, and door-to-door services, ensuring comprehensive financial support for individuals and businesses."
+      },
+      "Question2":{
+        "id":"2",
+        "question":"Do I need collateral for all loan services provided by Yehulu?",
+        "answer":"No, we offer loan packages where collateral aren’t needed depending on the business profitability and if the customer is a member of our organization. contact us or see the loan and eligibility sections to learn more."
+      },
+      "Question3":{
+        "id":"3",
+        "question":"What kind of business ventures and expansions does Yehulu support?",
+        "answer":"Yehulu supports various business ventures and expansions including social services, business expansion projects, vehicle purchases, and home purchases. Our loan services are designed to cater to these needs, offering flexible repayment terms and accessible financial support to help businesses and individuals achieve their goals."
+      },
+      "Question4":{
+        "id":"4",
+        "question":"Does Yehulu have interest rates?",
+        "answer":"Yes, Yehulu offers loans with interest rates that vary based on the loan duration. For example, loans with a duration of 100 days or less have an interest rate of 5%, while loans for 200 days have an interest rate of 9%. Longer-term loans, such as those up to 300 days, have an interest rate of 11%, and loans for one year or more also have an interest rate of 11%."
+      },
+      "Question5":{
+        "id":"5",
+        "question":"How much time do I need to wait after becoming a member to get loans?",
+        "answer":"After becoming a member of Yehulu, you need to maintain a loan saving account for 30 consecutive days to qualify for loans of 100 and 200 days, and for 16 weeks to qualify for a 350-day loan. During this period, you must consistently save 30% of the requested loan amount."
+      }
+    }
+  },
+
+  "News":{
+    "Header": "WHATS NEW",
+    "RecentNews": "Recent News",
+    "OlderNews":"Older News",
+    "SingleNews":{
+      "Header":"Related News"
+    }
+  }
 }

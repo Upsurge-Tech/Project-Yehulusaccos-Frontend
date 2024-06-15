@@ -1,9 +1,11 @@
 import React from "react";
 import Image from "next/image";
-
 import Questions from "@/components/faq/Questions";
+import { useTranslations } from "next-intl";
 
 const FAQPage = () => {
+
+  const tFaq = useTranslations("FAQ");
   return (
     <div className="container my-5 md:my-10 lg:my-16 xl:my-24 flex flex-col items-center w-full overflow-hidden gap-y-5  min-h-screen ">
       <div className=" flex flex-col max-w-xl gap-y-5 lg:gap-y-0">
@@ -11,7 +13,7 @@ const FAQPage = () => {
           FAQ
         </div>
         <h2 className="font-semibold text-center text-2xl lg:text-4xl">
-          Frequently asked questions
+          {tFaq("Header")}
         </h2>
         <div className="hidden lg:flex relative -rotate-45 bottom-[150px] left-[385px] ">
           <Image

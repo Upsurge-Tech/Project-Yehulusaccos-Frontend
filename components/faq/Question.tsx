@@ -8,14 +8,13 @@ import {
 import React, { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 
-interface Props {
-  question: {
-    question: string;
-    answer: string;
-  };
-}
 
-const Question = ({ question }: Props) => {
+type QuestionProps = {
+  question: string;
+  answer: string;
+};
+
+const Question = ({ question, answer }: QuestionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -26,7 +25,7 @@ const Question = ({ question }: Props) => {
     >
       <CollapsibleTrigger className=" self-start flex w-full text-start justify-between ">
         <p className="mr-2 text-xs md:text-[15px] lg:text-[17px] font-semibold text-gray-700">
-          {question.question}
+          {question}
         </p>
         {isOpen ? (
           <div>
@@ -39,7 +38,7 @@ const Question = ({ question }: Props) => {
         )}
       </CollapsibleTrigger>
       <CollapsibleContent className="text-gray-500 text-[11px] md:text-sm xl:text-[15px]">
-        {question.answer}
+        {answer}
       </CollapsibleContent>
     </Collapsible>
   );

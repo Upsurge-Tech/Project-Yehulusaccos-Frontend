@@ -6,6 +6,8 @@ import curly from "@/public/curlyarrow.svg";
 import threecircles from "@/public/threecircles.svg";
 import briefcase from "@/public/briefcase.svg";
 import rocket from "@/public/rocket.svg";
+import TitleFadeIn from "../animation/TitleFadeIn";
+import SlideFrom from "../animation/SlideFrom";
 
 // const values = [
 //   "Helping members achieve financial freedom, simplify their lives and live their dreams.",
@@ -38,14 +40,19 @@ const OurBelieve = () => {
       <div className="bg-primarySoft w-48 mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
         {tOurBelieve("Header")}
       </div>
-      <h2 className="font-semibold text-2xl lg:text-4xl">
-        {tOurBelieve("Title")}
-      </h2>
+      <TitleFadeIn
+        title={tOurBelieve("Title")}
+        className="font-semibold text-2xl lg:text-4xl"
+      />
+
       <div className="hidden xl:flex relative  -rotate-45 lg:-top-2 left-48 ">
         <Image src={curly} alt="curly green arrow" width={100} height={100} />
       </div>
       <div className="w-full flex flex-col mt-10 xl:mt-auto gap-y-7 xl:gap-y-20 xl:flex-row">
-        <div className="flex flex-col items-center lg:items-start gap-y-5 xl:gap-y-20 w-full ">
+        <SlideFrom
+          className="flex flex-col items-center lg:items-start gap-y-5 xl:gap-y-20 w-full "
+          from="left"
+        >
           <div className=" flex self-center flex-col w-3/4 xl:w-full">
             <Image
               src={threecircles}
@@ -53,7 +60,9 @@ const OurBelieve = () => {
               height={30}
               alt="three circles"
             />
-            <h3 className="text-lg font-semibold pt-2 xl:pt-5">{}</h3>
+            <h3 className="text-lg font-semibold pt-2 xl:pt-5">
+              {tOurBelieve("Vision")}
+            </h3>
             <p className="text-gray-600 text-sm">
               {tOurBelieve("VisionParagraph")}
             </p>
@@ -67,8 +76,12 @@ const OurBelieve = () => {
               {tOurBelieve("MissionParagraph")}
             </p>
           </div>
-        </div>
-        <div className="flex flex-col self-center w-3/4 xl:w-full gap-y-2 xl:gap-y-5 ">
+        </SlideFrom>
+
+        <SlideFrom
+          from="right"
+          className="flex flex-col self-center w-3/4 xl:w-full gap-y-2 xl:gap-y-5 "
+        >
           <Image src={rocket} width={30} height={30} alt="green rocket" />
           <h3 className="text-lg font-semibold">{tOurBelieve("Values")}</h3>
           <div className="flex flex-col gap-y-5">
@@ -81,7 +94,7 @@ const OurBelieve = () => {
               </div>
             ))}
           </div>
-        </div>
+        </SlideFrom>
       </div>
     </div>
   );

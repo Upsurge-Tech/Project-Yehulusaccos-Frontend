@@ -1,7 +1,7 @@
-import { articles } from "@/data/articles";
+import getArticles from "@/lib/articles/getArticles";
 import { NextRequest } from "next/server";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async (request: NextRequest): Promise<Response> => {
   //not yet connected to backend
   const params = request.nextUrl.searchParams;
   const pageParam = params.get("page");
@@ -11,13 +11,13 @@ export const GET = async (request: NextRequest) => {
   if (pageParam === null) {
     return Response.json(
       { error: "page query parameter is required" },
-      { status: 200 }
+      { status: 400 }
     );
   }
   if (sizeParam === null) {
     return Response.json(
       { error: "size query parameter is required" },
-      { status: 200 }
+      { status: 400 }
     );
   }
 
@@ -25,14 +25,13 @@ export const GET = async (request: NextRequest) => {
   const size = parseInt(sizeParam);
   const offset = offsetParam ? parseInt(offsetParam) : 0;
 
-  const afterOffsetArticles = articles.slice(offset);
-  const numArticles = afterOffsetArticles.length;
-  const numPages = Math.ceil(numArticles / size);
-
-  const startIndex = (page - 1) * size;
-  const endIndex = Math.min(startIndex + size, numArticles);
-  const slicedArticles = afterOffsetArticles.slice(startIndex, endIndex);
-
-  console.log("pagination status:", JSON.stringify({ numPages, numArticles }));
-  return Response.json({ data: slicedArticles, numPages });
+  const res = await getArticles({ page, size, offset });
+  if ("error" in res) {
+    return Response.json(res, { status: 500 });
+  } else {
+    return Response.json(
+      { data: res.articles, numPages: res.numPages },
+      { status: 200 }
+    );
+  }
 };

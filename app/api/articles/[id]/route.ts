@@ -1,4 +1,4 @@
-import { articles } from "@/data/articles";
+import getArticle from "@/lib/articles/getArticle";
 import { NextRequest } from "next/server";
 
 export const GET = async (
@@ -6,13 +6,14 @@ export const GET = async (
   { params }: { params: { id: string } }
 ) => {
   const id = params.id;
-  const article = articles.find((article) => article.id === Number(id));
-  if (!article) {
-    return Response.json({ error: "Article not found" }, { status: 404 });
-  } else {
-    const relatedArticles = articles
-      .filter((a) => a.id !== article.id)
-      .slice(0, 3);
-    return Response.json({ data: { article, relatedArticles } });
+  const res = await getArticle(Number(id));
+  if ("error" in res) {
+    if (res.error === "Not Found") {
+      return Response.json({ error: "Article not found" }, { status: 404 });
+    } else {
+      return Response.json({ error: res.error }, { status: 500 });
+    }
   }
+
+  return Response.json({ data: res });
 };
