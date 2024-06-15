@@ -61,6 +61,7 @@ export interface ImageFormContent {
   type: "image";
   alt: string;
   file: File | null;
+  previousSrc?: string; //string if editing image
 }
 export interface YouTubeFormContent {
   elementId: string;

@@ -1,0 +1,43 @@
+"use server";
+import { ArticleFormState } from "@/data-types/Article";
+import db from "@/db";
+import { articleTable, contentTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import {
+  createImagePaths,
+  insertContents,
+  removeFilesIfExist,
+  saveFiles,
+} from "./server-utils";
+
+export const editArticle = async (
+  articleId: number,
+  formData: FormData,
+  article: ArticleFormState
+): Promise<{ error: string } | number> => {
+  const imageFiles = [...(formData.getAll("images") as File[])];
+  const oldFilePaths = article.contents
+    .map((c) => (c.type === "image" ? c.previousSrc ?? "" : ""))
+    .filter((s) => s !== "");
+  const filePaths = createImagePaths(imageFiles);
+
+  try {
+    //update article, replace contents
+    await db
+      .update(articleTable)
+      .set({ title: article.title, thumbnail: filePaths[0] });
+
+    await db.delete(contentTable).where(eq(contentTable.articleId, articleId));
+    await insertContents(articleId, article, filePaths);
+
+    //remove old files, save new files
+    await saveFiles(imageFiles, filePaths);
+    await removeFilesIfExist(oldFilePaths);
+  } catch (e) {
+    console.error(e);
+    await db.delete(articleTable).where(eq(articleTable.id, articleId));
+    return { error: "Failed to save images" };
+  }
+  console.log("Successful edit articleId =", articleId);
+  return articleId;
+};

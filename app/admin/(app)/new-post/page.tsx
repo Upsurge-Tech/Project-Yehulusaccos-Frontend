@@ -9,21 +9,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArticleFormState, FormContent } from "@/data-types/Article";
-import { saveArticle } from "@/lib/articles/saveArticle.action";
+import { createArticle } from "@/lib/articles/createArticle.action";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { MdCancel } from "react-icons/md";
 
-const NewPost = () => {
-  const [formState, setFormState] = useState<ArticleFormState>({
-    title: "title",
-    thumbnail: { file: null, alt: "" },
-    unknown: "",
-    contents: [
-      { type: "heading", heading: "heading" },
-      { type: "paragraph", paragraph: "paragraph" },
-    ],
-  });
+const NewPost = ({
+  initialFormState,
+}: {
+  initialFormState?: ArticleFormState;
+}) => {
+  const isEdit = initialFormState !== undefined;
+
+  const [formState, setFormState] = useState<ArticleFormState>(
+    initialFormState || {
+      title: "title",
+      thumbnail: { file: null, alt: "" },
+      unknown: "",
+      contents: [
+        { type: "heading", heading: "heading" },
+        { type: "paragraph", paragraph: "paragraph" },
+      ],
+    }
+  );
 
   const router = useRouter();
 
@@ -72,14 +80,18 @@ const NewPost = () => {
     setError("");
     try {
       setIsLoading(true);
-      const res = await saveArticle(formData, copy);
-      if (typeof res === "number") {
-        console.log("Article saved with id", res);
-        router.push("/admin/posts");
-        router.refresh();
+      if (isEdit) {
+        console.log("saving article");
       } else {
-        setError(res.error);
-        console.log("Friendly error", res.error);
+        const res = await createArticle(formData, copy);
+        if (typeof res === "number") {
+          console.log("Article saved with id", res);
+          router.push("/admin/posts");
+          router.refresh();
+        } else {
+          setError(res.error);
+          console.log("Friendly error", res.error);
+        }
       }
     } catch (e) {
       setError("Something went wrong, Please try again later");
@@ -95,12 +107,14 @@ const NewPost = () => {
       className="h-full  flex flex-col gap-3"
     >
       <div className="flex justify-between pb-9">
-        <h1 className="text-primary font-bold text-2xl">Add new post</h1>
+        <h1 className="text-primary font-bold text-2xl">
+          {isEdit ? "Add new post" : "Edit post"}
+        </h1>
         <div>
           <div className="flex justify-end">
             <Button className="bg-tertiary" disabled={isLoading}>
               <Spinner spin={isLoading} />
-              <span>Publish</span>
+              <span>{isEdit ? "Save" : "Publish"}</span>
             </Button>
           </div>
           {error && <p className="text-destructive text-sm">{error}</p>}

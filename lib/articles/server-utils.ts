@@ -1,12 +1,22 @@
-import { Article } from "@/data-types/Article";
+import { Article, ArticleFormState } from "@/data-types/Article";
+import db from "@/db";
+import { contentTable } from "@/db/schema";
 import fs from "node:fs/promises";
 import path from "path";
-import { attachExcrept } from "./utils";
+import { attachExcrept, getVideoId } from "./utils";
 
 const toAbolutePath = (filePath: string) => {
   const segments = filePath.split("/");
   const absolutePath = path.join(process.cwd(), "public", ...segments);
   return absolutePath;
+};
+
+export const createImagePaths = (imageFiles: File[]): string[] => {
+  const filePaths = imageFiles.map((file) => {
+    const path = `/article-images/__${Math.round(Math.random() * 1000)}_${file.name}`;
+    return path;
+  });
+  return filePaths;
 };
 
 export const saveFiles = async (files: File[], filePaths: string[]) => {
@@ -36,6 +46,48 @@ export const removeFilesIfExist = async (filePaths: string[]) => {
       }
     })
   );
+};
+
+export const insertContents = async (
+  articleId: number,
+  article: ArticleFormState,
+  imagePaths: string[]
+): Promise<{ error: string } | void> => {
+  try {
+    await db.insert(contentTable).values(
+      article.contents.map((content, i) => {
+        const type = content.type;
+        let data: string = "";
+        let alt: string = "";
+        if (type === "image") {
+          data = imagePaths[i + 1];
+          alt = content.alt;
+        } else if (type === "heading") {
+          data = content.heading;
+        } else if (type === "paragraph") {
+          data = content.paragraph;
+        } else if (type === "youtube") {
+          const videoId = getVideoId(content.youtubeLink);
+          if (videoId === null) {
+            throw new Error(`Invalid youtube link at ${i + 1}th block`);
+          }
+          data = videoId;
+        }
+
+        if (data === "") {
+          throw new Error(`Empty content in ${type} at ${i + 1}th block`);
+        }
+
+        return { articleId, type, data, alt };
+      })
+    );
+  } catch (e) {
+    if (e instanceof Error) {
+      return { error: e.message };
+    } else {
+      return { error: "Something went wrong" + JSON.stringify(e) };
+    }
+  }
 };
 
 interface Res {

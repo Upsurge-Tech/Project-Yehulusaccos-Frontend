@@ -3,16 +3,34 @@ import { useEffect, useRef, useState } from "react";
 import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
 
+const urlToImage = async (url: string) => {
+  const res = await fetch(url);
+  const blob = await res.blob();
+  const name = url.slice(10) + Math.round(Math.random() * 1000);
+  const file = new File([blob], name, { type: blob.type });
+  return { file, url };
+};
+
 const ImageInput = ({
+  previousSrc,
   id,
   onFile,
   file,
 }: {
+  previousSrc?: string;
   id: string;
   onFile: (file: File | null) => void;
   file: File | null;
 }) => {
   const [localUrl, setLocalUrl] = useState<string | null>(null);
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!previousSrc) return;
+    urlToImage(previousSrc).then(({ file }) => {
+      onFile(file);
+    });
+  }, [previousSrc]);
   useEffect(() => {
     if (!file) return;
 
@@ -26,8 +44,6 @@ const ImageInput = ({
 
     return () => reader.abort();
   }, [file]);
-
-  const ref = useRef<HTMLInputElement>(null);
 
   return (
     <div className="relative max-w-[200px] border rounded">
