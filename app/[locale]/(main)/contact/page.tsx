@@ -73,9 +73,7 @@ const ContactPage = () => {
         <FadeIn className="">
           <GoogleMap />
         </FadeIn>
-        <PopUp className="" delay={0}>
-          <InfoBoard />
-        </PopUp>
+        <InfoBoard />
       </div>
     </div>
   );
