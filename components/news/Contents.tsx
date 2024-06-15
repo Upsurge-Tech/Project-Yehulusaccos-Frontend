@@ -1,20 +1,9 @@
-import React from "react";
 import Image from "next/image";
 
-import {
-  HeadingContent,
-  ParagraphContent,
-  ImageContent,
-  YouTubeContent,
-} from "@/data-types/Article";
+import { ArticleContent } from "@/data-types/Article";
 
 interface Props {
-  contents: (
-    | HeadingContent
-    | ParagraphContent
-    | ImageContent
-    | YouTubeContent
-  )[];
+  contents: ArticleContent[];
 }
 
 const Contents = ({ contents }: Props) => {

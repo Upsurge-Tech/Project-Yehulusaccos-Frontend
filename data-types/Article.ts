@@ -33,18 +33,19 @@ export interface YouTubeContent {
   youtubeId: string;
 }
 
+export type ArticleContent =
+  | HeadingContent
+  | ParagraphContent
+  | ImageContent
+  | YouTubeContent;
+
 export interface Article {
   id: number;
   title: string;
   excerpt: string;
   thumbnail: string;
   createdAt: string; //a date string
-  contents: (
-    | HeadingContent
-    | ParagraphContent
-    | ImageContent
-    | YouTubeContent
-  )[];
+  contents: ArticleContent[];
 }
 
 export interface HeadingFormContent {
