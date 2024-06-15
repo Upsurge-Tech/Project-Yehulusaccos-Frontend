@@ -2,8 +2,7 @@
 
 import db from "@/db";
 import { ContentSQL, articleTable, contentTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import path from "path";
+import { and, eq } from "drizzle-orm";
 import { removeFilesIfExist } from "./server-utils";
 
 const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
@@ -12,7 +11,7 @@ const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
     contents = await db
       .select()
       .from(contentTable)
-      .where(eq(contentTable.id, id));
+      .where(and(eq(contentTable.id, id), eq(contentTable.type, "image")));
   } catch (e) {
     let errString = "";
     if (e instanceof Error) errString = e.message;
@@ -20,9 +19,7 @@ const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
   }
 
   const imagePaths = contents.map((content) => content.data);
-  await removeFilesIfExist(
-    imagePaths.map((imagePath) => path.join(process.cwd(), "public", imagePath))
-  );
+  await removeFilesIfExist(imagePaths);
   try {
     await db.delete(contentTable).where(eq(contentTable.id, id));
     await db.delete(articleTable).where(eq(articleTable.id, id));

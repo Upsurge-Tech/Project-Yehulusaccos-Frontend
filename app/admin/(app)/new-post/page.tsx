@@ -19,7 +19,10 @@ const NewPost = () => {
     title: "title",
     thumbnail: { file: null, alt: "" },
     unknown: "",
-    contents: [{ type: "heading", heading: "heading" }],
+    contents: [
+      { type: "heading", heading: "heading" },
+      { type: "paragraph", paragraph: "paragraph" },
+    ],
   });
 
   const router = useRouter();

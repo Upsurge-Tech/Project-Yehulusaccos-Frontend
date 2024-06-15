@@ -32,7 +32,7 @@ const Posts = async ({
     throw new Error(res.error);
   }
   const { articles, numPages } = res;
-  console.log("articles", articles);
+  // console.log("articles", articles);
 
   return (
     <main className="">
