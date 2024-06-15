@@ -3,7 +3,7 @@ import { ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { saveFiles, removeFilesIfExist } from "./server-utils";
+import { removeFilesIfExist, saveFiles } from "./server-utils";
 import { getVideoId } from "./utils";
 
 export const saveArticle = async (
@@ -12,7 +12,7 @@ export const saveArticle = async (
 ): Promise<{ error: string } | number> => {
   const imageFiles = [...(formData.getAll("images") as File[])];
   const filePaths = imageFiles.map((file) => {
-    const path = `article-images/__${Math.round(Math.random() * 1000)}_${file.name}`;
+    const path = `/article-images/__${Math.round(Math.random() * 1000)}_${file.name}`;
     return path;
   });
   console.log("image paths", filePaths);

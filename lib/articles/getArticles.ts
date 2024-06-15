@@ -1,8 +1,8 @@
 import { Article } from "@/data-types/Article";
-import articles from "@/data/articles";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
+import { attachExcrept } from "./utils";
 
 const getArticles = async ({
   page,
@@ -13,21 +13,6 @@ const getArticles = async ({
   size: number;
   offset: number;
 }): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
-  //not yet connected to backend
-
-  /*
-    SELECT *
-  FROM (
-    SELECT DISTINCT id
-    FROM ${articleTable}
-    LIMIT ${size}
-  ) AS unique_ids
-  LEFT JOIN ${contentTable}
-  ON unique_ids.id = ${contentTable}.id
-  OFFSET ${size * (page - 1) + offset}
-`
-  */
-
   try {
     const limitQuery = db
       .select()
@@ -39,58 +24,77 @@ const getArticles = async ({
 
     const res = await db
       .select({
-        article: {
-          id: articleTable.id,
-          title: articleTable.title,
-          thumbnail: articleTable.thumbnail,
-          createdAt: articleTable.createdAt,
+        dbArticle: {
+          id: limitQuery.id,
+          title: limitQuery.title,
+          thumbnail: limitQuery.thumbnail,
+          createdAt: limitQuery.createdAt,
         },
-        content: {
+        dbContent: {
           id: contentTable.id,
+          articleId: contentTable.articleId,
           type: contentTable.type,
           data: contentTable.data,
           alt: contentTable.alt,
         },
       })
       .from(limitQuery)
-      .leftJoin(contentTable, eq(articleTable.id, contentTable.articleId));
+      .leftJoin(contentTable, eq(limitQuery.id, contentTable.articleId));
 
-    const articles = { a: 1, b: 2 };
+    const articles: Article[] = [];
     for (let i = 0; i < res.length; i++) {
-      const a = res[i].article;
+      const { dbArticle } = res[i];
+      articles.push({
+        ...dbArticle,
+        createdAt: dbArticle.createdAt.toISOString(),
+        excerpt: "",
+        contents: [],
+      });
+
+      while (
+        i < res.length &&
+        articles[articles.length - 1].id !== dbArticle.id
+      ) {
+        const content = res[i].dbContent;
+        if (!content) {
+          i++;
+          break;
+        }
+
+        const { data, alt, id, articleId, type } = content;
+        const lastArticle = articles[articles.length - 1];
+        if (type === "heading") {
+          lastArticle.contents.push({ type, heading: data, id, articleId });
+        } else if (type === "image") {
+          const content = { type, src: data, alt: alt || "", id, articleId };
+          lastArticle.contents.push(content);
+        } else if (type === "paragraph") {
+          lastArticle.contents.push({ type, paragraph: data, id, articleId });
+        } else if (type === "youtube") {
+          lastArticle.contents.push({ type, youtubeId: data, id, articleId });
+        } else {
+          return { error: `Unknown type ${type} in article id ${articleId}` };
+        }
+        i++;
+      }
     }
 
-    // res.forEach(({ article }) => {
-    //   if (article && visitedIds.has(article.id)) return;
-    //   const contents: ArticleContent[] = [];
-    //   articles.push({
-    //     ...article,
-    //     createdAt: article.createdAt.toISOString(),
-    //     contents,
-    //     excerpt: "",
-    //   });
-    //   visitedIds.add(article.id);
-    // });
+    articles.map(attachExcrept);
 
-    // res.forEach(({ content }) => {});
+    const res2 = await db.select({ count: count() }).from(articleTable);
+    const numPages = Math.ceil(res2[0].count / size);
 
     console.log("res is", res);
+
+    return { articles, numPages };
   } catch (e) {
+    console.error(e);
     if (e instanceof Error) {
       return { error: e.message };
     } else {
       return { error: "An error occurred" + JSON.stringify(e) };
     }
   }
-  const afterOffsetArticles = articles.slice(offset);
-  const numArticles = afterOffsetArticles.length;
-  const numPages = Math.ceil(numArticles / size);
-
-  const startIndex = (page - 1) * size;
-  const endIndex = Math.min(startIndex + size, numArticles);
-  const slicedArticles = afterOffsetArticles.slice(startIndex, endIndex);
-
-  return { articles: slicedArticles, numPages };
 };
 
 export default getArticles;
