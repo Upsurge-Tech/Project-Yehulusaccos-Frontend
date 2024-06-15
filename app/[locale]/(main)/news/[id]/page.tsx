@@ -38,7 +38,7 @@ const NewsDetailPage = async ({ params: { id } }: Props) => {
         </div>
         <Contents contents={article.contents} />
       </div>
-      <ArticlesGrid label="Related" articles={relatedArticles} />
+      <ArticlesGrid articles={relatedArticles} />
     </div>
   );
 };
