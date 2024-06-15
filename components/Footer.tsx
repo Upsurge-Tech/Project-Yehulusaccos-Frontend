@@ -57,12 +57,6 @@ const Footer = () => {
                 size={25}
               />
             </Link>
-            <Link href="https://www.t.me/hullucooprativeAssociationPrivat">
-              <FaTelegram
-                className="text-green-600 hover:scale-110 transition-transform duration-300"
-                size={25}
-              />
-            </Link>
           </div>
           <div className="flex items-center justify-center md:justify-start gap-x-4">
             <FiPhoneCall className="text-green-600" />
