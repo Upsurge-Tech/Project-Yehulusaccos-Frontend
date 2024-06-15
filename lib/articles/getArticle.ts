@@ -1,12 +1,12 @@
 import { Article } from "@/data-types/Article";
-import articles from "@/data/articles";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
 const getArticle = async (
-  id: number
+  id: number,
+  withRelatedArticles: boolean
 ): Promise<
   | { article: Article; relatedArticles: Article[] }
   | { error: "Not Found" | string }
@@ -28,10 +28,47 @@ const getArticle = async (
   const article = result[0];
 
   // const res2 = await db.se;
+  /*
+SELECT *
+FROM my_table
+WHERE id <> :given_row_id
+ORDER BY ABS(id - :given_row_id)
+LIMIT 5;
+*/
+  let relatedArticles: Article[] = [];
+  if (withRelatedArticles) {
+    const limitQuery = db
+      .select()
+      .from(articleTable)
+      .limit(3)
+      .orderBy(sql`ABS(${articleTable.id} - ${id})`)
+      .as("limit_query");
 
-  const relatedArticles = articles
-    .filter((a) => a.id !== article.id)
-    .slice(0, 3);
+    const res = await db
+      .select({
+        article: {
+          id: limitQuery.id,
+          title: limitQuery.title,
+          thumbnail: limitQuery.thumbnail,
+          createdAt: limitQuery.createdAt,
+        },
+        content: {
+          id: contentTable.id,
+          articleId: contentTable.articleId,
+          type: contentTable.type,
+          data: contentTable.data,
+          alt: contentTable.alt,
+        },
+      })
+      .from(limitQuery)
+      .leftJoin(contentTable, eq(limitQuery.id, contentTable.articleId));
+
+    const result = extractArticles(res);
+    if ("error" in result) {
+      return result;
+    }
+    relatedArticles = result;
+  }
 
   return { article, relatedArticles };
 };

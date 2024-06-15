@@ -8,14 +8,14 @@ interface Props {
 
 const ArticleCard = ({ article }: Props) => {
   return (
-    <div className=" w-full flex flex-col gap-y-2 sm:gap-y-4">
+    <div className=" w-full  flex flex-col gap-y-2 sm:gap-y-4">
       <Image
         width={500}
         height={100}
         priority
         src={`${article.thumbnail}`}
         alt=""
-        className="object-contain self-start rounded-md hover:scale-105 duration-200"
+        className="object-contain self-start rounded-md hover:scale-105 duration-200 max-h-[100px] bg-muted border"
       />
       <div className="bg-primarySoft text-primary self-start flex items-center text-xs font-semibold tracking-wide  px-2 h-7 sm:h-10 rounded-lg">
         {formateDate(article.createdAt)}

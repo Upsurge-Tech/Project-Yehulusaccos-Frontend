@@ -1,7 +1,7 @@
 import { Article } from "@/data-types/Article";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
-import { count, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
 const getArticles = async ({
@@ -17,9 +17,9 @@ const getArticles = async ({
     const limitQuery = db
       .select()
       .from(articleTable)
-      // .limit(size)
-      // .offset(size * (page - 1) + offset)
-      // .orderBy(desc(articleTable.id))
+      .limit(size)
+      .offset(size * (page - 1) + offset)
+      .orderBy(desc(articleTable.id))
       .as("limit_query");
 
     const res = await db
