@@ -9,16 +9,6 @@ import rocket from "@/public/rocket.svg";
 import TitleFadeIn from "../animation/TitleFadeIn";
 import SlideFrom from "../animation/SlideFrom";
 
-// const values = [
-//   "Helping members achieve financial freedom, simplify their lives and live their dreams.",
-//   "Being able to support hardworking employees with low income sources will enable them to reach their earning potential.",
-//   "Meet the needs of the user society by generating long-term financial reserves.",
-//   "Reducing unemployment and economic problems as a responsible stakeholder.",
-//   "To develop and expand savings and loan services among members and the community.",
-//   "Build a large-scale membership of the largest financial provider association in Ethiopia.",
-//   "Providing loan services by encouraging unsecured workers who wanted to use loan services.",
-//   "Being able to make a positive impact in the financial sector.",
-// ];
 
 const OurBelieve = () => {
   const tOurBelieve = useTranslations("Home.OurBelieve");

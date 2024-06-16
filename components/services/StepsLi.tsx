@@ -8,7 +8,7 @@ const StepsLi = ({
   children: ReactNode;
   index: number;
 }) => {
-  return (
+  return (  
     <li className="flex w-full relative">
       <div className="absolute w-full right-0 h-0.5 bg-primary/10 lg:top-5 top-3 left-4"></div>
       <ScaleToRight
