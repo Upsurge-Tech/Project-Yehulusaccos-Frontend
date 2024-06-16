@@ -17,13 +17,13 @@ const LoanApprovalProcess = () => {
           title={tApproval("Header")}
         />
       </div>
-      <h2 className="font-semibold text-center text-2xl lg:text-4xl">
-      <TitleFadeIn
-          duration={1.5}
-          className=""
-          title={tApproval("Statement")}
-        />
-      </h2>
+      <div className="font-semibold text-center text-2xl lg:text-4xl">
+        <TitleFadeIn
+            duration={1.5}
+            className=""
+            title={tApproval("Statement")}
+          />
+      </div>
       <div className="hidden lg:flex relative -rotate-45 bottom-[120px] left-[300px] ">
         <Image
           src="/curlyarrow.svg"

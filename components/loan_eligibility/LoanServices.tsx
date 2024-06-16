@@ -23,13 +23,13 @@ const LoanServices = () => {
           title={tLoanTypes("Header")}
         />
       </div>
-      <h2 className="font-semibold text-center text-2xl lg:text-4xl max-w-xl">
-      <TitleFadeIn
-          duration={1.3}
-          className=""
-          title={tLoanTypes("Statement")}
-        />
-      </h2>
+      <div className="font-semibold text-center text-2xl lg:text-4xl max-w-xl">
+        <TitleFadeIn
+            duration={1.3}
+            className=""
+            title={tLoanTypes("Statement")}
+          />
+        </div>
       <div className="hidden lg:flex relative -rotate-45 bottom-10 left-16 ">
         <Image
           src="/curlyarrow.svg"
