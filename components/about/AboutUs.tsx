@@ -21,7 +21,7 @@ const AboutUs = () => {
 
         <SlideFrom
           from="left"
-          className="flex flex-col gap-y-2 text-xs md:text-sm lg:text-lg text-gray-600 z-10"
+          className="flex flex-col mt-2 lg:mt-0 gap-y-2 text-xs md:text-sm lg:text-lg text-gray-600 z-10"
         >
           <p>
             <span className="font-semibold">{tAbout("InnerParagraph1")} </span>
