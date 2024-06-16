@@ -41,11 +41,11 @@ const Contents = ({ contents }: Props) => {
           return (
             <div
               key={content.id}
-              className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[80vh]"
+              className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[60vh]"
             >
               <Image
                 src={content.src}
-                className="rounded-lg object-cover"
+                className="rounded-lg object-contain border bg-muted"
                 fill
                 alt=""
                 priority

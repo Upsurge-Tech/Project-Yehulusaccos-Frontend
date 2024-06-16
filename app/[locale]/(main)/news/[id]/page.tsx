@@ -30,7 +30,7 @@ const NewsDetailPage = async ({ params: { id } }: Props) => {
         <div className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[80vh]">
           <Image
             src={article.thumbnail}
-            className="rounded-lg object-contain bg-muted border"
+            className="rounded-lg object-contain bg-muted border w-full"
             fill
             alt=""
             priority
