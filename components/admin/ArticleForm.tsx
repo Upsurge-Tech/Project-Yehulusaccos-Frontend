@@ -50,6 +50,23 @@ const ArticleForm = ({
     });
   };
 
+  const swapContent = (i: number, j: number) => {
+    const scrollPos = document.getElementById("admin-shell")?.scroll;
+    console.log("here", scrollPos);
+    setFormState((formState) => {
+      const newContents = [...formState.contents];
+      const c1 = newContents[i];
+      const c2 = newContents[j];
+      newContents[i] = c2;
+      newContents[j] = c1;
+      return {
+        ...formState,
+        contents: newContents,
+      };
+    });
+    window.scrollTo(0, scrollPos);
+  };
+
   const validateYoutube = (youtubeLink: string): string => {
     if (!youtubeLink) return "Can not be empty";
     if (!getVideoId(youtubeLink))
@@ -208,17 +225,38 @@ const ArticleForm = ({
 
         return (
           <div key={i} className="relative">
-            <button
-              className="absolute right-1 top-1 text-destructive"
-              onClick={(e) => {
-                e.preventDefault();
-                const newContents = [...formState.contents];
-                newContents.splice(i, 1);
-                setFormState({ ...formState, contents: newContents });
-              }}
-            >
-              <MdCancel />
-            </button>
+            <div className="absolute right-1 top-1 flex items-center gap-2">
+              <Button
+                className="p-0 h-min"
+                variant={"ghost"}
+                disabled={i === 0}
+                onClick={() => swapContent(i, i - 1)}
+              >
+                U
+              </Button>
+
+              <Button
+                className="p-0 h-min"
+                variant={"ghost"}
+                disabled={i === formState.contents.length - 1}
+                onClick={() => swapContent(i, i + 1)}
+              >
+                D
+              </Button>
+
+              <Button
+                className="p-0 h-min text-destructive"
+                variant={"ghost"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const newContents = [...formState.contents];
+                  newContents.splice(i, 1);
+                  setFormState({ ...formState, contents: newContents });
+                }}
+              >
+                <MdCancel />
+              </Button>
+            </div>
 
             <Label htmlFor={id}>{label}</Label>
             {content.type === "heading" && (
