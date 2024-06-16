@@ -1,1 +1,0 @@
-ALTER TABLE `article` MODIFY COLUMN `title` text NOT NULL;

@@ -40,7 +40,7 @@ LIMIT 5;
     const limitQuery = db
       .select()
       .from(articleTable)
-      .limit(3)
+      .limit(4)
       .orderBy(sql`ABS(${articleTable.id} - ${id})`)
       .as("limit_query");
 
@@ -67,7 +67,7 @@ LIMIT 5;
     if ("error" in result) {
       return result;
     }
-    relatedArticles = result;
+    relatedArticles = result.filter((a) => a.id !== id);
   }
 
   return { article, relatedArticles };
