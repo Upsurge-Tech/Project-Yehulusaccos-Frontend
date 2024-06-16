@@ -48,7 +48,7 @@ const Contents = ({ contents }: Props) => {
                 className="rounded-lg object-contain border bg-muted"
                 fill
                 alt=""
-                priority
+                // priority
               />
             </div>
           );
