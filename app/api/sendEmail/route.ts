@@ -1,12 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-
 import nodemailer from 'nodemailer';
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== 'POST') {
-    return res.status(405).send({ message: 'Only POST requests allowed' });
-  }
-  const { fullname, email, phone, city, reason, message } = req.body;
+export async function POST(req: { json: () => PromiseLike<{ fullname: any; email: any; phone: any; city: any; reason: any; message: any; }> | { fullname: any; email: any; phone: any; city: any; reason: any; message: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { status: string; message?: any; }): void; new(): any; }; }; }){
+
+  const { fullname, email, phone, city, reason, message } = await req.json();
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,

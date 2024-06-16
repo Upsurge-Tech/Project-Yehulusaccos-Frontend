@@ -39,7 +39,7 @@ const LoanServices = () => {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-y-7 lg:gap-x-36 w-full  ">
-        <FadeIn delay={1.3} className="">
+        <FadeIn className="">
           <div className="flex items-center gap-x-5 text-gray-500">
               <div>
                 <FaCheckCircle size={20} />
@@ -49,7 +49,7 @@ const LoanServices = () => {
               </p>
           </div>
         </FadeIn>
-        <FadeIn delay={1.3} className="">
+        <FadeIn className="">
           <div className="flex items-center   gap-x-5 text-gray-500">
             <div>
               <FaCheckCircle size={20} />
@@ -59,7 +59,7 @@ const LoanServices = () => {
             </p>
           </div>
         </FadeIn>
-        <FadeIn delay={1.3} className="">
+        <FadeIn className="">
           <div className="flex flex-col text-gray-500 gap-y-5 ">
               <div className="flex items-center gap-x-5">
                 <div>
@@ -71,7 +71,7 @@ const LoanServices = () => {
               </div>
             </div>
         </FadeIn>
-        <FadeIn delay={1.3} className="">
+        <FadeIn className="">
           <div className="flex gap-y-5 text-gray-500">
             <div className="flex gap-x-5 items-center">
               <div>
@@ -83,7 +83,7 @@ const LoanServices = () => {
             </div>
           </div>
         </FadeIn>
-        <FadeIn delay={1.3} className="">
+        <FadeIn  className="">
           <div className="grid grid-cols-1 place-items-center lg:ml-10 lg:place-items-start lg:grid-cols-2  items-center w-full gap-y-4 gap-x-0 lg:gap-x-5 text-gray-500">
             {typeOfLoans.map((loan) => (
               <div className="flex items-center w-52 lg:w-auto" key={loan}>
@@ -95,7 +95,7 @@ const LoanServices = () => {
             ))}
           </div>
         </FadeIn>
-        <FadeIn delay={1.3} className="">
+        <FadeIn className="">
           <LoanSavingTable />
         </FadeIn>
       </div>
