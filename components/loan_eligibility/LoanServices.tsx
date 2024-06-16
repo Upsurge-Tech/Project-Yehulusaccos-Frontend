@@ -5,6 +5,7 @@ import { GoDotFill } from "react-icons/go";
 import LoanSavingTable from "./LoanSavingTable";
 import { useTranslations } from "next-intl";
 import FadeIn from "../animation/FadeIn";
+import TitleFadeIn from "../animation/TitleFadeIn";
 
 
 const LoanServices = () => {
@@ -16,10 +17,18 @@ const LoanServices = () => {
   return (
     <div className="flex flex-col  gap-y-5 lg:gap-y-10 items-center w-full">
       <div className="bg-primarySoft lg:mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
-        {tLoanTypes("Header")}
+        <TitleFadeIn
+          duration={1.3}
+          className=""
+          title={tLoanTypes("Header")}
+        />
       </div>
       <h2 className="font-semibold text-center text-2xl lg:text-4xl max-w-xl">
-        {tLoanTypes("Statement")}
+      <TitleFadeIn
+          duration={1.3}
+          className=""
+          title={tLoanTypes("Statement")}
+        />
       </h2>
       <div className="hidden lg:flex relative -rotate-45 bottom-10 left-16 ">
         <Image

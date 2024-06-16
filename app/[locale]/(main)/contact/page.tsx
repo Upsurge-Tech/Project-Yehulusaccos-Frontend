@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import plant from "@/public/plantsWithCents.svg";
 import ContactForm from "@/components/contact/ContactForm";
 import { FaPhoneVolume } from "react-icons/fa6";

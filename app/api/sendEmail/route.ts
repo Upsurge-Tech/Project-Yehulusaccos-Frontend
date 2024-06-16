@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import nodemailer from 'nodemailer';
 
-export default async function sendEmail(req: NextApiRequest, res: NextApiResponse){
+export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     return res.status(405).send({ message: 'Only POST requests allowed' });
   }

@@ -15,7 +15,7 @@ const EligibilityCriteria = () => {
 
   return (
     <div className="grid lg:grid-cols-4">
-      <div className="hidden lg:flex items-center" suppressHydrationWarning>
+      <div className="hidden lg:flex items-center">
         <SlideFrom className="" from="left" delay={1.3}>
           <Image
             src="/leftHandMoney.svg"
@@ -33,14 +33,14 @@ const EligibilityCriteria = () => {
             title={tEligibility("Header")}
           />
         </div>
-        <h2 className="font-semibold text-center text-xl lg:text-4xl">
+        <div className="font-semibold text-center text-xl lg:text-4xl">
           <TitleFadeIn
             duration={1.5}
             className="font-semibold"
             title={tEligibility("Statement")}
           />
-        </h2>
-        <div className="hidden lg:flex relative -rotate-45 bottom-[300px] left-[470px] " suppressHydrationWarning>
+        </div>
+        <div className="hidden lg:flex relative -rotate-45 bottom-[300px] left-[470px] ">
           <Image
             src={currlyarrow}
             alt="curly green arrow"
