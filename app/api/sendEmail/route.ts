@@ -1,6 +1,7 @@
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-export async function POST(req: { json: () => PromiseLike<{ fullname: any; email: any; phone: any; city: any; reason: any; message: any; }> | { fullname: any; email: any; phone: any; city: any; reason: any; message: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { status: string; message?: any; }): void; new(): any; }; }; }){
+export async function POST(req: { json: () => PromiseLike<{ fullname: any; email: any; phone: any; city: any; reason: any; message: any; }> | { fullname: any; email: any; phone: any; city: any; reason: any; message: any; }; }){
 
   const { fullname, email, phone, city, reason, message } = await req.json();
 
@@ -31,9 +32,10 @@ export async function POST(req: { json: () => PromiseLike<{ fullname: any; email
   try {
     await transporter.sendMail(confirmationMailOptions);
     await transporter.sendMail(companyMailOptions);
-    res.status(200).json({ status: 'success' });
+    return NextResponse.json({message: 'Email sent successfully'})
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    
+    return NextResponse.json({message: 'Email failed to send'})
   }
 };
 

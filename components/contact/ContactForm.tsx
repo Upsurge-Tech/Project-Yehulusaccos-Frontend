@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Spinner from "./Spinner";
 import { useTranslations } from "next-intl";
 
@@ -35,6 +35,16 @@ const ContactForm = () => {
       setStatus("error");
     }
   };
+
+  useEffect(() => {
+    if (status) {
+      const timer = setTimeout(() => {
+        setStatus("");
+      },10000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   return (
     <div className="w-full rounded-lg p-8">
@@ -131,7 +141,7 @@ const ContactForm = () => {
           className={`mt-4 md:text-lg text-md text-center ${status === "success" ? "text-primary" : "text-red-600"}`}
         >
           {status === "success"
-            ? "Your response has been recorded successfully!"
+            ? "Your response has been recorded successfully! Check your email for confirmation."
             : "Failed to send message."}
         </div>
       )}
