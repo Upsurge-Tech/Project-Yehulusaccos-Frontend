@@ -101,9 +101,14 @@ const NavBar = () => {
               {link.label}
             </Link>
           ))}
-          <div className="mb-6 w-full text-center bg-primary text-white px-6 py-3 rounded-lg">
-            <Link href="/contact">{t("contactUs")}</Link>
-          </div>
+
+          <Link
+            href="/contact"
+            onClick={() => setMenuOpen(false)}
+            className="mb-6 w-full text-center bg-primary text-white px-6 py-3 rounded-lg"
+          >
+            {t("contactUs")}
+          </Link>
         </div>
       </div>
     </div>
