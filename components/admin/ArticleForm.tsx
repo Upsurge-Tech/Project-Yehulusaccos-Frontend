@@ -14,6 +14,7 @@ import { editArticle } from "@/lib/articles/editArticle.action";
 import { getVideoId, withPrevImages } from "@/lib/articles/utils";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
 
 const ArticleForm = ({
@@ -51,20 +52,14 @@ const ArticleForm = ({
   };
 
   const swapContent = (i: number, j: number) => {
-    const scrollPos = document.getElementById("admin-shell")?.scroll;
-    console.log("here", scrollPos);
     setFormState((formState) => {
       const newContents = [...formState.contents];
-      const c1 = newContents[i];
-      const c2 = newContents[j];
-      newContents[i] = c2;
-      newContents[j] = c1;
+      [newContents[i], newContents[j]] = [newContents[j], newContents[i]];
       return {
         ...formState,
         contents: newContents,
       };
     });
-    window.scrollTo(0, scrollPos);
   };
 
   const validateYoutube = (youtubeLink: string): string => {
@@ -225,28 +220,32 @@ const ArticleForm = ({
 
         return (
           <div key={i} className="relative">
-            <div className="absolute right-1 top-1 flex items-center gap-2">
+            <div className="absolute right-0 top-[-5px] flex items-center text-black/70">
               <Button
-                className="p-0 h-min"
                 variant={"ghost"}
+                size={"sm"}
                 disabled={i === 0}
+                type="button"
                 onClick={() => swapContent(i, i - 1)}
               >
-                U
+                <IoMdArrowDropupCircle />
               </Button>
 
               <Button
-                className="p-0 h-min"
                 variant={"ghost"}
+                size={"sm"}
                 disabled={i === formState.contents.length - 1}
+                type="button"
                 onClick={() => swapContent(i, i + 1)}
               >
-                D
+                <IoMdArrowDropdownCircle />
               </Button>
 
               <Button
-                className="p-0 h-min text-destructive"
+                className="text-destructive"
                 variant={"ghost"}
+                size={"sm"}
+                type="button"
                 onClick={(e) => {
                   e.preventDefault();
                   const newContents = [...formState.contents];
