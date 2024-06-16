@@ -28,6 +28,7 @@ export const editArticle = async (
     .filter((s) => s !== "");
   const filePaths = createImagePaths(imageFiles);
 
+  console.log("article title is", article.title);
   try {
     //update article, replace contents
     await db
