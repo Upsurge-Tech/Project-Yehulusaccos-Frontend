@@ -78,8 +78,7 @@ const Posts = async ({
       </Table>
       {numPages === 0 && articles.length === 0 && (
         <p className="pt-9 text-muted-foreground text-center">
-          {" "}
-          -- No news posts have been created --{" "}
+          -- No news posts have been created --
         </p>
       )}
     </main>

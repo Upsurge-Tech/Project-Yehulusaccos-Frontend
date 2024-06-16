@@ -5,7 +5,7 @@ import fs from "node:fs/promises";
 import path from "path";
 import { attachExcrept, getVideoId } from "./utils";
 
-const toAbolutePath = (filePath: string) => {
+const toAbsolutePath = (filePath: string) => {
   const segments = filePath.split("/");
   const absolutePath = path.join(process.cwd(), "public", ...segments);
   return absolutePath;
@@ -24,7 +24,7 @@ export const saveFiles = async (files: File[], filePaths: string[]) => {
     files.map(async (file, i) => {
       const arrayBuffer = await file.arrayBuffer();
       const buffer = new Uint8Array(arrayBuffer);
-      await fs.writeFile(toAbolutePath(filePaths[i]), buffer);
+      await fs.writeFile(toAbsolutePath(filePaths[i]), buffer);
     })
   );
 };
@@ -33,7 +33,7 @@ export const removeFilesIfExist = async (filePaths: string[]) => {
   await Promise.all(
     filePaths.map(async (filePath) => {
       try {
-        await fs.unlink(toAbolutePath(filePath));
+        await fs.unlink(toAbsolutePath(filePath));
       } catch (e) {
         if (e instanceof Error && "code" in e && e.code === "ENOENT") {
           console.log("file not found", filePath);
@@ -114,11 +114,12 @@ export const extractArticles = (res: Res[]): Article[] | { error: string } => {
     const { article } = res[i];
     articles.push({
       ...article,
-      createdAt: article.createdAt.toISOString(),
+      createdAt: article.createdAt.toLocaleString("en-Us", {
+        timeZone: "UTC",
+      }),
       excerpt: "",
       contents: [],
     });
-    console.log("title", article.title);
 
     while (
       i < res.length &&
