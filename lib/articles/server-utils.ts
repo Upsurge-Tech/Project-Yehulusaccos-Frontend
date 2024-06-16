@@ -55,6 +55,7 @@ export const insertContents = async (
 ): Promise<{ error: string } | void> => {
   try {
     let imageIndex = 1;
+    if (article.contents.length === 0) return;
     await db.insert(contentTable).values(
       article.contents.map((content, i) => {
         const type = content.type;
