@@ -40,7 +40,7 @@ const NavBar = () => {
 
   return (
     <div
-      className={`fixed bg-stone-50 z-30 py-3 px-3 md:px-7 w-full ${scrollActive ? "shadow-sm" : ""}`}
+      className={`fixed bg-stone-50 z-30 py-[6px] px-3 md:px-7 w-full ${scrollActive ? "shadow-sm" : ""}`}
     >
       <div className="container flex justify-between items-center">
         <Link
