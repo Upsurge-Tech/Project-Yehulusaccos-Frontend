@@ -1,63 +1,94 @@
+"use client";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import { Button } from "../ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+} from "../ui/pagination";
 
-const Pagination = ({
+const PaginationControls = ({
   numPages,
   currentPage,
   onPageChange,
 }: {
   numPages: number;
   currentPage: number;
-  onPageChange: (page: number) => void;
+  onPageChange: (currentPage: number) => void;
 }) => {
+  const maxPages = 5;
   const pages = Array.from({ length: numPages }, (_, i) => i + 1);
-  console.log(pages);
-  const maxPages = 6;
-  const midPoint = Math.ceil(numPages / 2);
-  const span = Math.min(midPoint, Math.floor(maxPages / 2));
-  const leftPages = pages.slice(0, span);
-  const rightPages = pages.slice(numPages - span, numPages);
+  const shouldElipsis = numPages > maxPages;
+
+  const leftPages = pages.slice(0, Math.min(maxPages - 1, pages.length - 1));
+  const rightPages = pages.slice(-1);
 
   return (
-    <div className="w-full flex justify-between items-center text-primary">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className={` ${currentPage === 1 ? "opacity-50" : ""} flex justify-between items-center gap-x-3`}
-      >
-        <FaArrowLeftLong size={25} className="hidden md:inline-block" />
-        Oldest
-      </button>
-      <div className="flex gap-2">
-        {leftPages.map((page) => (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={page === currentPage ? "active font-bold" : ""}
-          >
-            {page}
-          </button>
-        ))}
-        {pages.length > maxPages && <span>...</span>}
-        {rightPages.map((page) => (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={page === currentPage ? "active font-bold" : ""}
-          >
-            {page}
-          </button>
-        ))}
-      </div>
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === numPages}
-        className={` ${currentPage === numPages ? "opacity-50" : ""} flex justify-between items-center gap-x-3`}
-      >
-        Newest
-        <FaArrowRightLong size={25} className="hidden md:inline" />
-      </button>
+    <div className="w-min">
+      <Pagination className=" text-black/80 pb-3">
+        <PaginationContent>
+          <PaginationItem>
+            <Button
+              disabled={currentPage <= 1}
+              size={"sm"}
+              variant="ghost"
+              onClick={() => {
+                onPageChange(currentPage - 1);
+              }}
+            >
+              <FaArrowLeftLong size={25} className="hidden md:inline-block" />
+              Oldest
+            </Button>
+          </PaginationItem>
+
+          {leftPages.map((p) => (
+            <Button
+              key={p}
+              variant={p === currentPage ? undefined : "outline"}
+              size={"sm"}
+              onClick={() => {
+                onPageChange(p);
+              }}
+            >
+              {p}
+            </Button>
+          ))}
+          {shouldElipsis && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          )}
+          {rightPages.map((p) => (
+            <Button
+              key={p}
+              variant={p === currentPage ? undefined : "outline"}
+              size={"sm"}
+              onClick={() => {
+                onPageChange(p);
+              }}
+            >
+              {p}
+            </Button>
+          ))}
+
+          <PaginationItem>
+            <Button
+              disabled={currentPage >= numPages}
+              size={"sm"}
+              variant="ghost"
+              onClick={() => {
+                onPageChange(currentPage + 1);
+              }}
+            >
+              Newest
+              <FaArrowRightLong size={25} className="hidden md:inline" />
+            </Button>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
 
-export default Pagination;
+export default PaginationControls;

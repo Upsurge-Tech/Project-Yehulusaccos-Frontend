@@ -33,18 +33,19 @@ export interface YouTubeContent {
   youtubeId: string;
 }
 
+export type ArticleContent =
+  | HeadingContent
+  | ParagraphContent
+  | ImageContent
+  | YouTubeContent;
+
 export interface Article {
   id: number;
   title: string;
   excerpt: string;
   thumbnail: string;
   createdAt: string; //a date string
-  contents: (
-    | HeadingContent
-    | ParagraphContent
-    | ImageContent
-    | YouTubeContent
-  )[];
+  contents: ArticleContent[];
 }
 
 export interface HeadingFormContent {
@@ -58,8 +59,12 @@ export interface ParagraphFormContent {
 }
 export interface ImageFormContent {
   type: "image";
+  elementId: string;
   alt: string;
   file: File | null;
+  localUrl: string | null;
+  previousSrc?: string; //string if editing image
+  error: string;
 }
 export interface YouTubeFormContent {
   elementId: string;
@@ -76,7 +81,7 @@ export type FormContent =
 
 export interface ArticleFormState {
   title: string;
-  thumbnail: { file: File | null; alt: string };
+  thumbnail: ImageFormContent;
   unknown: string;
   contents: FormContent[];
 }

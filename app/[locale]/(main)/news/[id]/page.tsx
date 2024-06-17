@@ -12,7 +12,7 @@ interface Props {
 }
 
 const NewsDetailPage = async ({ params: { id } }: Props) => {
-  const res = await getArticle(Number(id));
+  const res = await getArticle(Number(id), true);
   if ("error" in res) {
     throw new Error("Article not found");
   }
@@ -30,7 +30,7 @@ const NewsDetailPage = async ({ params: { id } }: Props) => {
         <div className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[80vh]">
           <Image
             src={article.thumbnail}
-            className="rounded-lg object-cover"
+            className="rounded-lg object-contain bg-muted border w-full"
             fill
             alt=""
             priority

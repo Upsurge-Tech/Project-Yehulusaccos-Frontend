@@ -1,14 +1,29 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthOptions } from "next-auth";
-import { Admin } from "@/data-types/Admin";
 import db from "@/db";
-import { eq, and } from "drizzle-orm";
 import { adminTable } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
+import NextAuth, { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
+  },
+  callbacks: {
+    // jwt: async (token, user) => {
+    //   if (user) {
+    //     token.id = user.id;
+    //   }
+    //   return token;
+    // },
+    // session: async ({ session, token }) => {
+    //   return {
+    //     ...session,
+    //     user: {
+    //       ...session.user,
+    //       id: token.id,
+    //     },
+    //   };
+    // },
   },
   secret: process.env.SECRET,
   debug: process.env.NODE_ENV === "development",
@@ -47,7 +62,7 @@ const authOptions: AuthOptions = {
           return null;
         }
 
-        return { id: res[0].id } as any;
+        return { id: res[0].id };
       },
     }),
   ],

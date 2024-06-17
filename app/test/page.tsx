@@ -1,9 +1,14 @@
 import { Article } from "@/data-types/Article";
 import db from "@/db";
 import { adminTable } from "@/db/schema";
+import dateFormat from "dateformat";
 import Image from "next/image";
 
 const Test = () => {
+  return <div>{dateFormat(new Date())}</div>;
+};
+
+const YoutubeTest = () => {
   return (
     <iframe
       className="w-1/2 aspect-video self-stretch md:min-h-96"

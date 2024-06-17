@@ -12,7 +12,7 @@ const YoutubeInput = ({
 }: {
   id: string;
   error: string;
-  onLinkChange: (link: string, error: string) => void;
+  onLinkChange: (link: string) => void;
   link: string;
 }) => {
   const videoId = getVideoId(link);
@@ -27,12 +27,7 @@ const YoutubeInput = ({
         value={link}
         onChange={(e) => {
           const link = e.target.value;
-          onLinkChange(
-            link,
-            !getVideoId(link)
-              ? "Please paste a valid youtube link (eg: https://www.youtube.com/watch?v=Abc123Abc )"
-              : ""
-          );
+          onLinkChange(link);
         }}
         placeholder="Paste the link of the video"
       />

@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1717924889280,
-      "tag": "0000_wild_spyke",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1717925952941,
-      "tag": "0001_hesitant_ego",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1718265453909,
-      "tag": "0002_sour_captain_flint",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1718266028731,
-      "tag": "0003_handy_carmella_unuscione",
+      "when": 1718563929858,
+      "tag": "0000_legal_rage",
       "breakpoints": true
     }
   ]
