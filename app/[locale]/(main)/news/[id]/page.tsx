@@ -4,6 +4,7 @@ import Image from "next/image";
 import Contents from "@/components/news/Contents";
 import getArticle from "@/lib/articles/getArticle";
 import formateDate from "@/utils/dateFormatter";
+import TitleFadeIn from "@/components/animation/TitleFadeIn";
 
 interface Props {
   params: {
@@ -24,9 +25,10 @@ const NewsDetailPage = async ({ params: { id } }: Props) => {
         <div className="bg-primarySoft text-primary self-start flex items-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
           {formateDate(article.createdAt)}
         </div>
-        <h2 className="font-semibold text-xl md:text-2xl lg:text-4xl">
-          {article.title}
-        </h2>
+        <TitleFadeIn
+          title={article.title}
+          className="font-semibold text-xl md:text-2xl lg:text-4xl"
+        />
         <div className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[80vh]">
           <Image
             src={article.thumbnail}

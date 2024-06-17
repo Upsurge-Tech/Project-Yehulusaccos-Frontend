@@ -7,6 +7,7 @@ import {
   ImageContent,
   YouTubeContent,
 } from "@/data-types/Article";
+import FadeIn from "../animation/FadeIn";
 
 interface Props {
   contents: (
@@ -23,35 +24,35 @@ const Contents = ({ contents }: Props) => {
       {contents.map((content) => {
         if (content.type === "paragraph")
           return (
-            <p
-              key={content.id}
-              className="text-gray-500 text-[13px] sm:text-sm md:text-md"
-            >
-              {content.paragraph}
-            </p>
+            <FadeIn duration={0.2} className="" key={content.id}>
+              <p className="text-gray-500 text-[13px] sm:text-sm md:text-md">
+                {content.paragraph}
+              </p>
+            </FadeIn>
           );
         if (content.type === "youtube")
           return (
-            <iframe
-              key={content.youtubeId}
-              src={`https://www.youtube.com/embed/${content.youtubeId}`}
-              allowFullScreen
-              className="h-[35vh] sm:h-[50vh] xl:h-[80vh] rounded-lg"
-            />
+            <FadeIn className="w-full" duration={0.2} key={content.youtubeId}>
+              <iframe
+                src={`https://www.youtube.com/embed/${content.youtubeId}`}
+                allowFullScreen
+                className="h-[35vh] w-full sm:h-[50vh] xl:h-[80vh] rounded-lg"
+              />
+            </FadeIn>
           );
         if (content.type === "heading")
           return (
-            <h3
-              className="font-medium text-lg md:text-xl lg:text-2xl"
-              key={content.id}
-            >
-              {content.heading}
-            </h3>
+            <FadeIn className="" key={content.id} duration={0.2}>
+              <h3 className="font-medium text-lg md:text-xl lg:text-2xl">
+                {content.heading}
+              </h3>
+            </FadeIn>
           );
         if (content.type === "image")
           return (
-            <div
+            <FadeIn
               key={content.id}
+              duration={0.2}
               className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[80vh]"
             >
               <Image
@@ -61,7 +62,7 @@ const Contents = ({ contents }: Props) => {
                 alt=""
                 priority
               />
-            </div>
+            </FadeIn>
           );
       })}
     </div>
