@@ -2,9 +2,9 @@ import React from "react";
 import Image from "next/image";
 import Questions from "@/components/faq/Questions";
 import { useTranslations } from "next-intl";
+import TitleFadeIn from "@/components/animation/TitleFadeIn";
 
 const FAQPage = () => {
-
   const tFaq = useTranslations("FAQ");
   return (
     <div className="container my-5 md:my-10 lg:my-16 xl:my-24 flex flex-col items-center w-full overflow-hidden gap-y-5  min-h-screen ">
@@ -12,9 +12,10 @@ const FAQPage = () => {
         <div className="bg-primarySoft lg:mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
           FAQ
         </div>
-        <h2 className="font-semibold text-center text-2xl lg:text-4xl">
-          {tFaq("Header")}
-        </h2>
+        <TitleFadeIn
+          title={tFaq("Header")}
+          className="font-semibold text-center text-2xl lg:text-4xl"
+        />
         <div className="hidden lg:flex relative -rotate-45 bottom-[150px] left-[385px] ">
           <Image
             src="/curlyarrow.svg"
