@@ -6,7 +6,7 @@ import LoanServices from "@/components/loan_eligibility/LoanServices";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Yehulu | Laon and Eligibility",
+  title: "Yehulu | Loan and Eligibility",
 };
 
 const LoanEligibilityPage = () => {
