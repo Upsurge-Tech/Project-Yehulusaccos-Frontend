@@ -25,10 +25,8 @@ const ArticleGrid = () => {
         `/api/articles?page=${page}&size=${pageSize}&offset=${offset}`
       );
       const resData = (await res.json()) as GetArticlesResponse;
-      
 
       if ("error" in resData) {
-        
         return;
       }
       const { data, numPages } = resData;
@@ -49,16 +47,18 @@ const ArticleGrid = () => {
         <p className="text-lg">No news found.</p>
       ) : (
         <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-        {articles.map((article) => (
-          <ArticleCardMain key={article.id} article={article} />
-        ))}
-      </div>
-      <Pagination
-        numPages={numPages}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      /></>}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+            {articles.map((article) => (
+              <ArticleCardMain key={article.id} article={article} />
+            ))}
+          </div>
+          <Pagination
+            numPages={numPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
     </div>
   );
 };
