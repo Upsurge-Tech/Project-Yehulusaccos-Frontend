@@ -25,10 +25,10 @@ const ArticleGrid = () => {
         `/api/articles?page=${page}&size=${pageSize}&offset=${offset}`
       );
       const resData = (await res.json()) as GetArticlesResponse;
-      console.log("->", resData);
+      
 
       if ("error" in resData) {
-        console.error(resData.error);
+        
         return;
       }
       const { data, numPages } = resData;
@@ -45,6 +45,10 @@ const ArticleGrid = () => {
 
   return (
     <div className="flex flex-col gap-4 items-center">
+      {articles.length <= 0 ? (
+        <p className="text-lg">No news found.</p>
+      ) : (
+        <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
         {articles.map((article) => (
           <ArticleCardMain key={article.id} article={article} />
@@ -54,7 +58,7 @@ const ArticleGrid = () => {
         numPages={numPages}
         currentPage={currentPage}
         onPageChange={handlePageChange}
-      />
+      /></>}
     </div>
   );
 };
