@@ -31,9 +31,11 @@ export const uploadImage = async (
     const encoded = Buffer.from(fileBuffer).toString(encoding);
     const fileUri = "data:" + mime + ";" + encoding + "," + encoded;
 
-    const res = await cloudinary.uploader.upload(fileUri, {
+    const res = await cloudinary.uploader.upload_large(fileUri, {
       invalidate: true,
       resource_type: "image",
+      chunk_size: 5000000,
+      upload_preset: "ml_default",
     });
     return res.public_id;
   } catch (e) {
