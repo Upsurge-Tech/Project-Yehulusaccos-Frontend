@@ -4,6 +4,7 @@ import { Article } from "@/data-types/Article";
 import React, { useEffect, useState } from "react";
 import ArticleCardMain from "./ArticleCardMain";
 import Pagination from "./PaginationControls";
+import Spinner from "../contact/Spinner";
 
 type GetArticlesResponse =
   | {
@@ -15,23 +16,27 @@ type GetArticlesResponse =
 const ArticleGrid = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [numPages, setNumPages] = useState(0);
+  const [isFetching, setIsFetching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
   const offset = 3;
 
   useEffect(() => {
     const fetchArticles = async (page: number) => {
+      setIsFetching(true);
       const res = await fetch(
         `/api/articles?page=${page}&size=${pageSize}&offset=${offset}`
       );
       const resData = (await res.json()) as GetArticlesResponse;
 
       if ("error" in resData) {
+        setIsFetching(false);
         return;
       }
       const { data, numPages } = resData;
       setArticles(data);
       setNumPages(numPages);
+      setIsFetching(false);
     };
 
     fetchArticles(currentPage);
@@ -43,7 +48,9 @@ const ArticleGrid = () => {
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      {articles.length <= 0 ? (
+      {isFetching ? (
+        <Spinner />
+      ) : articles.length <= 0 ? (
         <p className="text-lg">No news found.</p>
       ) : (
         <>
