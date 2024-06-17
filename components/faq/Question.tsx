@@ -45,9 +45,11 @@ const Question = ({
           </div>
         )}
       </CollapsibleTrigger>
-      <CollapsibleContent className="text-gray-500 text-[11px] md:text-sm xl:text-[15px]">
+      <p
+        className={`${!isOpen && " hidden "} text-gray-500 text-[11px] md:text-sm xl:text-[15px]`}
+      >
         {answer}
-      </CollapsibleContent>
+      </p>
     </Collapsible>
   );
 };
