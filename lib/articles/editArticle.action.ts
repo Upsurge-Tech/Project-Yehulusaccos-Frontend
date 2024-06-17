@@ -44,8 +44,11 @@ export const editArticle = async (
     await insertContents(articleId, article, newUrls);
     await removeImages(oldUrls);
   } catch (e) {
-    console.error(e);
-    return { error: "Failed to save images" };
+    if (e instanceof Error) {
+      return { error: "Failed to edit article: " + e.message };
+    } else {
+      return { error: "Failed to edit article." + JSON.stringify(e) };
+    }
   }
   console.log("Successful edit articleId =", articleId);
 };

@@ -51,7 +51,7 @@ export const removeImages = async (
         const publicId = url.split("/")?.pop()?.split(".")[0];
         if (!publicId)
           throw new Error("Could not extract cloudinary public id from" + url);
-        await cloudinary.uploader.destroy(publicId);
+        await cloudinary.uploader.destroy(publicId, { invalidate: true });
       })
     );
   } catch (e) {

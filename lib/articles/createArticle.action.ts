@@ -43,7 +43,7 @@ export const createArticle = async (
     console.error(e);
     let errString = "";
     if (e instanceof Error) errString = e.message;
-    return { error: "Failed to save article" + errString };
+    return { error: "Failed to create article" + errString };
   }
 
   console.log("Successful save articleId =", articleId);
