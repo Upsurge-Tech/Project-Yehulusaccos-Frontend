@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import ArticleCardMain from "./ArticleCardMain";
 import Pagination from "./PaginationControls";
 import Spinner from "../contact/Spinner";
+import ArticleCard from "./ArticleCard";
+import Link from "next/link";
 
 type GetArticlesResponse =
   | {
@@ -56,7 +58,9 @@ const ArticleGrid = () => {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
             {articles.map((article) => (
-              <ArticleCardMain key={article.id} article={article} />
+              <Link href={`/news/${article.id}`} key={article.id}>
+                <ArticleCard key={article.id} article={article} />
+              </Link>
             ))}
           </div>
           <Pagination
