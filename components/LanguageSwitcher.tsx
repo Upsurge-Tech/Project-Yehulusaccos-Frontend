@@ -3,14 +3,22 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { FaGlobe } from "react-icons/fa";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 const LanguageSwitcher: React.FC = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
   const localeActive = useLocale();
 
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const nextLocale = e.target.value;
+  const onSelectChange = (nextLocale: string) => {
     const newPath = pathname.replace(`/${localeActive}`, `/${nextLocale}`);
 
     startTransition(() => {
@@ -19,30 +27,25 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <label className="flex items-center justify-between p-1 focus:outline-none focus-within:outline-none rounded-md">
-      <select
-        defaultValue={localeActive}
-        className=" text-green-900 bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer"
-        onChange={onSelectChange}
+    <>
+      <Select
+        onValueChange={(nextLocale: string) => onSelectChange(nextLocale)}
         disabled={isPending}
+        defaultValue={localeActive}
       >
-        <option value="en">EN</option>
-        <option value="am">አማ</option>
-      </select>
+        <SelectTrigger className="w-[90px] focus-visible:ring-0 rounded-lg">
+          <SelectValue placeholder="Select a language" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="am">አማርኛ</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
       <FaGlobe className="ml-2 text-green-500" />
-    </label>
+    </>
   );
 };
 
 export default LanguageSwitcher;
-
-
-
-
-
-
-
-
-
-
-

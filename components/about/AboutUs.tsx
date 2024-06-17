@@ -7,8 +7,8 @@ const AboutUs = () => {
   const tAbout = useTranslations("AboutUs");
   return (
     <div className=" grid grid-cols-1 xl:grid-cols-2 gap-x-10 xl:gap-x-36 gap-y-10">
-      <div className=" order-2 xl:order-1 flex h-full flex-col items-start place-self-center justify-center py-5 gap-y-5 xl:gap-y-14 w-3/4 xl:w-full">
-        <div className="flex flex-col gap-y-1">
+      <div className=" order-2 xl:order-1 flex h-full flex-col items-start place-self-center justify-center py-5 lg:gap-y-5 xl:gap-y-14 w-3/4 xl:w-full">
+        <div className="flex flex-col lg:gap-y-1">
           <div className="bg-primarySoft lg:mb-10 self-start text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
             {tAbout("Header")}
           </div>
@@ -21,7 +21,7 @@ const AboutUs = () => {
 
         <SlideFrom
           from="left"
-          className="flex flex-col gap-y-2 text-xs md:text-sm lg:text-lg text-gray-600 z-10"
+          className="flex flex-col mt-2 lg:mt-0 gap-y-2 text-sm lg:text-lg text-gray-600 z-10"
         >
           <p>
             <span className="font-semibold">{tAbout("InnerParagraph1")} </span>
