@@ -25,14 +25,14 @@ const Posts = async ({
       page = 1;
     }
   }
-  const size = 5;
+  const size = 10;
 
   const res = await getArticles({ page, size, offset: 0 });
   if ("error" in res) {
     throw new Error(res.error);
   }
   const { articles, numPages } = res;
-  console.log("articles", articles);
+  // console.log("articles", articles);
 
   return (
     <main className="">
@@ -57,8 +57,8 @@ const Posts = async ({
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Link href={`/news/${article.id}`} className="hidden">
-                    <Button size={"sm"} variant={"ghost"}>
+                  <Link href={`/news/${article.id}`}>
+                    <Button size={"sm"} variant={"outline"}>
                       Read
                     </Button>
                   </Link>
@@ -76,6 +76,11 @@ const Posts = async ({
           ))}
         </TableBody>
       </Table>
+      {numPages === 0 && articles.length === 0 && (
+        <p className="pt-9 text-muted-foreground text-center">
+          -- No news posts have been created --
+        </p>
+      )}
     </main>
   );
 };

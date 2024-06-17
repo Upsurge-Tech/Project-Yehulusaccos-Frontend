@@ -1,14 +1,41 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthOptions } from "next-auth";
-import { Admin } from "@/data-types/Admin";
 import db from "@/db";
-import { eq, and } from "drizzle-orm";
 import { adminTable } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
+import NextAuth, { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
+  },
+  callbacks: {
+    session: async ({ session, token }) => {
+      console.log("token is", token);
+      if (session?.user) {
+        if (typeof token.uid !== "number") {
+          throw new Error(
+            `Type of token.uid is bad ${token} in session callback`
+          );
+        }
+        session.user.id = token.uid;
+      } else {
+        console.log("skipping adding id to session", session, token);
+      }
+      console.log("session", session);
+      return session;
+    },
+    jwt: async ({ user, token }) => {
+      console.log("user is", user);
+      if (user && typeof user.id === "number") {
+        console.log("id is ", user.id);
+        token.uid = user.id;
+      }
+      if (!user || !user.id) {
+        console.log("skipping token formation user:", user);
+      }
+
+      return token;
+    },
   },
   secret: process.env.SECRET,
   debug: process.env.NODE_ENV === "development",
@@ -47,7 +74,7 @@ const authOptions: AuthOptions = {
           return null;
         }
 
-        return { id: res[0].id } as any;
+        return { id: res[0].id };
       },
     }),
   ],

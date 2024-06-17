@@ -32,7 +32,7 @@ const PostsPagination = ({
         <PaginationContent>
           <PaginationItem>
             <Button
-              disabled={page === 1}
+              disabled={page <= 1}
               size={"sm"}
               variant="outline"
               onClick={() => {
@@ -75,7 +75,7 @@ const PostsPagination = ({
 
           <PaginationItem>
             <Button
-              disabled={page === numPages}
+              disabled={page >= numPages}
               size={"sm"}
               variant="outline"
               onClick={() => {

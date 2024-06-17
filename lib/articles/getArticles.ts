@@ -1,5 +1,8 @@
 import { Article } from "@/data-types/Article";
-import articles from "@/data/articles";
+import db from "@/db";
+import { articleTable, contentTable } from "@/db/schema";
+import { count, desc, eq } from "drizzle-orm";
+import { extractArticles } from "./server-utils";
 
 const getArticles = async ({
   page,
@@ -10,34 +13,50 @@ const getArticles = async ({
   size: number;
   offset: number;
 }): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
-  //not yet connected to backend
+  try {
+    const limitQuery = db
+      .select()
+      .from(articleTable)
+      .limit(size)
+      .offset(size * (page - 1) + offset)
+      .orderBy(desc(articleTable.id))
+      .as("limit_query");
 
-  // try {
-  //   const res = await db
-  //     .select()
-  //     .from(articleTable)
-  //     .leftJoin(
-  //       contentTable,
-  //       on(articleTable.id, eq(articleTable.id, contentTable.id))
-  //     )
-  //     .limit(size)
-  //     .offset(size * (page - 1) + offset);
-  // } catch (e) {
-  //   if (e instanceof Error) {
-  //     return { error: e.message };
-  //   } else {
-  //     return { error: "An error occurred" + JSON.stringify(e) };
-  //   }
-  // }
-  const afterOffsetArticles = articles.slice(offset);
-  const numArticles = afterOffsetArticles.length;
-  const numPages = Math.ceil(numArticles / size);
+    const res = await db
+      .select({
+        article: {
+          id: limitQuery.id,
+          title: limitQuery.title,
+          thumbnail: limitQuery.thumbnail,
+          createdAt: limitQuery.createdAt,
+        },
+        content: {
+          id: contentTable.id,
+          articleId: contentTable.articleId,
+          type: contentTable.type,
+          data: contentTable.data,
+          alt: contentTable.alt,
+        },
+      })
+      .from(limitQuery)
+      .leftJoin(contentTable, eq(limitQuery.id, contentTable.articleId));
 
-  const startIndex = (page - 1) * size;
-  const endIndex = Math.min(startIndex + size, numArticles);
-  const slicedArticles = afterOffsetArticles.slice(startIndex, endIndex);
+    const res2 = await db.select({ count: count() }).from(articleTable);
+    const numPages = Math.ceil(res2[0].count / size);
 
-  return { articles: slicedArticles, numPages };
+    // console.log("res is", res);
+
+    const result = extractArticles(res);
+    if ("error" in result) return result;
+    return { articles: result, numPages };
+  } catch (e) {
+    console.error(e);
+    if (e instanceof Error) {
+      return { error: e.message };
+    } else {
+      return { error: "An error occurred" + JSON.stringify(e) };
+    }
+  }
 };
 
 export default getArticles;

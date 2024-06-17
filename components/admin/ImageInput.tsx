@@ -1,45 +1,46 @@
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
 
 const ImageInput = ({
+  previousSrc,
   id,
-  onFile,
   file,
+  localUrl,
+  onFileChange,
+  error,
+  onError,
 }: {
+  previousSrc?: string;
   id: string;
-  onFile: (file: File | null) => void;
+  onFileChange: (file: File | null, localUrl: string | null) => void;
   file: File | null;
+  localUrl: string | null;
+  error: string;
+  onError: (error: string) => void;
 }) => {
-  const [localUrl, setLocalUrl] = useState<string | null>(null);
-  useEffect(() => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     console.log("here");
     reader.onload = (e) => {
       const url = (e.target?.result as string) || null;
-      setLocalUrl(url);
+      onFileChange(file, url);
     };
     reader.readAsDataURL(file);
-
-    return () => reader.abort();
-  }, [file]);
-
-  const ref = useRef<HTMLInputElement>(null);
+  };
 
   return (
     <div className="relative max-w-[200px] border rounded">
       <button
         className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
-        onClick={(e) => {
-          console.log("here");
-          e.preventDefault();
-          ref.current?.value && (ref.current.value = "");
-          onFile(null);
-          setLocalUrl(null);
-        }}
+        type="button"
+        onClick={() => onFileChange(null, null)}
       >
         <MdOutlineCleaningServices />
       </button>
@@ -57,16 +58,15 @@ const ImageInput = ({
         id={id}
         type="file"
         accept="image/*"
-        onChange={(e) => onFile(e.target.files?.[0] || null)}
-        required
+        onChange={(e) => onChange(e)}
         className="w-1 h-1 opacity-0 absolute right-1/2 bottom-0 "
       />
       {localUrl && (
         <Image
           src={localUrl}
           alt=""
-          width={10}
-          height={10}
+          width={300}
+          height={300}
           className="w-full max-h-[200px] object-contain bg-muted"
         />
       )}

@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 
 import {
@@ -6,16 +5,14 @@ import {
   ParagraphContent,
   ImageContent,
   YouTubeContent,
+  ArticleContent
 } from "@/data-types/Article";
+
 import FadeIn from "../animation/FadeIn";
 
+
 interface Props {
-  contents: (
-    | HeadingContent
-    | ParagraphContent
-    | ImageContent
-    | YouTubeContent
-  )[];
+  contents: ArticleContent[];
 }
 
 const Contents = ({ contents }: Props) => {
@@ -54,13 +51,14 @@ const Contents = ({ contents }: Props) => {
               key={content.id}
               duration={0.2}
               className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[80vh]"
+
             >
               <Image
                 src={content.src}
-                className="rounded-lg object-cover"
+                className="rounded-lg object-contain border bg-muted"
                 fill
                 alt=""
-                priority
+                // priority
               />
             </FadeIn>
           );
