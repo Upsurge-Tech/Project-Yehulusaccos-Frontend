@@ -5,12 +5,17 @@ import Contents from "@/components/news/Contents";
 import getArticle from "@/lib/articles/getArticle";
 import formateDate from "@/utils/dateFormatter";
 import TitleFadeIn from "@/components/animation/TitleFadeIn";
+import { Metadata } from "next";
 
 interface Props {
   params: {
     id: string;
   };
 }
+
+export const metadata: Metadata = {
+  title: "Yehulu | News & Announcements",
+};
 
 const NewsDetailPage = async ({ params: { id } }: Props) => {
   const res = await getArticle(Number(id), true);

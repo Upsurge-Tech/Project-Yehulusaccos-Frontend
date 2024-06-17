@@ -5,6 +5,11 @@ import OurBelieve from "@/components/home/OurBelieve";
 import OurUniqeness from "@/components/home/OurUniqeness";
 import Testimonials from "@/components/home/Testimonials";
 import Metrics from "@/components/home/Metrics";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | Home",
+};
 
 const HomePage = () => {
   return (

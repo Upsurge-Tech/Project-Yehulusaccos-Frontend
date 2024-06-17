@@ -5,6 +5,11 @@ import articles from "@/data/articles";
 import Vector from "@/public/Vector.svg";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | News & Announcements",
+};
 
 const NewsPage = ({
   searchParams,
