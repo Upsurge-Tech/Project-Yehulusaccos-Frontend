@@ -3,6 +3,11 @@ import Image from "next/image";
 import Questions from "@/components/faq/Questions";
 import { useTranslations } from "next-intl";
 import TitleFadeIn from "@/components/animation/TitleFadeIn";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | FAQ",
+};
 
 const FAQPage = () => {
   const tFaq = useTranslations("FAQ");

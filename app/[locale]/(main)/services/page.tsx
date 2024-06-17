@@ -3,6 +3,11 @@ import React from "react";
 import LoanSavingServices from "@/components/services/LoanSavingServices";
 import SavingServices from "@/components/services/SavingServices";
 import LoanServices from "@/components/services/LoanServices";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | Services",
+};
 
 const ServicesPage = () => {
   return (

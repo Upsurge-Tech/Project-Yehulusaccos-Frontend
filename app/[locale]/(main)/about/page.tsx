@@ -3,6 +3,11 @@ import React from "react";
 import AboutUs from "@/components/about/AboutUs";
 import Team from "@/components/about/Team";
 import OurOffice from "@/components/about/OurOffice";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | About",
+};
 
 const AboutPage = () => {
   return (
