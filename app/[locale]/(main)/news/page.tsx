@@ -11,6 +11,11 @@ import { useTranslations } from "next-intl";
 import TitleFadeIn from "@/components/animation/TitleFadeIn";
 import SlideFrom from "@/components/animation/SlideFrom";
 import FadeIn from "@/components/animation/FadeIn";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | News & Announcements",
+};
 
 const NewsPage = ({
   searchParams,

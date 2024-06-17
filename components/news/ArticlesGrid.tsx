@@ -1,14 +1,14 @@
-import React from "react";
-import ArticelCard from "./ArticleCard";
 import { Article } from "@/data-types/Article";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import ArticelCard from "./ArticleCard";
 
 interface Props {
   articles: Article[];
 }
 
 const ArticlesGrid = ({ articles }: Props) => {
+  articles = [];
   const t = useTranslations("News.SingleNews");
   return (
     <div className="flex flex-col gap-y-10">
@@ -19,6 +19,9 @@ const ArticlesGrid = ({ articles }: Props) => {
             <ArticelCard article={article} />
           </Link>
         ))}
+        {articles.length === 0 && (
+          <p className="text-muted-foreground">-- No News Articles yet -- </p>
+        )}
       </div>
     </div>
   );

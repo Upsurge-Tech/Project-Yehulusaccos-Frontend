@@ -92,18 +92,8 @@ const Footer = () => {
           <h2 className="text-lg font-semibold">{tFooter("GetStarted")}</h2>
           <ul className="space-y-2">
             <li>
-              <Link href="/careers" className="hover:text-green-600">
-                {tFooter("Careers")}
-              </Link>
-            </li>
-            <li>
               <Link href="/contact" className="hover:text-green-600">
                 {tFooter("contact")}
-              </Link>
-            </li>
-            <li>
-              <Link href="/legal-documents" className="hover:text-green-600">
-                {tFooter("Legal")}
               </Link>
             </li>
           </ul>
@@ -117,18 +107,8 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/mission" className="hover:text-green-600">
+              <Link href="/home" className="hover:text-green-600">
                 {tFooter("Mission")}
-              </Link>
-            </li>
-            <li>
-              <Link href="/shareholders" className="hover:text-green-600">
-                {tFooter("Shareholders")}
-              </Link>
-            </li>
-            <li>
-              <Link href="/investor-relations" className="hover:text-green-600">
-                {tFooter("Investors")}
               </Link>
             </li>
           </ul>

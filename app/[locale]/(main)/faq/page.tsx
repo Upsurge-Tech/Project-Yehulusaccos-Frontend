@@ -2,6 +2,12 @@ import React from "react";
 import Image from "next/image";
 import Questions from "@/components/faq/Questions";
 import { useTranslations } from "next-intl";
+import TitleFadeIn from "@/components/animation/TitleFadeIn";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | FAQ",
+};
 
 const FAQPage = () => {
   const tFaq = useTranslations("FAQ");
@@ -11,9 +17,10 @@ const FAQPage = () => {
         <div className="bg-primarySoft lg:mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
           FAQ
         </div>
-        <h2 className="font-semibold text-center text-2xl lg:text-4xl">
-          {tFaq("Header")}
-        </h2>
+        <TitleFadeIn
+          title={tFaq("Header")}
+          className="font-semibold text-center text-2xl lg:text-4xl"
+        />
         <div className="hidden lg:flex relative -rotate-45 bottom-[150px] left-[385px] ">
           <Image
             src="/curlyarrow.svg"

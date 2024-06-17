@@ -1,32 +1,216 @@
-import fs from "node:fs/promises";
+import { cloudinary } from "@/cloudinary.config";
+import { Article, ArticleFormState } from "@/data-types/Article";
+import db from "@/db";
+import { adminTable, contentTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
 import path from "path";
+import { attachExcrept, getVideoId } from "./utils";
 
-export const saveFiles = async (files: File[], filePaths: string[]) => {
-  await Promise.all(
-    files.map(async (file, i) => {
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = new Uint8Array(arrayBuffer);
-      const absolutePath = path.join(process.cwd(), "public", filePaths[i]);
-      await fs.writeFile(absolutePath, buffer);
-    })
-  );
+const toAbsolutePath = (filePath: string) => {
+  const segments = filePath.split("/");
+  const absolutePath = path.join(process.cwd(), "public", ...segments);
+  return absolutePath;
 };
 
-export const removeFilesIfExist = async (filePaths: string[]) => {
-  await Promise.all(
-    filePaths.map(async (filePath) => {
-      try {
-        const absolutePath = path.join(process.cwd(), "public", filePath);
-        await fs.unlink(absolutePath);
-      } catch (e) {
-        if (e instanceof Error && "code" in e && e.code === "ENOENT") {
-          return;
+export const createImagePaths = (imageFiles: File[]): string[] => {
+  const filePaths = imageFiles.map((file) => {
+    const path = `/article-images/__${Math.round(Math.random() * 1000)}_${file.name}`;
+    return path;
+  });
+  return filePaths;
+};
+
+export const uploadImage = async (
+  file: File
+): Promise<{ error: string } | string> => {
+  try {
+    const mime = file.type;
+    const fileBuffer = await file.arrayBuffer();
+    const encoding = "base64";
+    const encoded = Buffer.from(fileBuffer).toString(encoding);
+    const fileUri = "data:" + mime + ";" + encoding + "," + encoded;
+
+    const res = await cloudinary.uploader.upload_large(fileUri, {
+      invalidate: true,
+      resource_type: "image",
+      chunk_size: 5000000,
+      upload_preset: "ml_default",
+    });
+    return res.public_id;
+  } catch (e) {
+    if (e instanceof Error) return { error: e.message };
+    else return { error: "Something went wrong" + JSON.stringify(e) };
+  }
+};
+
+export const removeImages = async (
+  fileUrls: string[]
+): Promise<{ error: string } | void> => {
+  try {
+    await Promise.all(
+      fileUrls.map(async (url) => {
+        const publicId = url.split("/")?.pop()?.split(".")[0];
+        if (!publicId)
+          throw new Error("Could not extract cloudinary public id from" + url);
+        await cloudinary.uploader.destroy(publicId, { invalidate: true });
+      })
+    );
+  } catch (e) {
+    if (e instanceof Error) return { error: e.message };
+    else return { error: "Something went wrong" + JSON.stringify(e) };
+  }
+};
+
+export const uploadImages = async (
+  files: File[]
+): Promise<string[] | { error: string }> => {
+  const uploadedIds: string[] = [];
+  try {
+    await Promise.all(
+      files.map(async (file, i) => {
+        const res = await uploadImage(file);
+        if (typeof res === "string") {
+          uploadedIds.push(cloudinary.url(res, { secure: true }));
         } else {
-          //let it crash if it can't delete the file
-          console.error("cant delte", e);
-          throw e;
+          throw new Error(`Failed to upload file ${file.name} ${res.error}`);
         }
+      })
+    );
+    return uploadedIds;
+  } catch (e) {
+    let error = "";
+    const res = await removeImages(uploadedIds);
+    if (res) error += res.error;
+    if (e instanceof Error) error += " " + e.message;
+    else error += " Something went wrong" + JSON.stringify(e);
+    return { error };
+  }
+};
+
+export const insertContents = async (
+  articleId: number,
+  article: ArticleFormState,
+  imagePaths: string[]
+): Promise<{ error: string } | void> => {
+  try {
+    let imageIndex = 1;
+    if (article.contents.length === 0) return;
+    await db.insert(contentTable).values(
+      article.contents.map((content, i) => {
+        const type = content.type;
+        let data: string = "";
+        let alt: string = "";
+        if (type === "image") {
+          data = imagePaths[imageIndex];
+          alt = content.alt;
+          imageIndex++;
+        } else if (type === "heading") {
+          data = content.heading;
+        } else if (type === "paragraph") {
+          data = content.paragraph;
+        } else if (type === "youtube") {
+          const videoId = getVideoId(content.youtubeLink);
+          if (videoId === null) {
+            throw new Error(`Invalid youtube link at ${i + 1}th block`);
+          }
+          data = videoId;
+        }
+
+        if (data === "") {
+          throw new Error(`Empty content in ${type} at ${i + 1}th block`);
+        }
+
+        return { articleId, type, data, alt };
+      })
+    );
+  } catch (e) {
+    if (e instanceof Error) {
+      return { error: e.message };
+    } else {
+      return { error: "Something went wrong" + JSON.stringify(e) };
+    }
+  }
+};
+
+interface Res {
+  article: {
+    id: number;
+    title: string;
+    thumbnail: string;
+    createdAt: Date;
+  };
+  content: {
+    id: number;
+    data: string;
+    articleId: number;
+    type: "heading" | "paragraph" | "image" | "youtube";
+    alt: string | null;
+  } | null;
+}
+export const extractArticles = (res: Res[]): Article[] | { error: string } => {
+  const articles: Article[] = [];
+  for (let i = 0; i < res.length; i++) {
+    const { article } = res[i];
+    articles.push({
+      ...article,
+      createdAt: article.createdAt.toLocaleString("en-Us", {
+        timeZone: "UTC",
+      }),
+      excerpt: "",
+      contents: [],
+    });
+
+    while (
+      i < res.length &&
+      articles[articles.length - 1].id === res[i].article.id
+    ) {
+      const content = res[i].content;
+      if (!content) break;
+
+      const { data, alt, id, articleId, type } = content;
+      const lastArticle = articles[articles.length - 1];
+      if (type === "heading") {
+        lastArticle.contents.push({ type, heading: data, id, articleId });
+      } else if (type === "image") {
+        const content = { type, src: data, alt: alt || "", id, articleId };
+        lastArticle.contents.push(content);
+      } else if (type === "paragraph") {
+        lastArticle.contents.push({ type, paragraph: data, id, articleId });
+      } else if (type === "youtube") {
+        lastArticle.contents.push({ type, youtubeId: data, id, articleId });
+      } else {
+        return { error: `Unknown type ${type} in article id ${articleId}` };
       }
-    })
-  );
+      i++;
+    }
+  }
+
+  articles.map(attachExcrept);
+  articles.forEach((a) => a.contents.sort((a, b) => a.id - b.id));
+  return articles;
+};
+
+export const errorIfNotLoggedIn = async (): Promise<{
+  error: string;
+} | void> => {
+  const session = await getServerSession();
+  if (session === null) {
+    return { error: "You are not logged in" };
+  } else if (session && session.user.id) {
+    try {
+      const res = await db
+        .select()
+        .from(adminTable)
+        .where(eq(adminTable.id, session.user.id));
+      if (!res.length) return { error: "Logged in user does not exist" };
+    } catch (e) {
+      if (e instanceof Error) {
+        return { error: e.message };
+      } else {
+        return { error: `Something went wrong ${JSON.stringify(e)}` };
+      }
+    }
+  }
+  return;
 };

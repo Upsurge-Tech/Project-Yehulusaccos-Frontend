@@ -1,1 +1,0 @@
-ALTER TABLE `admin` ADD `password` varchar(50) NOT NULL;

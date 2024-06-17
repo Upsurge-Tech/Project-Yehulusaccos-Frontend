@@ -26,7 +26,7 @@ const CustomAvatar = ({ src, name, role }: Props) => {
           <p className=" lg:text-lg">{name}</p>
         </FadeIn>
         <FadeIn delay={0.3} className="">
-          <p className="text-sm lg:text-md text-gray-600">{role}</p>
+          <p className="text-sm text-center lg:text-md text-gray-600">{role}</p>
         </FadeIn>
       </div>
     </div>

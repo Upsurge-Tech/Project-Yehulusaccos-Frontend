@@ -19,10 +19,11 @@ const DeletePostModal = ({ id }: { id: number }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size={"sm"} variant={"destructive"}>
             Delete
@@ -52,8 +53,10 @@ const DeletePostModal = ({ id }: { id: number }) => {
                     if (res && res.error) {
                       console.error(res.error);
                       setError(res.error);
+                    } else {
+                      router.refresh();
+                      setOpen(false);
                     }
-                    router.refresh();
                   } catch (e) {
                     console.error(e);
                     setError("Something went wrong, please try again later");

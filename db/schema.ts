@@ -18,7 +18,7 @@ export type AdminSQL = typeof adminTable.$inferSelect;
 
 export const articleTable = mysqlTable("article", {
   id: int("id").autoincrement().primaryKey(),
-  title: varchar("title", { length: 50 }).notNull(),
+  title: text("title").notNull(),
   thumbnail: text("thumbnail").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
