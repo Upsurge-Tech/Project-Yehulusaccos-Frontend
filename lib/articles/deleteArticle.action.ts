@@ -4,9 +4,12 @@ import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import getArticle from "./getArticle";
-import { removeFilesIfExist } from "./server-utils";
+import { errorIfNotLoggedIn, removeFilesIfExist } from "./server-utils";
 
 const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
+  const sessionError = await errorIfNotLoggedIn();
+  if (sessionError) return sessionError;
+
   try {
     const result = await getArticle(id, false);
     if ("error" in result) return result;

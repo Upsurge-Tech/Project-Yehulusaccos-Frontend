@@ -33,9 +33,10 @@ const Login = () => {
         const errorString =
           res.error === "CredentialsSignin" ? "Invalid Credentials" : res.error;
         console.log("errorString", errorString);
-        throw new Error(errorString);
+        setError(errorString);
+      } else {
+        router.push("/admin/posts");
       }
-      router.push("/admin/posts");
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);
