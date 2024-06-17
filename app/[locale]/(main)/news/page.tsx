@@ -20,7 +20,6 @@ const NewsPage = ({
   };
 }) => {
   const [latestArticles, setLatestArticles] = useState([]);
-  const [error, setError] = useState(null);
   const tnews = useTranslations("News");
   const page = 1;
   const offset = 0;
@@ -39,7 +38,7 @@ const NewsPage = ({
         setLatestArticles(data.data);
         console.log(data.data);
       } catch (error) {
-        setError(error.message);
+        console.error(error);
       }
     };
 

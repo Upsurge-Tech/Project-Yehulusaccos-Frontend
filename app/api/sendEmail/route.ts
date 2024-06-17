@@ -1,25 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import nodemailer from "nodemailer";
 
-export async function POST(req: {
-  json: () =>
-    | PromiseLike<{
-        fullname: any;
-        email: any;
-        phone: any;
-        city: any;
-        reason: any;
-        message: any;
-      }>
-    | {
-        fullname: any;
-        email: any;
-        phone: any;
-        city: any;
-        reason: any;
-        message: any;
-      };
-}) {
+export async function POST(req: NextRequest) {
   const { fullname, email, phone, city, reason, message } = await req.json();
 
   const transporter = nodemailer.createTransport({
@@ -31,7 +13,6 @@ export async function POST(req: {
       pass: process.env.EMAIL_PASS,
     },
   } as any);
-
 
   const companyMailOptions = {
     from: process.env.EMAIL_USER,
