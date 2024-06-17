@@ -1,26 +1,34 @@
-"use client";
-
 import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@radix-ui/react-collapsible";
-import React, { useState } from "react";
+import React from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 
-
-type QuestionProps = {
+interface Props {
   question: string;
   answer: string;
-};
+  questionNumber: number;
+  openQuestionNumber: number;
+  onOpenQuestion: (qNumber: number | null) => void;
+}
 
-const Question = ({ question, answer }: QuestionProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Question = ({
+  question,
+  answer,
+  questionNumber,
+  openQuestionNumber,
+  onOpenQuestion,
+}: Props) => {
+  const isOpen = questionNumber === openQuestionNumber;
 
   return (
     <Collapsible
       open={isOpen}
-      onOpenChange={setIsOpen}
+      onOpenChange={() =>
+        isOpen ? onOpenQuestion(null) : onOpenQuestion(questionNumber)
+      }
       className="self-start flex py-5 lg:py-10 flex-col gap-y-5 border-b-[2px]  border-stone-200 w-full"
     >
       <CollapsibleTrigger className=" self-start flex w-full text-start justify-between ">
