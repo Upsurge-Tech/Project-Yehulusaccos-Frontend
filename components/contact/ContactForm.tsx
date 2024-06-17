@@ -141,8 +141,8 @@ const ContactForm = () => {
           className={`mt-4 md:text-sm text-sm text-center ${status === "success" ? "text-primary" : "text-red-600"}`}
         >
           {status === "success"
-            ? "Your response has been recorded successfully! Check your email for confirmation. Please also check your spam folder if you do not see the email in your inbox."
-            : "Failed to send message."}
+            ? <div>{tContactForm("MessageSent")}</div>
+            : <div>{tContactForm("MessageSentFailed")}</div>}
         </div>
       )}
     </div>

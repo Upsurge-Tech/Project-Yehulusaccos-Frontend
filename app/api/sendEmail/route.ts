@@ -32,12 +32,6 @@ export async function POST(req: {
     },
   } as any);
 
-  const confirmationMailOptions = {
-    from: `Yehulusaccos Team ${process.env.EMAIL_USER}`,
-    to: email,
-    subject: "Confirmation Email",
-    text: `Hello ${fullname},\n\nThank you for contacting us. We have received your message and will get back to you shortly.\n\nBest regards,\nYehulusaccos Team`,
-  };
 
   const companyMailOptions = {
     from: process.env.EMAIL_USER,
@@ -47,7 +41,6 @@ export async function POST(req: {
   };
 
   try {
-    await transporter.sendMail(confirmationMailOptions);
     await transporter.sendMail(companyMailOptions);
     return NextResponse.json({ message: "Email sent successfully" });
   } catch (error: any) {

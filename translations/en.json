@@ -255,7 +255,9 @@
       "City": "City",
       "Reason": "Reason",
       "YourMessage": "Your Message",
-      "Button": "Send message"
+      "Button": "Send message",
+      "MessageSent":"Your response has been recorded successfully! We will get back to you soon.",
+      "MessageSentFailed":"There was an error sending your message. Please try again later."
     },
     "InfoBox": {
       "Office": "Main Office",
