@@ -8,6 +8,7 @@ const NewPost = () => {
       type: "image",
       elementId: "thumbnail",
       file: null,
+      localUrl: null,
       alt: "",
       error: "",
     },

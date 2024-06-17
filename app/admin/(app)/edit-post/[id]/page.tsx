@@ -18,6 +18,7 @@ const EditPost = async ({ params: { id } }: Props) => {
   const formState: ArticleFormState = {
     title: article.title,
     thumbnail: {
+      localUrl: null,
       elementId: "thumbnail",
       type: "image",
       file: null,
@@ -36,6 +37,7 @@ const EditPost = async ({ params: { id } }: Props) => {
           type: "image",
           alt: c.alt,
           file: null,
+          localUrl: null,
           previousSrc: c.src,
           elementId: `img_${c.src}`,
           error: "",
