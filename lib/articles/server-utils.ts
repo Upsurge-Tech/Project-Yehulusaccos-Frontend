@@ -1,9 +1,9 @@
+import { cloudinary } from "@/cloudinary.config";
 import { Article, ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
 import { adminTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import fs from "node:fs/promises";
 import path from "path";
 import { attachExcrept, getVideoId } from "./utils";
 
@@ -21,33 +21,71 @@ export const createImagePaths = (imageFiles: File[]): string[] => {
   return filePaths;
 };
 
-export const saveFiles = async (files: File[], filePaths: string[]) => {
-  await Promise.all(
-    files.map(async (file, i) => {
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = new Uint8Array(arrayBuffer);
-      await fs.writeFile(toAbsolutePath(filePaths[i]), buffer);
-    })
-  );
+export const uploadImage = async (
+  file: File
+): Promise<{ error: string } | string> => {
+  try {
+    const mime = file.type;
+    const fileBuffer = await file.arrayBuffer();
+    const encoding = "base64";
+    const encoded = Buffer.from(fileBuffer).toString(encoding);
+    const fileUri = "data:" + mime + ";" + encoding + "," + encoded;
+
+    const res = await cloudinary.uploader.upload_large(fileUri, {
+      invalidate: true,
+      resource_type: "image",
+      chunk_size: 5000000,
+      upload_preset: "ml_default",
+    });
+    return res.public_id;
+  } catch (e) {
+    if (e instanceof Error) return { error: e.message };
+    else return { error: "Something went wrong" + JSON.stringify(e) };
+  }
 };
 
-export const removeFilesIfExist = async (filePaths: string[]) => {
-  await Promise.all(
-    filePaths.map(async (filePath) => {
-      try {
-        await fs.unlink(toAbsolutePath(filePath));
-      } catch (e) {
-        if (e instanceof Error && "code" in e && e.code === "ENOENT") {
-          console.log("file not found", filePath);
-          return;
+export const removeImages = async (
+  fileUrls: string[]
+): Promise<{ error: string } | void> => {
+  try {
+    await Promise.all(
+      fileUrls.map(async (url) => {
+        const publicId = url.split("/")?.pop()?.split(".")[0];
+        if (!publicId)
+          throw new Error("Could not extract cloudinary public id from" + url);
+        await cloudinary.uploader.destroy(publicId, { invalidate: true });
+      })
+    );
+  } catch (e) {
+    if (e instanceof Error) return { error: e.message };
+    else return { error: "Something went wrong" + JSON.stringify(e) };
+  }
+};
+
+export const uploadImages = async (
+  files: File[]
+): Promise<string[] | { error: string }> => {
+  const uploadedIds: string[] = [];
+  try {
+    await Promise.all(
+      files.map(async (file, i) => {
+        const res = await uploadImage(file);
+        if (typeof res === "string") {
+          uploadedIds.push(cloudinary.url(res, { secure: true }));
         } else {
-          //let it crash if it can't delete the file
-          console.error("cant delte", e);
-          throw e;
+          throw new Error(`Failed to upload file ${file.name} ${res.error}`);
         }
-      }
-    })
-  );
+      })
+    );
+    return uploadedIds;
+  } catch (e) {
+    let error = "";
+    const res = await removeImages(uploadedIds);
+    if (res) error += res.error;
+    if (e instanceof Error) error += " " + e.message;
+    else error += " Something went wrong" + JSON.stringify(e);
+    return { error };
+  }
 };
 
 export const insertContents = async (

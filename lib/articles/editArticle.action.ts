@@ -4,11 +4,10 @@ import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import {
-  createImagePaths,
   errorIfNotLoggedIn,
   insertContents,
-  removeFilesIfExist,
-  saveFiles,
+  removeImages,
+  uploadImages,
 } from "./server-utils";
 
 export const editArticle = async (
@@ -27,29 +26,29 @@ export const editArticle = async (
     return { error: "Missing images, Please try again later." };
   }
 
-  const oldFilePaths = article.contents
+  const oldUrls = article.contents
     .map((c) => (c.type === "image" ? c.previousSrc ?? "" : ""))
     .filter((s) => s !== "");
-  const filePaths = createImagePaths(imageFiles);
 
-  console.log("article title is", article.title);
   try {
-    //update article, replace contents
+    const res = await uploadImages(imageFiles);
+    if ("error" in res) return res;
+    const newUrls = res;
+
     await db
       .update(articleTable)
-      .set({ title: article.title, thumbnail: filePaths[0] })
+      .set({ title: article.title, thumbnail: newUrls[0] })
       .where(eq(articleTable.id, articleId));
 
     await db.delete(contentTable).where(eq(contentTable.articleId, articleId));
-    await insertContents(articleId, article, filePaths);
-
-    //remove old files, save new files
-    await saveFiles(imageFiles, filePaths);
-    await removeFilesIfExist(oldFilePaths);
+    await insertContents(articleId, article, newUrls);
+    await removeImages(oldUrls);
   } catch (e) {
-    console.error(e);
-    await db.delete(articleTable).where(eq(articleTable.id, articleId));
-    return { error: "Failed to save images" };
+    if (e instanceof Error) {
+      return { error: "Failed to edit article: " + e.message };
+    } else {
+      return { error: "Failed to edit article." + JSON.stringify(e) };
+    }
   }
   console.log("Successful edit articleId =", articleId);
 };
