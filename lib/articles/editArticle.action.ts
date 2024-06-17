@@ -5,6 +5,7 @@ import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import {
   createImagePaths,
+  errorIfNotLoggedIn,
   insertContents,
   removeFilesIfExist,
   saveFiles,
@@ -15,6 +16,9 @@ export const editArticle = async (
   formData: FormData,
   article: ArticleFormState
 ): Promise<{ error: string } | void> => {
+  const sessionError = await errorIfNotLoggedIn();
+  if (sessionError) return sessionError;
+
   const imageFiles = [...(formData.getAll("images") as File[])];
   if (
     imageFiles.length - 1 !==

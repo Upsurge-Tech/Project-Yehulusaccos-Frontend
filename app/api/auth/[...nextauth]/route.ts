@@ -9,21 +9,33 @@ const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    // jwt: async (token, user) => {
-    //   if (user) {
-    //     token.id = user.id;
-    //   }
-    //   return token;
-    // },
-    // session: async ({ session, token }) => {
-    //   return {
-    //     ...session,
-    //     user: {
-    //       ...session.user,
-    //       id: token.id,
-    //     },
-    //   };
-    // },
+    session: async ({ session, token }) => {
+      console.log("token is", token);
+      if (session?.user) {
+        if (typeof token.uid !== "number") {
+          throw new Error(
+            `Type of token.uid is bad ${token} in session callback`
+          );
+        }
+        session.user.id = token.uid;
+      } else {
+        console.log("skipping adding id to session", session, token);
+      }
+      console.log("session", session);
+      return session;
+    },
+    jwt: async ({ user, token }) => {
+      console.log("user is", user);
+      if (user && typeof user.id === "number") {
+        console.log("id is ", user.id);
+        token.uid = user.id;
+      }
+      if (!user || !user.id) {
+        console.log("skipping token formation user:", user);
+      }
+
+      return token;
+    },
   },
   secret: process.env.SECRET,
   debug: process.env.NODE_ENV === "development",

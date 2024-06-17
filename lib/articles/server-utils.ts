@@ -1,6 +1,7 @@
 import { Article, ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
-import { contentTable } from "@/db/schema";
+import { adminTable, contentTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import fs from "node:fs/promises";
 import path from "path";
@@ -158,6 +159,20 @@ export const errorIfNotLoggedIn = async (): Promise<{
   const session = await getServerSession();
   if (session === null) {
     return { error: "You are not logged in" };
+  } else if (session && session.user.id) {
+    try {
+      const res = await db
+        .select()
+        .from(adminTable)
+        .where(eq(adminTable.id, session.user.id));
+      if (!res.length) return { error: "Logged in user does not exist" };
+    } catch (e) {
+      if (e instanceof Error) {
+        return { error: e.message };
+      } else {
+        return { error: `Something went wrong ${JSON.stringify(e)}` };
+      }
+    }
   }
   return;
 };

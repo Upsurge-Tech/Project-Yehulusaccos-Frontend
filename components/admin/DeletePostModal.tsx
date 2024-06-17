@@ -53,9 +53,10 @@ const DeletePostModal = ({ id }: { id: number }) => {
                     if (res && res.error) {
                       console.error(res.error);
                       setError(res.error);
+                    } else {
+                      router.refresh();
+                      setOpen(false);
                     }
-                    router.refresh();
-                    setOpen(false);
                   } catch (e) {
                     console.error(e);
                     setError("Something went wrong, please try again later");
