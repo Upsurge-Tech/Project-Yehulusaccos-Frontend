@@ -1,14 +1,11 @@
 "use server";
 import { ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { articleTable } from "@/db/schema";
 import {
-  createImagePaths,
   errorIfNotLoggedIn,
   insertContents,
-  removeFilesIfExist,
-  saveFiles,
+  uploadImages,
 } from "./server-utils";
 
 export const createArticle = async (
@@ -23,26 +20,25 @@ export const createArticle = async (
     imageFiles.length - 1 !==
     article.contents.filter((c) => c.type === "image").length
   ) {
-    console.error(
-      "files",
-      imageFiles.length,
-      "vs",
-      "image in form data",
-      article.contents.filter((c) => c.type === "image").length
-    );
     return { error: "Missing images, Please try again later." };
   }
-  const filePaths = createImagePaths(imageFiles);
-  console.log("image paths", filePaths);
 
   let articleId: number;
   try {
+    const resUpload = await uploadImages(imageFiles);
+    if ("error" in resUpload) return resUpload;
+    const imageUrls = resUpload;
+
     const res = await db.insert(articleTable).values({
       title: article.title,
-      thumbnail: filePaths[0],
+      thumbnail: imageUrls[0],
     });
-    articleId = res[0].insertId;
+
     console.log("inserted article");
+    articleId = res[0].insertId;
+    const res2 = await insertContents(articleId, article, imageUrls);
+    if (res2 && res2.error) return res2;
+    console.log("inserted contents");
   } catch (e) {
     console.error(e);
     let errString = "";
@@ -50,19 +46,6 @@ export const createArticle = async (
     return { error: "Failed to save article" + errString };
   }
 
-  const res = await insertContents(articleId, article, filePaths);
-  if (res && res.error) return res;
-  console.log("inserted contents");
-
-  try {
-    await saveFiles(imageFiles, filePaths);
-  } catch (e) {
-    console.error(e);
-    await db.delete(contentTable).where(eq(contentTable.articleId, articleId));
-    await db.delete(articleTable).where(eq(articleTable.id, articleId));
-    await removeFilesIfExist(filePaths);
-    return { error: "Failed to save images" };
-  }
   console.log("Successful save articleId =", articleId);
   return articleId;
 };

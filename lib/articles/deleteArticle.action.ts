@@ -4,7 +4,7 @@ import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import getArticle from "./getArticle";
-import { errorIfNotLoggedIn, removeFilesIfExist } from "./server-utils";
+import { errorIfNotLoggedIn, removeImages } from "./server-utils";
 
 const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
   const sessionError = await errorIfNotLoggedIn();
@@ -15,13 +15,13 @@ const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
     if ("error" in result) return result;
 
     const { article } = result;
-    const imagePaths: string[] = [
+    const imageUrls: string[] = [
       article.thumbnail,
       ...article.contents
         .map((c) => (c.type === "image" ? c.src : ""))
         .filter((src) => src !== ""),
     ];
-    await removeFilesIfExist(imagePaths);
+    await removeImages(imageUrls);
     await db.delete(contentTable).where(eq(contentTable.articleId, id));
     await db.delete(articleTable).where(eq(articleTable.id, id));
   } catch (e) {
