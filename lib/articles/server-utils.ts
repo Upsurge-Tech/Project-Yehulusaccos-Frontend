@@ -1,6 +1,7 @@
 import { Article, ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
 import { contentTable } from "@/db/schema";
+import { getServerSession } from "next-auth";
 import fs from "node:fs/promises";
 import path from "path";
 import { attachExcrept, getVideoId } from "./utils";
@@ -149,4 +150,14 @@ export const extractArticles = (res: Res[]): Article[] | { error: string } => {
   articles.map(attachExcrept);
   articles.forEach((a) => a.contents.sort((a, b) => a.id - b.id));
   return articles;
+};
+
+export const errorIfNotLoggedIn = async (): Promise<{
+  error: string;
+} | void> => {
+  const session = await getServerSession();
+  if (session === null) {
+    return { error: "You are not logged in" };
+  }
+  return;
 };
