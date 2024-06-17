@@ -11,7 +11,10 @@ export const metadata: Metadata = {
 
 const LoanEligibilityPage = () => {
   return (
-    <div className="container my-20 flex flex-col items-center w-full overflow-hidden gap-y-48 min-h-screen ">
+    <div
+      className="container my-20 flex flex-col items-center w-full overflow-hidden gap-y-48 min-h-screen"
+      suppressHydrationWarning
+    >
       <EligibilityCriteria />
       <LoanApprovalProcess />
       <LoanServices />

@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import "../globals.css";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import React from "react";
+import React, { ReactNode } from "react";
 
 const font = Plus_Jakarta_Sans({ subsets: ["latin"] });
 

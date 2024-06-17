@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Spinner from "./Spinner";
 import { useTranslations } from "next-intl";
 
 const ContactForm = () => {
   const tContactForm = useTranslations("ContactUs.ContactForm");
+  const ButtonText = tContactForm("Button");
 
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
@@ -14,53 +15,40 @@ const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
 
-  const ButtonText = tContactForm("Button");
-
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      const response = await fetch("https://formspree.io/f/mwkggpqv", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullname,
-          email,
-          phone,
-          city,
-          reason,
-          message,
-        }),
-      });
 
-      if (response.ok) {
-        setStatus("success");
-        setFullname("");
-        setEmail("");
-        setPhone("");
-        setCity("");
-        setReason("");
-        setMessage("");
-      } else {
-        setStatus("error");
-      }
-    } catch (error) {
-      console.error("Error sending message:", error);
+    const response = await fetch("/api/sendEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fullname, email, phone, city, reason, message }),
+    });
+
+    setLoading(false);
+
+    if (response.ok) {
+      setStatus("success");
+    } else {
       setStatus("error");
-    } finally {
-      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (status) {
+      const timer = setTimeout(() => {
+        setStatus("");
+      }, 20000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
   return (
     <div className="w-full rounded-lg p-8">
-      <form
-        onSubmit={handleSubmit}
-        action="https://formspree.io/f/mwkggpqv"
-        method="POST"
-      >
+      <form onSubmit={handleSubmit}>
         <div className="mb-4 space-y-3">
           <label className="block text-gray-700">
             {tContactForm("FullName")}
@@ -150,11 +138,11 @@ const ContactForm = () => {
       </form>
       {status && (
         <div
-          className={`mt-4 md:text-lg text-md text-center ${status === "success" ? "text-primary" : "text-red-600"}`}
+          className={`mt-4 md:text-sm text-sm text-center ${status === "success" ? "text-primary" : "text-red-600"}`}
         >
           {status === "success"
-            ? "Your response has been recorded successfully!"
-            : "Failed to send message."}
+            ? <div>{tContactForm("MessageSent")}</div>
+            : <div>{tContactForm("MessageSentFailed")}</div>}
         </div>
       )}
     </div>

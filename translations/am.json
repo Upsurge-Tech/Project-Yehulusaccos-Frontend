@@ -253,7 +253,9 @@
       "City": "ከተማ",
       "Reason": "ጉዳይ",
       "YourMessage": "መልዕክትዎን እዚህ ጋር ይጻፉልን",
-      "Button": "መልዕክት ላክ"
+      "Button": "መልዕክት ላክ",
+      "MessageSent":"መልዕክትዎ በተሳካ ሁኔታ ተልክዋል። እናመሰግናለን።",
+      "MessageSentFailed":"መልዕክትዎ በተሳካ ሁኔታ አልተላከም። እባኮ እንደገና ይሞክሩ።"
     },
     "InfoBox": {
       "Office": "ዋና መ/ቤት :-",
@@ -359,6 +361,7 @@
     "Header": "ዜናዎች",
     "RecentNews":"የቅርብ ዜናዎች",
     "OlderNews":"የበፊት ዜናዎች",
+    "NoNews":"ለጊዜው የቅርብ ዜና የለም",
     "SingleNews":{
       "Header":"ተዛማጅ ዜናዎች"
     }
