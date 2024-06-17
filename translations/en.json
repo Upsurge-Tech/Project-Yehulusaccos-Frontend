@@ -361,6 +361,7 @@
     "Header": "WHATS NEW",
     "RecentNews": "Recent News",
     "OlderNews":"Older News",
+    "NoNews":"currently no recent news",
     "SingleNews":{
       "Header":"Related News"
     }

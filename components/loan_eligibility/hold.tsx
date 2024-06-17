@@ -9,9 +9,22 @@ import currlyarrow from "@/public/curlyarrow.svg";
 
 const EligibilityCriteria = () => {
   const tEligibility = useTranslations("Loan.EligibilityCriteria");
-  const tEligibilityList = useTranslations("Loan.EligibilityCriteria.Criterias");
+  const tEligibilityList = useTranslations(
+    "Loan.EligibilityCriteria.Criterias"
+  );
 
-  const criterias = ["Criteria1", "Criteria2", "Criteria3", "Criteria4", "Criteria5", "Criteria6", "Criteria7", "Criteria8", "Criteria9", "Criteria10"]
+  const criterias = [
+    "Criteria1",
+    "Criteria2",
+    "Criteria3",
+    "Criteria4",
+    "Criteria5",
+    "Criteria6",
+    "Criteria7",
+    "Criteria8",
+    "Criteria9",
+    "Criteria10",
+  ];
 
   return (
     <div className=" flex flex-col max-w-xl gap-y-5 lg:gap-y-0">
@@ -51,21 +64,21 @@ const EligibilityCriteria = () => {
       </h2>
       <div className="hidden lg:flex relative -rotate-45 bottom-[180px] left-[470px] ">
         <Image
-              src={currlyarrow}
-              alt="curly green arrow"
-              width={150}
-              height={100}
-            />
+          src={currlyarrow}
+          alt="curly green arrow"
+          width={150}
+          height={100}
+        />
       </div>
       <div className="flex flex-col gap-y-5 max-w-lg self-center mt-5 lg:mt-0">
         {criterias.map((criteria, index) => (
-          <FadeIn key={criteria} delay={index * 0.2} className="" >
+          <FadeIn key={criteria} delay={index * 0.2} className="">
             <div className="flex  gap-x-5  text-gray-500">
-            <div>
-              <FaCheckCircle size={20} />
+              <div>
+                <FaCheckCircle size={20} />
+              </div>
+              <p className=" text-sm">{tEligibilityList(`${criteria}`)}</p>
             </div>
-            <p className=" text-sm">{tEligibilityList(`${criteria}`)}</p>
-          </div>
           </FadeIn>
         ))}
       </div>

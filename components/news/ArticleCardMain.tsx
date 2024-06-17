@@ -5,6 +5,7 @@ import Link from "next/link";
 import { IoIosArrowRoundUp } from "react-icons/io";
 
 const ArticleCardMain = ({ article }: { article: Article }) => {
+  console.log(article);
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex-1 w-full h-full">
@@ -12,7 +13,7 @@ const ArticleCardMain = ({ article }: { article: Article }) => {
           src={article.thumbnail}
           width={1600}
           height={1900}
-          alt={`Thumbnail for Article: ${article.title}`}
+          alt="Thumbnail for Article"
           className="rounded-lg"
         />
       </div>

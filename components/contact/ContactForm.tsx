@@ -15,11 +15,11 @@ const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
 
-    const response = await fetch('/api/sendEmail', { 
+    const response = await fetch("/api/sendEmail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +40,7 @@ const ContactForm = () => {
     if (status) {
       const timer = setTimeout(() => {
         setStatus("");
-      },10000);
+      }, 20000);
 
       return () => clearTimeout(timer);
     }
@@ -138,10 +138,10 @@ const ContactForm = () => {
       </form>
       {status && (
         <div
-          className={`mt-4 md:text-lg text-md text-center ${status === "success" ? "text-primary" : "text-red-600"}`}
+          className={`mt-4 md:text-sm text-sm text-center ${status === "success" ? "text-primary" : "text-red-600"}`}
         >
           {status === "success"
-            ? "Your response has been recorded successfully! Check your email for confirmation."
+            ? "Your response has been recorded successfully! Check your email for confirmation. Please also check your spam folder if you do not see the email in your inbox."
             : "Failed to send message."}
         </div>
       )}

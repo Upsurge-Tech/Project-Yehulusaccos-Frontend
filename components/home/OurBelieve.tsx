@@ -9,7 +9,6 @@ import rocket from "@/public/rocket.svg";
 import TitleFadeIn from "../animation/TitleFadeIn";
 import SlideFrom from "../animation/SlideFrom";
 
-
 const OurBelieve = () => {
   const tOurBelieve = useTranslations("Home.OurBelieve");
   const tOurValues = useTranslations("Home.OurBelieve.OurValues");

@@ -359,6 +359,7 @@
     "Header": "ዜናዎች",
     "RecentNews":"የቅርብ ዜናዎች",
     "OlderNews":"የበፊት ዜናዎች",
+    "NoNews":"ለጊዜው የቅርብ ዜና የለም",
     "SingleNews":{
       "Header":"ተዛማጅ ዜናዎች"
     }

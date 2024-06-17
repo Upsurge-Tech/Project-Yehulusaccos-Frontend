@@ -9,9 +9,22 @@ import currlyarrow from "@/public/curlyarrow.svg";
 
 const EligibilityCriteria = () => {
   const tEligibility = useTranslations("Loan.EligibilityCriteria");
-  const tEligibilityList = useTranslations("Loan.EligibilityCriteria.Criterias");
+  const tEligibilityList = useTranslations(
+    "Loan.EligibilityCriteria.Criterias"
+  );
 
-  const criterias = ["Criteria1", "Criteria2", "Criteria3", "Criteria4", "Criteria5", "Criteria6", "Criteria7", "Criteria8", "Criteria9", "Criteria10"];
+  const criterias = [
+    "Criteria1",
+    "Criteria2",
+    "Criteria3",
+    "Criteria4",
+    "Criteria5",
+    "Criteria6",
+    "Criteria7",
+    "Criteria8",
+    "Criteria9",
+    "Criteria10",
+  ];
 
   return (
     <div className="grid lg:grid-cols-4">

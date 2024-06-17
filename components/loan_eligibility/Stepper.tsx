@@ -8,7 +8,6 @@ import FadeIn from "../animation/FadeIn";
 import TitleFadeIn from "../animation/TitleFadeIn";
 
 const Stepper = () => {
-
   const tStepper = useTranslations("Loan.Stepper");
 
   return (
@@ -23,9 +22,7 @@ const Stepper = () => {
               size={35}
               className="self-center text-primary font-medium leading-tight"
             />
-            <p className="text-xs lg:text-sm self-end">
-              {tStepper("Step1")}
-            </p>
+            <p className="text-xs lg:text-sm self-end">{tStepper("Step1")}</p>
           </div>
         </FadeIn>
       </li>
@@ -55,9 +52,7 @@ const Stepper = () => {
               size={35}
               className="self-center text-primary font-medium leading-tight"
             />
-            <p className="text-xs lg:text-sm self-end"> 
-              {tStepper("Step3")}
-            </p>
+            <p className="text-xs lg:text-sm self-end">{tStepper("Step3")}</p>
           </div>
         </FadeIn>
       </li>
@@ -71,9 +66,7 @@ const Stepper = () => {
               size={35}
               className="font-medium leading-tight text-primary"
             />
-            <p className="text-xs lg:text-sm">
-              {tStepper("Step4")}
-            </p>
+            <p className="text-xs lg:text-sm">{tStepper("Step4")}</p>
           </div>
         </FadeIn>
       </li>

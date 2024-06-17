@@ -4,7 +4,6 @@ import Questions from "@/components/faq/Questions";
 import { useTranslations } from "next-intl";
 
 const FAQPage = () => {
-
   const tFaq = useTranslations("FAQ");
   return (
     <div className="container my-5 md:my-10 lg:my-16 xl:my-24 flex flex-col items-center w-full overflow-hidden gap-y-5  min-h-screen ">
