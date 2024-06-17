@@ -24,6 +24,8 @@ const PaginationControls = ({
   const leftPages = pages.slice(0, Math.min(maxPages - 1, pages.length - 1));
   const rightPages = pages.slice(-1);
 
+  if(numPages <= 1) return;
+  
   return (
     <div className="w-min">
       <Pagination className=" text-black/80 pb-3">
