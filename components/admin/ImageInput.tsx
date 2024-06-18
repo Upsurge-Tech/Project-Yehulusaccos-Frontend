@@ -7,6 +7,7 @@ import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
 
 const ImageInput = ({
+  error,
   compressing,
   compressed,
   setCompress,
@@ -39,6 +40,7 @@ const ImageInput = ({
     const compress = async () => {
       if (!file) return;
       if (compressed) return;
+
       try {
         setCompress(true, false);
         const compressedFile = await imageCompression(file, {
@@ -50,16 +52,18 @@ const ImageInput = ({
 
         const reader = new FileReader();
         reader.onload = (e) => {
+          if (controller.signal.aborted) {
+            onFileChange(null, null, false, false);
+            return;
+          }
           const url = (e.target?.result as string) || null;
           onFileChange(compressedFile, url, false, true);
         };
         reader.readAsDataURL(compressedFile);
       } catch (e) {
-        console.error("Could not compress image", e);
-        onError("Could not compress image");
+        console.log("Could not compress image", e);
+        onFileChange(null, null, false, false);
         return;
-      } finally {
-        setCompress(false, false);
       }
     };
     compress();
@@ -81,6 +85,9 @@ const ImageInput = ({
   return (
     <div className="relative max-w-[200px] border rounded">
       {compressing && <p className="text-black/50 text-sm">compressing...</p>}
+      {error && !compressing && (
+        <p className="text-destructive text-sm">{error}</p>
+      )}
       <button
         className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
         type="button"
