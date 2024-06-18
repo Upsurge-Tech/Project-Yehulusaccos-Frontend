@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArticleFormState, FormContent } from "@/data-types/Article";
+import {
+  ArticleFormState,
+  FormContent,
+  ImageFormContent,
+} from "@/data-types/Article";
 import { createArticle } from "@/lib/articles/createArticle.action";
 import { editArticle } from "@/lib/articles/editArticle.action";
 import { getVideoId, withPrevImages } from "@/lib/articles/utils";
@@ -68,8 +72,9 @@ const ArticleForm = ({
       return "Please paste a valid youtube link (eg: https://www.youtube.com/watch?v=Abc123Abc )";
     else return "";
   };
-  const validateImage = (file: File | null): string => {
-    if (!file) return "Can not be empty";
+  const validateImage = (state: ImageFormContent): string => {
+    if (!state.file) return "Can not be empty";
+    if (state.compressing) return "Please wait till the image is compressed";
     else return "";
   };
 
@@ -78,13 +83,13 @@ const ArticleForm = ({
     const state = formState;
 
     //ensure required* and other unresolved errors
-    if (validateImage(state.thumbnail.file)) {
+    if (validateImage(state.thumbnail)) {
       document.getElementById(state.thumbnail.elementId)?.focus();
       setFormState({
         ...formState,
         thumbnail: {
           ...formState.thumbnail,
-          error: validateImage(state.thumbnail.file),
+          error: validateImage(state.thumbnail),
         },
       });
       return;
@@ -98,7 +103,7 @@ const ArticleForm = ({
         error = validateYoutube(content.youtubeLink);
         elementId = content.elementId;
       } else if (content.type === "image") {
-        error = validateImage(content.file);
+        error = validateImage(content);
         elementId = content.elementId;
       }
       if (error && (content.type === "youtube" || content.type === "image")) {
@@ -291,17 +296,24 @@ const ArticleForm = ({
             {content.type === "image" && (
               <div className="border p-2">
                 <ImageInput
+                  compressed={content.compressed}
+                  compressing={content.compressing}
+                  setCompress={(compressing, compressed) => {
+                    replaceContent({ ...content, compressing, compressed }, i);
+                  }}
                   previousSrc={content.previousSrc}
                   id={content.elementId}
                   file={content.file}
                   localUrl={content.localUrl}
-                  onFileChange={(file, localUrl) => {
+                  onFileChange={(file, localUrl, compressing, compressed) => {
                     replaceContent(
                       {
                         ...content,
                         file,
-                        error: validateImage(file),
+                        error: validateImage(content),
                         localUrl,
+                        compressing,
+                        compressed,
                       },
                       i
                     );
@@ -339,6 +351,14 @@ const ArticleForm = ({
       <div className="pt-9 ">
         <Label htmlFor="thumb">Thumbnail *</Label>
         <ImageInput
+          compressed={formState.thumbnail.compressed}
+          compressing={formState.thumbnail.compressing}
+          setCompress={(compressing, compressed) => {
+            setFormState({
+              ...formState,
+              thumbnail: { ...formState.thumbnail, compressing, compressed },
+            });
+          }}
           error={formState.thumbnail.error}
           localUrl={formState.thumbnail.localUrl}
           onError={(error) =>
@@ -349,14 +369,16 @@ const ArticleForm = ({
           }
           id={formState.thumbnail.elementId}
           previousSrc={formState.thumbnail.previousSrc}
-          onFileChange={(file, url) => {
+          onFileChange={(file, url, compressing, compressed) => {
             setFormState({
               ...formState,
               thumbnail: {
                 ...formState.thumbnail,
+                compressing,
+                compressed,
                 file,
                 localUrl: url,
-                error: validateImage(file),
+                error: validateImage(formState.thumbnail),
               },
             });
           }}

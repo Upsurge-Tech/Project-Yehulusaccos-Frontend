@@ -65,6 +65,8 @@ export interface ImageFormContent {
   localUrl: string | null;
   previousSrc?: string; //string if editing image
   error: string;
+  compressing: boolean;
+  compressed: boolean;
 }
 export interface YouTubeFormContent {
   elementId: string;
