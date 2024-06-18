@@ -12,14 +12,19 @@ export const createArticle = async (
   formData: FormData,
   article: ArticleFormState
 ): Promise<{ error: string } | number> => {
+  console.log("starting creating article");
   const sessionError = await errorIfNotLoggedIn();
-  if (sessionError) return sessionError;
+  if (sessionError) {
+    console.error("session error", sessionError);
+    return sessionError;
+  }
 
   const imageFiles = [...(formData.getAll("images") as File[])];
   if (
     imageFiles.length - 1 !==
     article.contents.filter((c) => c.type === "image").length
   ) {
+    console.error("missing images!");
     return { error: "Missing images, Please try again later." };
   }
 
