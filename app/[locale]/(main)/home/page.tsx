@@ -1,0 +1,26 @@
+import React from "react";
+
+import Intro from "@/components/home/Intro";
+import OurBelieve from "@/components/home/OurBelieve";
+import OurUniqeness from "@/components/home/OurUniqeness";
+import Testimonials from "@/components/home/Testimonials";
+import Metrics from "@/components/home/Metrics";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Yehulu | Home",
+};
+
+const HomePage = () => {
+  return (
+    <div className="container overflow-hidden xl:overflow-visible my-20 flex flex-col w-full gap-y-5 md:gap-y-16 xl:gap-y-48 min-h-screen">
+      <Intro />
+      <OurBelieve />
+      <OurUniqeness />
+      <Testimonials />
+      <Metrics />
+    </div>
+  );
+};
+
+export default HomePage;

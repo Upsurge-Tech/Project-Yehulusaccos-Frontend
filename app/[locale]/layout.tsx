@@ -1,0 +1,39 @@
+import { Plus_Jakarta_Sans } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import "../globals.css";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
+import React, { ReactNode } from "react";
+
+const font = Plus_Jakarta_Sans({ subsets: ["latin"] });
+
+interface RootLayoutProps {
+  children: React.ReactNode;
+  params: {
+    locale: string;
+  };
+}
+
+export default function RootLayout({
+  children,
+  params: { locale },
+}: Readonly<RootLayoutProps>): JSX.Element {
+  const messages = {
+    en: require(`@/translations/en.json`),
+    am: require(`@/translations/am.json`),
+  }[locale];
+
+  return (
+    <html lang={locale}>
+      <body className={font.className}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <div className="flex flex-col   bg-stone-50">
+            <NavBar />
+            <div className="mt-[70px]">{children}</div>
+            <Footer />
+          </div>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}

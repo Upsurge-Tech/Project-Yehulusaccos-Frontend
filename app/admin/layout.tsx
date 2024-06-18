@@ -1,11 +1,9 @@
-import React, { ReactNode } from "react";
+"use client";
 
-interface Props {
-  children: ReactNode;
-}
-
-const AdminLayout = ({ children }: Props) => {
-  return <div>{children}</div>;
+import { SessionProvider, useSession } from "next-auth/react";
+import { ReactNode } from "react";
+const Layout = ({ children }: { children: ReactNode }) => {
+  return <SessionProvider>{children}</SessionProvider>;
 };
 
-export default AdminLayout;
+export default Layout;

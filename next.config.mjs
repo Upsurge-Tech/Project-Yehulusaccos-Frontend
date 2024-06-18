@@ -1,4 +1,30 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+import createNextIntlPlugin from "next-intl/plugin";
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  distDir: "_next",
+  images: {
+    unoptimized: true,
+    // https://img.youtube.com/vi/[video-id]/[thumbnail-number].jpg
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+        port: "",
+        pathname: "**/*",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "**/*",
+      },
+    ],
+  },
+};
+
+export default withNextIntl(nextConfig);
+
+// export default nextConfig
