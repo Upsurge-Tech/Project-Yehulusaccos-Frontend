@@ -80,7 +80,7 @@ const ImageInput = ({
 
   return (
     <div className="relative max-w-[200px] border rounded">
-      {compressing && <p>compressing...</p>}
+      {compressing && <p className="text-black/50 text-sm">compressing...</p>}
       <button
         className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
         type="button"

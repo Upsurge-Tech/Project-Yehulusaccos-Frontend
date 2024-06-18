@@ -5,6 +5,8 @@ const NewPost = () => {
   const state: ArticleFormState = {
     title: "title",
     thumbnail: {
+      compressing: false,
+      compressed: false,
       type: "image",
       elementId: "thumbnail",
       file: null,
