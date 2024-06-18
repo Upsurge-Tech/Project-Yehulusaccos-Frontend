@@ -310,10 +310,10 @@ const ArticleForm = ({
                       {
                         ...content,
                         file,
-                        error: validateImage(content),
                         localUrl,
                         compressing,
                         compressed,
+                        error: "",
                       },
                       i
                     );
@@ -378,7 +378,7 @@ const ArticleForm = ({
                 compressed,
                 file,
                 localUrl: url,
-                error: validateImage(formState.thumbnail),
+                error: "",
               },
             });
           }}
