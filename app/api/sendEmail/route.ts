@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
@@ -25,6 +25,10 @@ export async function POST(req: NextRequest) {
     await transporter.sendMail(companyMailOptions);
     return NextResponse.json({ message: "Email sent successfully" });
   } catch (error: any) {
-    return NextResponse.json({ message: "Email failed to send" });
+    console.error(error);
+    return NextResponse.json(
+      { message: "Email failed to send" },
+      { status: 500 }
+    );
   }
 }
