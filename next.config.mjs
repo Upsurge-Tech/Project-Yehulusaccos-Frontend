@@ -4,7 +4,9 @@ const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: "_next",
   images: {
+    unoptimized: true,
     // https://img.youtube.com/vi/[video-id]/[thumbnail-number].jpg
     remotePatterns: [
       {
@@ -24,3 +26,5 @@ const nextConfig = {
 };
 
 export default withNextIntl(nextConfig);
+
+// export default nextConfig
