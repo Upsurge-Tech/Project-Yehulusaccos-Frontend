@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Logo2 from "@/public/assets/Logo2.png";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import Link from "next/link";
-import NavLink from "./NavLink";
+import { useEffect, useState } from "react";
 import { HiMenuAlt2, HiX } from "react-icons/hi";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import NavLink from "./NavLink";
 
 const NavBar = () => {
   const t = useTranslations("NavBar");
@@ -41,9 +40,14 @@ const NavBar = () => {
   ];
 
   return (
-    <div className={`fixed bg-stone-50 z-30 py-[6px] px-3 md:px-7 w-full ${scrollActive ? "shadow-sm" : ""}`}>
+    <div
+      className={`fixed border bg-shellColor z-30 py-[6px] px-3 md:px-7 w-full ${scrollActive ? "shadow-sm" : ""}`}
+    >
       <div className="container flex justify-between items-center">
-        <Link href={`/${locale}/home`} className="w-[50px] md:w-[70px] h-[50px] md:h-[70px]">
+        <Link
+          href={`/${locale}/home`}
+          className="w-[50px] md:w-[70px] h-[50px] md:h-[70px]"
+        >
           <Image src={Logo2} alt="imageLogo" className="w-full h-full" />
         </Link>
         <div className="hidden lg:flex items-center">
