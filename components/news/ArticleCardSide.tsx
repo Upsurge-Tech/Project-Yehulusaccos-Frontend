@@ -2,6 +2,7 @@ import { Article } from "@/data-types/Article";
 import formateDate from "@/utils/dateFormatter";
 import Image from "next/image";
 import { IoIosArrowRoundUp } from "react-icons/io";
+import Link from 'next/link'
 
 const ArticleCardSide = ({ article }: { article: Article }) => {
   return (
@@ -20,8 +21,13 @@ const ArticleCardSide = ({ article }: { article: Article }) => {
           {formateDate(article.createdAt)}
         </span>
         <div className="flex justify-between items-center gap-x-3">
+        <Link
+          href={`/news/${article.id}`}
+          className="flex justify-between items-center gap-x-3 w-full"
+        >
           <p className="font-bold">{article.title}</p>
           <IoIosArrowRoundUp className="text-primary rotate-45" size={40} />
+        </Link>
         </div>
         <p>{article.excerpt}</p>
       </div>
