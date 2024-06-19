@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3003",
     "lint": "next lint",
     "prettier-fix": "prettier --write '**/*.{ts,tsx}'",
     "db-migrations": "npx drizzle-kit generate"
@@ -21,6 +21,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@react-google-maps/api": "^2.19.3",
     "@types/dateformat": "^5.0.2",
+    "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.2.0",
     "clsx": "^2.1.1",

@@ -18,6 +18,8 @@ const EditPost = async ({ params: { id } }: Props) => {
   const formState: ArticleFormState = {
     title: article.title,
     thumbnail: {
+      compressing: false,
+      compressed: true,
       localUrl: null,
       elementId: "thumbnail",
       type: "image",
@@ -36,6 +38,8 @@ const EditPost = async ({ params: { id } }: Props) => {
         return {
           type: "image",
           alt: c.alt,
+          compressing: false,
+          compressed: true,
           file: null,
           localUrl: null,
           previousSrc: c.src,
