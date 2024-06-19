@@ -15,8 +15,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [formState, setFormState] = useState({
-    email: "abebe@gmail.com",
-    password: "abebe",
+    email: "",
+    password: "",
   });
   const router = useRouter();
   const handleSubmit = async (e: FormEvent) => {
@@ -68,7 +68,7 @@ const Login = () => {
             <Input
               type="email"
               id="email"
-              placeholder="email"
+              placeholder="Your Email"
               value={formState.email}
               onChange={(e) =>
                 setFormState({ ...formState, email: e.target.value })
@@ -80,7 +80,7 @@ const Login = () => {
             <Input
               id="password"
               type="password"
-              placeholder="password"
+              placeholder="Your Password"
               value={formState.password}
               onChange={(e) =>
                 setFormState({ ...formState, password: e.target.value })
