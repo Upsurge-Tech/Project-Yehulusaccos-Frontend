@@ -16,8 +16,8 @@ const NewPost = () => {
     },
     unknown: "",
     contents: [
-      { type: "heading", heading: "heading" },
-      { type: "paragraph", paragraph: "paragraph" },
+      { type: "heading", heading: "" },
+      { type: "paragraph", paragraph: "" },
     ],
   };
   return <ArticleForm initialFormState={state} />;

@@ -1,11 +1,10 @@
-import React from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { FaCheckCircle } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
-import LoanSavingTable from "./LoanSavingTable";
-import { useTranslations } from "next-intl";
 import FadeIn from "../animation/FadeIn";
 import TitleFadeIn from "../animation/TitleFadeIn";
+import LoanSavingTable from "./LoanSavingTable";
 
 const LoanServices = () => {
   const tLoanTypes = useTranslations("Loan.LoanTypes");
@@ -25,7 +24,7 @@ const LoanServices = () => {
   ];
 
   return (
-    <div className="flex flex-col  gap-y-5 lg:gap-y-10 items-center w-full">
+    <div className="container flex flex-col  gap-y-5 lg:gap-y-10 items-center w-full">
       <div className="bg-primarySoft lg:mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide  px-2 h-10 rounded-lg">
         <TitleFadeIn duration={1.3} className="" title={tLoanTypes("Header")} />
       </div>

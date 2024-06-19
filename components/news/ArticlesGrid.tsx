@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ArticlesGrid = ({ articles }: Props) => {
-  articles = [];
+  // articles = [];
   const t = useTranslations("News.SingleNews");
   return (
     <div className="flex flex-col gap-y-10">
