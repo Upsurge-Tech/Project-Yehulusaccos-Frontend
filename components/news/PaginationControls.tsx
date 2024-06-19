@@ -24,8 +24,8 @@ const PaginationControls = ({
   const leftPages = pages.slice(0, Math.min(maxPages - 1, pages.length - 1));
   const rightPages = pages.slice(-1);
 
-  if(numPages <= 1) return;
-  
+  if (numPages <= 1) return;
+
   return (
     <div className="w-min">
       <Pagination className=" text-black/80 pb-3">
@@ -40,7 +40,7 @@ const PaginationControls = ({
               }}
             >
               <FaArrowLeftLong size={25} className="hidden md:inline-block" />
-              Oldest
+              Newest
             </Button>
           </PaginationItem>
 
@@ -83,7 +83,7 @@ const PaginationControls = ({
                 onPageChange(currentPage + 1);
               }}
             >
-              Newest
+              Oldest
               <FaArrowRightLong size={25} className="hidden md:inline" />
             </Button>
           </PaginationItem>
