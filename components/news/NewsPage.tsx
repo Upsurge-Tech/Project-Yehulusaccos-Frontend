@@ -11,7 +11,14 @@ import TitleFadeIn from "@/components/animation/TitleFadeIn";
 import SlideFrom from "@/components/animation/SlideFrom";
 import FadeIn from "@/components/animation/FadeIn";
 
-const NewsPage = ({
+
+interface NewsPageProps {
+    searchParams: {
+      [key: string]: string | string[] | undefined;
+    };
+  }
+
+const NewsPage: React.FC<NewsPageProps> = ({
   searchParams,
 }: {
   searchParams: {
