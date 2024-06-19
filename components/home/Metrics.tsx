@@ -88,7 +88,7 @@ const Metrics = () => {
           </div>
           <p className="text-xl font-semibold">
             <Counter value={490} direction="up" />
-            B+
+            M+
           </p>
           <p>{tMetrics("Finance")}</p>
         </div>

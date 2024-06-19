@@ -1,27 +1,24 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import Logo from "@/public/assets/Logo2.png";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaTiktok,
-  FaYoutube,
-  FaTelegram,
-} from "react-icons/fa";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
-import { useTranslations } from "next-intl";
 
 const Footer = () => {
   const tFooter = useTranslations("Footer");
+  const locale = useLocale();
 
   return (
-    <footer className="bg-[#FAFFFC] w-full p-10 border-t-[1px] border-stone-200">
+    <footer className="bg-shellColor w-full p-10 border-t-[1px] border">
       <div className="container mx-auto flex md:flex-row flex-col md:justify-between md:gap-x-10 space-y-8 md:space-y-0">
-        <Link href="/home" className="flex items-start justify-center">
-          <Image src={Logo} alt="Company Logo" width={70} height={70} />
+        <Link
+          href={`/${locale}/home`}
+          className="flex items-start justify-center"
+        >
+          <Image src={Logo} alt="Company Logo" width={100} height={100} />
         </Link>
         <div className="space-y-6">
           <h2 className="text-lg font-semibold text-center md:text-start">
@@ -67,22 +64,28 @@ const Footer = () => {
           <h2 className="text-lg font-semibold">{tFooter("Pages")}</h2>
           <ul className="space-y-2">
             <li>
-              <Link href="/services" className="hover:text-green-600">
+              <Link
+                href={`/${locale}/services`}
+                className="hover:text-green-600"
+              >
                 {tFooter("Services")}
               </Link>
             </li>
             <li>
-              <Link href="/faq" className="hover:text-green-600">
+              <Link href={`/${locale}/faq`} className="hover:text-green-600">
                 {tFooter("Faq")}
               </Link>
             </li>
             <li>
-              <Link href="/news" className="hover:text-green-600">
+              <Link href={`/${locale}/news`} className="hover:text-green-600">
                 {tFooter("News")}
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-green-600">
+              <Link
+                href={`/${locale}/contact`}
+                className="hover:text-green-600"
+              >
                 {tFooter("Contactus")}
               </Link>
             </li>
@@ -92,7 +95,10 @@ const Footer = () => {
           <h2 className="text-lg font-semibold">{tFooter("GetStarted")}</h2>
           <ul className="space-y-2">
             <li>
-              <Link href="/contact" className="hover:text-green-600">
+              <Link
+                href={`/${locale}/contact`}
+                className="hover:text-green-600"
+              >
                 {tFooter("contact")}
               </Link>
             </li>
@@ -102,12 +108,12 @@ const Footer = () => {
           <h2 className="text-lg font-semibold">{tFooter("About")}</h2>
           <ul className="space-y-2">
             <li>
-              <Link href="/about" className="hover:text-green-600">
+              <Link href={`/${locale}/about`} className="hover:text-green-600">
                 {tFooter("Glance")}
               </Link>
             </li>
             <li>
-              <Link href="/home" className="hover:text-green-600">
+              <Link href={`/${locale}/home`} className="hover:text-green-600">
                 {tFooter("Mission")}
               </Link>
             </li>
