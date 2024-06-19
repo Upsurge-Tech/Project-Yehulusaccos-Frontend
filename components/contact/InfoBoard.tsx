@@ -8,7 +8,7 @@ const InfoBoard = () => {
   return (
     <PopUpAlt className=" max-w-sm w-full md:absolute top-0 right-40 border flex justify-between gap-x-5 p-4 md:rounded-xl md:shadow-lg bg-white mx-auto">
       <div className="flex items-start py-4">
-        <FaLocationDot className="text-primary animate-bounce" size={25} />
+        <FaLocationDot className="text-primary animate-bounce" size={35} />
       </div>
       <div className="space-y-4">
         <div>
