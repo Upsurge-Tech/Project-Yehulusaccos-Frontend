@@ -21,7 +21,7 @@ const Footer = () => {
     <footer className="bg-[#FAFFFC] w-full p-10 border-t-[1px] border-stone-200">
       <div className="container mx-auto flex md:flex-row flex-col md:justify-between md:gap-x-10 space-y-8 md:space-y-0">
         <Link href="/home" className="flex items-start justify-center">
-          <Image src={Logo} alt="Company Logo" width={70} height={70} />
+          <Image src={Logo} alt="Company Logo" width={100} height={100} />
         </Link>
         <div className="space-y-6">
           <h2 className="text-lg font-semibold text-center md:text-start">
