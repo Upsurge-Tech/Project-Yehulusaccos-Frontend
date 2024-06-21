@@ -1,4 +1,5 @@
 import { Article, ArticleFormState, FormContent } from "@/data-types/Article";
+import { getSignature } from "./getSignature.action";
 
 export const getVideoId = (link: string): string | null => {
   try {
@@ -136,33 +137,59 @@ export const withUploadedImages = async (
     }
   }
 
-  const preset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
-  if (!preset) return { error: "Cloudinary preset not found" };
+  const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string;
+  const upload_preset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
+  if (!upload_preset) return { error: "Cloudinary upload_preset not found" };
+  if (!api_key) return { error: "Cloudinary api_key not found" };
 
-  const urls: string[] = await Promise.all(
-    images.map(async (image) => {
-      const formData = new FormData();
-      formData.append("file", image);
-      formData.append("upload_preset", preset);
+  try {
+    const res = await getSignature();
+    if ("error" in res) {
+      return { error: res.error };
+    }
 
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const data = await res.json();
-      return data.secure_url;
-    })
-  );
+    const { signature, timestamp, upload_preset } = res;
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string;
+    if (!cloudName) {
+      return { error: "Cloudinary credentials not found" };
+    }
 
-  const newContents: FormContent[] = state.contents.map((c, i) =>
-    c.type === "image" ? { ...c, src: urls[i + 1] } : c
-  );
-  return {
-    ...state,
-    thumbnail: { ...state.thumbnail, src: urls[0] },
-    contents: newContents,
-  };
+    const urls: string[] = await Promise.all(
+      images.map(async (image) => {
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("upload_preset", upload_preset);
+
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload/q_auto/api_key=${api_key}&timestamp=${timestamp}&upload_preset=${upload_preset}&signature=${signature}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = (await res.json()) as {
+          error?: { message: string };
+          secure_url: string;
+        };
+        console.log(data);
+        if (data.error) throw new Error(data.error.message);
+        return data.secure_url;
+      })
+    );
+
+    const newContents: FormContent[] = state.contents.map((c, i) =>
+      c.type === "image" ? { ...c, src: urls[i + 1] } : c
+    );
+    return {
+      ...state,
+      thumbnail: { ...state.thumbnail, src: urls[0] },
+      contents: newContents,
+    };
+  } catch (e) {
+    if (e instanceof Error) {
+      return { error: e.message };
+    } else {
+      return { error: "An error occurred: " + JSON.stringify(e) };
+    }
+  }
 };

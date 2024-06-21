@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
+import Spinner from "../Spinner";
 
 const ImageInput = ({
   index,
@@ -149,7 +150,10 @@ const ImageInput = ({
   return (
     <div className="relative max-w-[200px] border rounded">
       {content.compressing && (
-        <p className="text-black/50 text-sm">compressing...</p>
+        <p className="text-black/50 text-sm flex gap-2 items-center">
+          <Spinner spin={content.compressing} />
+          compressing...
+        </p>
       )}
       {content.error && !content.compressing && (
         <p className="text-destructive text-sm">{content.error}</p>

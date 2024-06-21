@@ -11,6 +11,7 @@ const NewPost = () => {
       elementId: "thumbnail",
       file: null,
       localUrl: null,
+      src: "",
       alt: "",
       error: "",
     },

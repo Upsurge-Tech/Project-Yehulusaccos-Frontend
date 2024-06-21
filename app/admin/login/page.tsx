@@ -67,6 +67,7 @@ const Login = () => {
             <Label htmlFor="email">Email</Label>
             <Input
               type="email"
+              required
               id="email"
               placeholder="Your Email"
               value={formState.email}
@@ -79,6 +80,7 @@ const Login = () => {
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
+              required
               type="password"
               placeholder="Your Password"
               value={formState.password}
@@ -90,7 +92,7 @@ const Login = () => {
           {!isLoading && error && (
             <p className="text-destructive text-sm">{error}</p>
           )}
-          <Button className="flex gap-3" type="submit">
+          <Button className="flex gap-3" type="submit" disabled={isLoading}>
             <Spinner spin={isLoading} />
             <span>Login</span>
           </Button>
