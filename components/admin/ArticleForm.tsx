@@ -13,7 +13,12 @@ import {
 } from "@/data-types/Article";
 import { createArticle } from "@/lib/articles/createArticle.action";
 import { editArticle } from "@/lib/articles/editArticle.action";
-import { getVideoId, withPrevImages } from "@/lib/articles/utils";
+import {
+  getVideoId,
+  withNulledImages,
+  withPrevImages,
+  withUploadedImages,
+} from "@/lib/articles/utils";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
@@ -81,7 +86,7 @@ const ArticleForm = ({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const state = formState;
+    let state: ArticleFormState = formState;
 
     //ensure required* and other unresolved errors
     if (validateImage(state.thumbnail)) {
@@ -114,51 +119,20 @@ const ArticleForm = ({
       }
     }
 
-    //create form data
-    const formData = new FormData();
-    formData.append("images", state.thumbnail.file as File);
-    for (const content of state.contents) {
-      if (content.type === "image") {
-        formData.append("images", content.file as File);
-      }
-    }
-
-    console.log("submitting", state);
-
-    //create alt and also remove files from content
-    let nearestHeading: string = formState.title;
-    const copy: ArticleFormState = {
-      ...state,
-      thumbnail: {
-        ...state.thumbnail,
-        file: null,
-        localUrl: null,
-        alt: `Image describing ${nearestHeading}`,
-      },
-      contents: state.contents.map((c) => {
-        if (c.type === "heading") {
-          nearestHeading = c.heading;
-        }
-        if (c.type === "image") {
-          return {
-            ...c,
-            file: null,
-            localUrl: null,
-            alt: `Image describing ${nearestHeading}`,
-          };
-        } else {
-          return c;
-        }
-      }),
-    };
-    console.log(formData, copy);
-
-    //start networking
     setError("");
     try {
       setIsLoading(true);
+      const res = await withUploadedImages(state);
+      if ("error" in res) {
+        setError(res.error);
+        return;
+      }
+
+      state = res;
+      state = withNulledImages(state);
+      console.log("submitting", state);
       if (isEdit) {
-        const res = await editArticle(articleId as number, formData, copy);
+        const res = await editArticle(articleId as number, state);
         if (!res) {
           router.push("/admin/posts");
           router.refresh();
@@ -167,7 +141,7 @@ const ArticleForm = ({
           console.log("Friendly error", res.error);
         }
       } else {
-        const res = await createArticle(formData, copy);
+        const res = await createArticle(state);
         if (typeof res === "number") {
           console.log("Article saved with id", res);
           router.push("/admin/posts");

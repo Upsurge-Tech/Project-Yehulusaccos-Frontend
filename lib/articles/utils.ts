@@ -54,16 +54,16 @@ const toFile = async (url: string | null): Promise<File | null> => {
 export const withPrevImages = async (
   article: ArticleFormState
 ): Promise<ArticleFormState> => {
-  const thumbnailFile = await toFile(article.thumbnail.previousSrc || null);
-  const thumbnailLocalUrl = article.thumbnail.previousSrc || null;
+  const thumbnailFile = await toFile(article.thumbnail.src || null);
+  const thumbnailLocalUrl = article.thumbnail.src || null;
 
   const contents = await Promise.all(
     article.contents.map(async (c, i) => {
       if (c.type !== "image") {
         return { ...c };
       } else {
-        const file = await toFile(c.previousSrc || null);
-        const localUrl = c.previousSrc || null;
+        const file = await toFile(c.src || null);
+        const localUrl = c.src || null;
         return { ...c, file, localUrl };
       }
     })
@@ -89,4 +89,80 @@ export const replaceContent = (
   const newContents = [...state.contents];
   newContents[index] = content;
   return { ...state, contents: newContents };
+};
+
+export const withNulledImages = (state: ArticleFormState): ArticleFormState => {
+  let nearestHeading: string = state.title;
+  const copy: ArticleFormState = {
+    ...state,
+    thumbnail: {
+      ...state.thumbnail,
+      file: null,
+      localUrl: null,
+      alt: `Image describing ${nearestHeading}`,
+    },
+    contents: state.contents.map((c) => {
+      if (c.type === "heading") {
+        nearestHeading = c.heading;
+      }
+      if (c.type === "image") {
+        return {
+          ...c,
+          file: null,
+          localUrl: null,
+          alt: `Image describing ${nearestHeading}`,
+        };
+      } else {
+        return c;
+      }
+    }),
+  };
+  return copy;
+};
+
+export const withUploadedImages = async (
+  state: ArticleFormState
+): Promise<ArticleFormState | { error: string }> => {
+  const images: File[] = [];
+  if (!state.thumbnail.file) {
+    return { error: "Thumbnail is required" };
+  }
+  images.push(state.thumbnail.file);
+
+  for (const content of state.contents) {
+    if (content.type === "image") {
+      if (!content.file) return { error: "All images are required" };
+      images.push(content.file);
+    }
+  }
+
+  const preset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
+  if (!preset) return { error: "Cloudinary preset not found" };
+
+  const urls: string[] = await Promise.all(
+    images.map(async (image) => {
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", preset);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await res.json();
+      return data.secure_url;
+    })
+  );
+
+  const newContents: FormContent[] = state.contents.map((c, i) =>
+    c.type === "image" ? { ...c, src: urls[i + 1] } : c
+  );
+  return {
+    ...state,
+    thumbnail: { ...state.thumbnail, src: urls[0] },
+    contents: newContents,
+  };
 };

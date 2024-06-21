@@ -90,8 +90,7 @@ export const uploadImages = async (
 
 export const insertContents = async (
   articleId: number,
-  article: ArticleFormState,
-  imagePaths: string[]
+  article: ArticleFormState
 ): Promise<{ error: string } | void> => {
   try {
     let imageIndex = 1;
@@ -102,7 +101,7 @@ export const insertContents = async (
         let data: string = "";
         let alt: string = "";
         if (type === "image") {
-          data = imagePaths[imageIndex];
+          data = content.src;
           alt = content.alt;
           imageIndex++;
         } else if (type === "heading") {

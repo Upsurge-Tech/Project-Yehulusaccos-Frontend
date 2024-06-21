@@ -65,7 +65,7 @@ export interface ImageFormContent {
   alt: string;
   file: File | null;
   localUrl: string | null;
-  previousSrc?: string; //string if editing image
+  src: string; //string if editing image
   error: string;
   compressing: boolean;
   compressed: boolean;

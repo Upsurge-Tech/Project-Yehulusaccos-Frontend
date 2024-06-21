@@ -3,46 +3,40 @@ import { ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import getArticle from "./getArticle";
 import {
   errorIfNotLoggedIn,
   insertContents,
   removeImages,
-  uploadImages,
 } from "./server-utils";
 
 export const editArticle = async (
   articleId: number,
-  formData: FormData,
   article: ArticleFormState
 ): Promise<{ error: string } | void> => {
   const sessionError = await errorIfNotLoggedIn();
   if (sessionError) return sessionError;
 
-  const imageFiles = [...(formData.getAll("images") as File[])];
-  if (
-    imageFiles.length - 1 !==
-    article.contents.filter((c) => c.type === "image").length
-  ) {
-    return { error: "Missing images, Please try again later." };
-  }
-
-  const oldUrls = article.contents
-    .map((c) => (c.type === "image" ? c.previousSrc ?? "" : ""))
-    .filter((s) => s !== "");
-
   try {
-    const res = await uploadImages(imageFiles);
-    if ("error" in res) return res;
-    const newUrls = res;
+    const res1 = await getArticle(articleId, false);
+    if ("error" in res1) return res1;
 
     await db
       .update(articleTable)
-      .set({ title: article.title, thumbnail: newUrls[0] })
+      .set({ title: article.title, thumbnail: article.thumbnail.src })
       .where(eq(articleTable.id, articleId));
 
     await db.delete(contentTable).where(eq(contentTable.articleId, articleId));
-    await insertContents(articleId, article, newUrls);
-    await removeImages(oldUrls);
+    await insertContents(articleId, article);
+
+    const oldArticle = res1.article;
+    const oldSrcs = [
+      oldArticle.thumbnail,
+      ...article.contents
+        .map((c) => (c.type === "image" ? c.src : ""))
+        .filter((s) => s !== ""),
+    ];
+    await removeImages(oldSrcs);
   } catch (e) {
     if (e instanceof Error) {
       return { error: "Failed to edit article: " + e.message };
