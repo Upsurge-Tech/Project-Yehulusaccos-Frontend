@@ -49,11 +49,13 @@ export interface Article {
 }
 
 export interface HeadingFormContent {
+  elementId: string;
   type: "heading";
   heading: string;
 }
 
 export interface ParagraphFormContent {
+  elementId: string;
   type: "paragraph";
   paragraph: string;
 }

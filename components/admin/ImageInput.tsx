@@ -1,5 +1,7 @@
 "use client";
 
+import { ArticleFormState, ImageFormContent } from "@/data-types/Article";
+import { replaceContent } from "@/lib/articles/utils";
 import imageCompression from "browser-image-compression";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
@@ -7,98 +9,162 @@ import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
 
 const ImageInput = ({
-  error,
-  compressing,
-  compressed,
-  setCompress,
-  id,
-  file,
-  localUrl,
-  onFileChange,
-  onError,
+  index,
+  formState,
+  setFormState,
+  validate,
 }: {
-  compressing: boolean;
-  compressed: boolean;
-  setCompress: (compressing: boolean, compressed: boolean) => void;
-  previousSrc?: string;
-  id: string;
-  onFileChange: (
-    file: File | null,
-    localUrl: string | null,
-    compressing: boolean,
-    compressed: boolean
-  ) => void;
-  file: File | null;
-  localUrl: string | null;
-  error: string;
-  onError: (error: string) => void;
+  index: number;
+  formState: ArticleFormState;
+  setFormState: React.Dispatch<React.SetStateAction<ArticleFormState>>;
+  validate: (s: ImageFormContent) => string;
 }) => {
+  const isThumbnail = index === -1;
+  const content = isThumbnail ? formState.thumbnail : formState.contents[index];
+  if (content.type !== "image") throw new Error("Content type mismatch");
+
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const controller = new AbortController();
+    const onAbort = () => {
+      if (isThumbnail) {
+        setFormState((s) => ({
+          ...s,
+          thumbnail: { ...s.thumbnail, compressed: false, compressing: false },
+        }));
+      } else {
+        setFormState((s) =>
+          replaceContent(
+            s,
+            {
+              ...(s.contents[index] as ImageFormContent),
+              compressed: false,
+              compressing: false,
+            },
+            index
+          )
+        );
+      }
+    };
     const compress = async () => {
-      if (!file) return;
-      if (compressed) return;
+      if (!content.file) return;
+      if (content.compressed) return;
+      const isBig = content.file.size / (1024 * 1024) > 0.1;
+      console.log("is big", isBig);
 
       try {
-        setCompress(true, false);
-        const compressedFile = await imageCompression(file, {
-          maxSizeMB: 0.025,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-          signal: controller.signal,
-        });
+        const beforeContent = {
+          ...content,
+          compressing: true,
+          compressed: false,
+        };
+        if (isThumbnail) {
+          setFormState((s) => ({ ...s, thumbnail: beforeContent }));
+        } else {
+          setFormState((s) => replaceContent(s, beforeContent, index));
+        }
+
+        const compressedFile = isBig
+          ? await imageCompression(content.file, {
+              maxSizeMB: 0.1,
+              useWebWorker: true,
+              signal: controller.signal,
+            })
+          : content.file;
 
         const reader = new FileReader();
         reader.onload = (e) => {
           if (controller.signal.aborted) {
-            onFileChange(null, null, false, false);
+            onAbort();
             return;
           }
-          const url = (e.target?.result as string) || null;
-          onFileChange(compressedFile, url, false, true);
+
+          const localUrl = (e.target?.result as string) || null;
+          const newContent = {
+            ...content,
+            file: compressedFile,
+            localUrl,
+            compressing: false,
+            compressed: true,
+          };
+          if (isThumbnail) {
+            setFormState((s) => ({ ...s, thumbnail: newContent }));
+          } else {
+            setFormState((s) => replaceContent(s, newContent, index));
+          }
         };
         reader.readAsDataURL(compressedFile);
       } catch (e) {
         console.log("Could not compress image", e);
-        onFileChange(null, null, false, false);
+        onAbort();
         return;
       }
     };
     compress();
     return () => controller.abort();
-  }, [file, compressed]);
+  }, [content.file, content.compressed, index]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    console.log("here");
     reader.onload = (e) => {
-      const url = (e.target?.result as string) || null;
-      onFileChange(file, url, false, false);
+      const localUrl = (e.target?.result as string) || null;
+      const newContent = {
+        ...content,
+        file,
+        localUrl,
+        compressed: false,
+        compressing: false,
+        error: "",
+      };
+      newContent.error = validate(newContent);
+
+      if (isThumbnail) {
+        setFormState((s) => ({ ...s, thumbnail: newContent }));
+      } else {
+        setFormState((s) => replaceContent(s, newContent, index));
+      }
     };
     reader.readAsDataURL(file);
   };
 
+  const cancel = () => {
+    const newContent = {
+      ...content,
+      file: null,
+      localUrl: null,
+      compressed: false,
+      compressing: false,
+      error: "",
+    };
+    if (isThumbnail) {
+      setFormState((s) => ({ ...s, thumbnail: newContent }));
+    } else {
+      setFormState((s) => replaceContent(s, newContent, index));
+    }
+  };
+
   return (
     <div className="relative max-w-[200px] border rounded">
-      {compressing && <p className="text-black/50 text-sm">compressing...</p>}
-      {error && !compressing && (
-        <p className="text-destructive text-sm">{error}</p>
+      {content.compressing && (
+        <p className="text-black/50 text-sm">compressing...</p>
+      )}
+      {content.error && !content.compressing && (
+        <p className="text-destructive text-sm">{content.error}</p>
       )}
       <button
-        className={` ${file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
+        className={` ${content.file ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
         type="button"
-        onClick={() => onFileChange(null, null, false, false)}
+        onClick={() => cancel()}
       >
         <MdOutlineCleaningServices />
       </button>
 
       <label
-        htmlFor={id}
-        className={`${file ? "hidden" : ""}  p-3 flex gap-2 `}
+        htmlFor={content.elementId}
+        className={`${content.file ? "hidden" : ""}  p-3 flex gap-2 `}
       >
         <FaFileImage className="text-xl text-black/80" />
         <span>Add Image</span>
@@ -106,15 +172,15 @@ const ImageInput = ({
 
       <input
         ref={ref}
-        id={id}
+        id={content.elementId}
         type="file"
         accept="image/*"
         onChange={(e) => onChange(e)}
         className="w-1 h-1 opacity-0 absolute right-1/2 bottom-0 "
       />
-      {localUrl && (
+      {content.localUrl && (
         <Image
-          src={localUrl}
+          src={content.localUrl}
           alt=""
           width={300}
           height={300}

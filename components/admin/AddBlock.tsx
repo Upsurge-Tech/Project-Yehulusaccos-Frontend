@@ -35,9 +35,17 @@ const AddBlock = ({ formState, setFormState }: Props) => {
                 onClick={() => {
                   let content: FormContent;
                   if (type === "heading") {
-                    content = { type, heading: formState.unknown };
+                    content = {
+                      elementId: `${Math.round(Math.random() * 10000)}`,
+                      type,
+                      heading: formState.unknown,
+                    };
                   } else if (type === "paragraph") {
-                    content = { type, paragraph: formState.unknown };
+                    content = {
+                      elementId: `${Math.round(Math.random() * 10000)}`,
+                      type,
+                      paragraph: formState.unknown,
+                    };
                   } else if (type === "youtube") {
                     content = {
                       type,

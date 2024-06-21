@@ -1,4 +1,4 @@
-import { Article, ArticleFormState } from "@/data-types/Article";
+import { Article, ArticleFormState, FormContent } from "@/data-types/Article";
 
 export const getVideoId = (link: string): string | null => {
   try {
@@ -79,4 +79,14 @@ export const withPrevImages = async (
     contents,
   };
   return copy;
+};
+
+export const replaceContent = (
+  state: ArticleFormState,
+  content: FormContent,
+  index: number
+) => {
+  const newContents = [...state.contents];
+  newContents[index] = content;
+  return { ...state, contents: newContents };
 };

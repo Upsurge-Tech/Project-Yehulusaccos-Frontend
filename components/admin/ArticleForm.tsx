@@ -1,13 +1,11 @@
 "use client";
 import Spinner from "@/components/Spinner";
 import { AddBlockButton } from "@/components/admin/AddBlock";
-import ImageInput from "@/components/admin/ImageInput";
 import YoutubeInput from "@/components/admin/YoutubeInput";
 import addContentButtonProps from "@/components/admin/addContentButtonProps";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   ArticleFormState,
   FormContent,
@@ -20,6 +18,9 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
+import HeadingInput from "./HeadingInput";
+import ImageInput from "./ImageInput";
+import ParagraphInput from "./ParagraphInput";
 
 const ArticleForm = ({
   articleId,
@@ -216,13 +217,7 @@ const ArticleForm = ({
         />
       </div>
       {formState.contents.map((content, i) => {
-        const id = i + content.type;
-        const label =
-          i +
-          1 +
-          ". " +
-          addContentButtonProps.find((b) => b.type === content.type)?.label;
-
+        const label = `${i + 1}. ${addContentButtonProps.find((b) => b.type === content.type)?.label}`;
         return (
           <div key={i} className="relative">
             <div className="absolute right-0 top-[-5px] flex items-center text-black/70">
@@ -262,127 +257,53 @@ const ArticleForm = ({
               </Button>
             </div>
 
-            <Label htmlFor={id}>{label}</Label>
+            <Label htmlFor={content.elementId}>{label}</Label>
             {content.type === "heading" && (
-              <Input
-                required
-                id={id}
-                value={content.heading}
-                onChange={(e) => {
-                  replaceContent(
-                    {
-                      type: content.type,
-                      heading: e.target.value,
-                    },
-                    i
-                  );
-                }}
+              <HeadingInput
+                index={i}
+                formState={formState}
+                setFormState={setFormState}
               />
             )}
             {content.type === "paragraph" && (
-              <Textarea
-                required
-                id={id}
-                value={content.paragraph}
-                rows={5}
-                onChange={(e) => {
-                  replaceContent(
-                    { type: content.type, paragraph: e.target.value },
-                    i
-                  );
-                }}
+              <ParagraphInput
+                index={i}
+                formState={formState}
+                setFormState={setFormState}
               />
             )}
             {content.type === "image" && (
               <div className="border p-2">
                 <ImageInput
-                  compressed={content.compressed}
-                  compressing={content.compressing}
-                  setCompress={(compressing, compressed) => {
-                    replaceContent({ ...content, compressing, compressed }, i);
-                  }}
-                  previousSrc={content.previousSrc}
-                  id={content.elementId}
-                  file={content.file}
-                  localUrl={content.localUrl}
-                  onFileChange={(file, localUrl, compressing, compressed) => {
-                    replaceContent(
-                      {
-                        ...content,
-                        file,
-                        localUrl,
-                        compressing,
-                        compressed,
-                        error: "",
-                      },
-                      i
-                    );
-                  }}
-                  error={content.error}
-                  onError={(error) => {
-                    replaceContent({ ...content, error }, i);
-                  }}
+                  index={i}
+                  validate={validateImage}
+                  formState={formState}
+                  setFormState={setFormState}
                 />
               </div>
             )}
             {content.type === "youtube" && (
               <YoutubeInput
-                id={content.elementId}
-                error={content.error}
-                onLinkChange={(youtubeLink) => {
-                  replaceContent(
-                    {
-                      ...content,
-                      youtubeLink,
-                      error: validateYoutube(youtubeLink),
-                    },
-                    i
-                  );
-                }}
-                link={content.youtubeLink}
+                index={i}
+                formState={formState}
+                setFormState={setFormState}
+                validate={validateYoutube}
               />
             )}
           </div>
         );
       })}
+
       <AddBlockButton formState={formState} setFormState={setFormState} />
 
       <div className="flex-1"></div>
       <div className="pt-9 ">
         <Label htmlFor="thumb">Thumbnail *</Label>
         <ImageInput
-          compressed={formState.thumbnail.compressed}
-          compressing={formState.thumbnail.compressing}
-          setCompress={(compressing, compressed) => {
-            setFormState({
-              ...formState,
-              thumbnail: { ...formState.thumbnail, compressing, compressed },
-            });
-          }}
-          error={formState.thumbnail.error}
-          localUrl={formState.thumbnail.localUrl}
-          onError={(error) =>
-            setFormState({
-              ...formState,
-              thumbnail: { ...formState.thumbnail, error },
-            })
-          }
-          id={formState.thumbnail.elementId}
-          previousSrc={formState.thumbnail.previousSrc}
-          onFileChange={(file, url, compressing, compressed) => {
-            setFormState({
-              ...formState,
-              thumbnail: {
-                ...formState.thumbnail,
-                compressing,
-                compressed,
-                file,
-                localUrl: url,
-                error: "",
-              },
-            });
-          }}
-          file={formState.thumbnail.file}
+          index={-1}
+          formState={formState}
+          setFormState={setFormState}
+          validate={validateImage}
         />
       </div>
     </form>
