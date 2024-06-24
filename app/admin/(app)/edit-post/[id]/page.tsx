@@ -20,6 +20,7 @@ const EditPost = async ({ params: { id } }: Props) => {
     title: article.title,
     thumbnail: {
       compressing: false,
+      loadingSrc: false,
       compressed: true,
       localUrl: null,
       elementId: "thumbnail",
@@ -47,6 +48,7 @@ const EditPost = async ({ params: { id } }: Props) => {
         return {
           type: "image",
           alt: c.alt,
+          loadingSrc: false,
           compressing: false,
           compressed: true,
           file: null,

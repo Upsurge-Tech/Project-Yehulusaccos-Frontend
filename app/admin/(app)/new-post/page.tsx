@@ -8,6 +8,7 @@ const NewPost = () => {
       compressing: false,
       compressed: false,
       type: "image",
+      loadingSrc: false,
       elementId: "thumbnail",
       file: null,
       localUrl: null,
