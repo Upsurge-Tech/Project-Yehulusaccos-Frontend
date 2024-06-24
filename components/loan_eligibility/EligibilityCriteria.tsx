@@ -1,10 +1,11 @@
-import currlyarrow from "@/public/curlyarrow.svg";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { FaCheckCircle } from "react-icons/fa";
-import FadeIn from "../animation/FadeIn";
-import SlideFrom from "../animation/SlideFrom";
+import { useTranslations } from "next-intl";
 import TitleFadeIn from "../animation/TitleFadeIn";
+import SlideFrom from "../animation/SlideFrom";
+import FadeIn from "../animation/FadeIn";
+import currlyarrow from "@/public/curlyarrow.svg";
+import { IoArrowForwardCircleSharp } from "react-icons/io5";
+
 
 const EligibilityCriteria = () => {
   const tEligibility = useTranslations("Loan.EligibilityCriteria");
@@ -65,7 +66,7 @@ const EligibilityCriteria = () => {
             <FadeIn key={criteria} delay={index * 0.2} className="">
               <div className="flex  gap-x-5  text-gray-500">
                 <div>
-                  <FaCheckCircle size={20} />
+                  <IoArrowForwardCircleSharp className=" text-green-600" size={20} />
                 </div>
                 <p className=" text-sm">{tEligibilityList(`${criteria}`)}</p>
               </div>
