@@ -16,6 +16,7 @@ export const editArticle = async (
 ): Promise<{ error: string } | void> => {
   const sessionError = await errorIfNotLoggedIn();
   if (sessionError) return sessionError;
+  console.log("starting editing article" + article.title);
 
   try {
     const res1 = await getArticle(articleId, false);

@@ -7,7 +7,7 @@ import { errorIfNotLoggedIn, insertContents } from "./server-utils";
 export const createArticle = async (
   article: ArticleFormState
 ): Promise<{ error: string } | number> => {
-  console.log("starting creating article");
+  console.log("starting creating article" + article.title);
   const sessionError = await errorIfNotLoggedIn();
   if (sessionError) {
     console.error("session error", sessionError);
