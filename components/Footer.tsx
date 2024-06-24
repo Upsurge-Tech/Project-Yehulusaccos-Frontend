@@ -36,16 +36,16 @@ const Footer = () => {
           </p>
           <div className="flex gap-x-1 justify-center md:justify-start">
             <Link href="https://www.facebook.com/profile.php?id=61554075832185">
-              <FaFacebookF className="text-green-600 bg-white rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300" size={35} />
+              <FaFacebookF className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300" size={35} />
             </Link>
             <Link href="https://www.instagram.com/yehulu_sacco/">
-              <AiFillInstagram  className="text-green-600 bg-white rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
+              <AiFillInstagram  className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
             </Link>
             <Link href="https://www.tiktok.com/@yehulu_saccosltd">
-              <FaTiktok className="text-green-600 bg-white rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
+              <FaTiktok className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
             </Link>
             <Link href="https://www.youtube.com/@yehulusacco">
-              <FaYoutube className="text-green-600 bg-white rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
+              <FaYoutube className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
             </Link>
           </div>
           <div className="flex items-center justify-center md:justify-start gap-x-4">
