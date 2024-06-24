@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import FadeIn from "../animation/FadeIn";
 import TitleFadeIn from "../animation/TitleFadeIn";
 import { IoArrowForwardCircleSharp } from "react-icons/io5";

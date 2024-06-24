@@ -1,7 +1,4 @@
-import currlyarrow from "@/public/curlyarrow.svg";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { FaCheckCircle } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import TitleFadeIn from "../animation/TitleFadeIn";
 import SlideFrom from "../animation/SlideFrom";
