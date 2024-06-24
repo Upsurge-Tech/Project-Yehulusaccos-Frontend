@@ -26,7 +26,7 @@ const ContactUs = () => {
         </div>
         <div className="flex md:translate-x-10">
           <TitleFadeIn
-            className="font-semibold text-3xl lg:text-5xl mt-2 lg:mt-0"
+            className="font-semibold text-xl lg:text-5xl mt-2 lg:mt-0"
             title={tContactPage("Title")}
           />
           <Image
