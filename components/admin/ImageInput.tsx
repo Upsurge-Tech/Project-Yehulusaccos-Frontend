@@ -2,9 +2,8 @@
 
 import { ArticleFormState, ImageFormContent } from "@/data-types/Article";
 import { replaceContent } from "@/lib/articles/utils";
-import imageCompression from "browser-image-compression";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
 import Spinner from "../Spinner";
@@ -25,86 +24,6 @@ const ImageInput = ({
   if (content.type !== "image") throw new Error("Content type mismatch");
 
   const ref = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const onAbort = () => {
-      if (isThumbnail) {
-        setFormState((s) => ({
-          ...s,
-          thumbnail: { ...s.thumbnail, compressed: false, compressing: false },
-        }));
-      } else {
-        setFormState((s) =>
-          replaceContent(
-            s,
-            {
-              ...(s.contents[index] as ImageFormContent),
-              compressed: false,
-              compressing: false,
-            },
-            index
-          )
-        );
-      }
-    };
-    const compress = async () => {
-      if (!content.file) return;
-      if (content.compressed) return;
-      const isBig = content.file.size / (1024 * 1024) > 0.1;
-      console.log("is big", isBig);
-
-      try {
-        const beforeContent = {
-          ...content,
-          compressing: true,
-          compressed: false,
-        };
-        if (isThumbnail) {
-          setFormState((s) => ({ ...s, thumbnail: beforeContent }));
-        } else {
-          setFormState((s) => replaceContent(s, beforeContent, index));
-        }
-
-        const compressedFile = isBig
-          ? await imageCompression(content.file, {
-              maxSizeMB: 0.1,
-              useWebWorker: true,
-              signal: controller.signal,
-            })
-          : content.file;
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (controller.signal.aborted) {
-            onAbort();
-            return;
-          }
-
-          const localUrl = (e.target?.result as string) || null;
-          const newContent = {
-            ...content,
-            file: compressedFile,
-            localUrl,
-            compressing: false,
-            compressed: true,
-          };
-          if (isThumbnail) {
-            setFormState((s) => ({ ...s, thumbnail: newContent }));
-          } else {
-            setFormState((s) => replaceContent(s, newContent, index));
-          }
-        };
-        reader.readAsDataURL(compressedFile);
-      } catch (e) {
-        console.log("Could not compress image", e);
-        onAbort();
-        return;
-      }
-    };
-    compress();
-    return () => controller.abort();
-  }, [content.file, content.compressed, index]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

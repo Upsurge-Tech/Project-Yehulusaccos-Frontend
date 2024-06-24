@@ -161,7 +161,7 @@ export const withUploadedImages = async (
         formData.append("upload_preset", upload_preset);
 
         const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload/q_auto/api_key=${api_key}&timestamp=${timestamp}&upload_preset=${upload_preset}&signature=${signature}`,
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload?api_key=${api_key}&timestamp=${timestamp}&upload_preset=${upload_preset}&signature=${signature}`,
           {
             method: "POST",
             body: formData,
