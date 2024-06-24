@@ -35,6 +35,7 @@ const config = {
         foreground: "hsl(var(--foreground))",
         primarySoft: "#00b6590d",
         tertiary: "#2563eb",
+        shellColor: "#fafaf9",
 
         primary: {
           DEFAULT: "hsl(var(--primary))",

@@ -47,6 +47,8 @@ const AddBlock = ({ formState, setFormState }: Props) => {
                     };
                   } else if (type === "image") {
                     content = {
+                      compressed: false,
+                      compressing: false,
                       error: "",
                       type,
                       alt: "",

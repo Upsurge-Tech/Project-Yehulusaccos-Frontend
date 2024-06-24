@@ -1,5 +1,7 @@
-import React from "react";
+import currlyarrow from "@/public/curlyarrow.svg";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { FaCheckCircle } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import TitleFadeIn from "../animation/TitleFadeIn";
 import SlideFrom from "../animation/SlideFrom";
@@ -39,7 +41,7 @@ const EligibilityCriteria = () => {
           />
         </SlideFrom>
       </div>
-      <div className="flex flex-col col-span-2 items-center">
+      <div className="container flex flex-col col-span-2 items-center">
         <div className="bg-primarySoft lg:mb-10 self-center text-primary flex items-center justify-center text-xs font-semibold tracking-wide w-fit mx-auto  px-2 h-10 rounded-lg">
           <TitleFadeIn
             duration={1.5}
@@ -75,7 +77,10 @@ const EligibilityCriteria = () => {
           ))}
         </div>
       </div>
-      <div className="hidden lg:flex items-center" suppressHydrationWarning>
+      <div
+        className="hidden lg:flex items-center justify-end"
+        suppressHydrationWarning
+      >
         <SlideFrom className="" from="right" delay={1.3}>
           <Image
             src="/rightHandMoney.svg"

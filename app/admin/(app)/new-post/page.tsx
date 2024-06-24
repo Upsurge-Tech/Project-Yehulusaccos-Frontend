@@ -5,6 +5,8 @@ const NewPost = () => {
   const state: ArticleFormState = {
     title: "title",
     thumbnail: {
+      compressing: false,
+      compressed: false,
       type: "image",
       elementId: "thumbnail",
       file: null,
@@ -14,8 +16,8 @@ const NewPost = () => {
     },
     unknown: "",
     contents: [
-      { type: "heading", heading: "heading" },
-      { type: "paragraph", paragraph: "paragraph" },
+      { type: "heading", heading: "" },
+      { type: "paragraph", paragraph: "" },
     ],
   };
   return <ArticleForm initialFormState={state} />;

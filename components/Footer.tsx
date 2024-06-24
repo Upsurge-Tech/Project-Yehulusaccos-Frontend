@@ -1,21 +1,20 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import Logo from "@/public/assets/Logo2.png";
 import {  FaTiktok, FaYoutube, FaFacebookF } from "react-icons/fa";
 import { AiFillInstagram  } from "react-icons/ai";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import { FaFacebook, FaInstagram  } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
 
 const Footer = () => {
   const tFooter = useTranslations("Footer");
   const locale = useLocale();
 
   return (
-    <footer className="bg-[#FAFFFC] w-full p-10 border-t-[1px] border-stone-200">
+    <footer className="bg-shellColor w-full p-10 border-t-[1px] border">
       <div className="container mx-auto flex md:flex-row flex-col md:justify-between md:gap-x-10 space-y-8 md:space-y-0">
         <div className="flex items-center justify-center flex-col gap-y-3">
           <Link href={`/${locale}/home`} className="flex items-start justify-center">
@@ -58,7 +57,10 @@ const Footer = () => {
           <h2 className="text-lg font-semibold">{tFooter("Pages")}</h2>
           <ul className="space-y-2">
             <li>
-              <Link href={`/${locale}/services`} className="hover:text-green-600">
+              <Link
+                href={`/${locale}/services`}
+                className="hover:text-green-600"
+              >
                 {tFooter("Services")}
               </Link>
             </li>
@@ -73,7 +75,10 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href={`/${locale}/contact`} className="hover:text-green-600">
+              <Link
+                href={`/${locale}/contact`}
+                className="hover:text-green-600"
+              >
                 {tFooter("Contactus")}
               </Link>
             </li>
@@ -83,7 +88,10 @@ const Footer = () => {
           <h2 className="text-lg font-semibold">{tFooter("GetStarted")}</h2>
           <ul className="space-y-2">
             <li>
-              <Link href={`/${locale}/contact`} className="hover:text-green-600">
+              <Link
+                href={`/${locale}/contact`}
+                className="hover:text-green-600"
+              >
                 {tFooter("contact")}
               </Link>
             </li>
