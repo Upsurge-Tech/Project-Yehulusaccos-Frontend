@@ -19,6 +19,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin;
   orientation?: "horizontal" | "vertical";
   setApi?: (api: CarouselApi) => void;
+  autoSlideInterval?: number;
 };
 
 type CarouselContextProps = {
@@ -54,6 +55,7 @@ const Carousel = React.forwardRef<
       plugins,
       className,
       children,
+      autoSlideInterval = 3000, 
       ...props
     },
     ref
@@ -62,6 +64,7 @@ const Carousel = React.forwardRef<
       {
         ...opts,
         axis: orientation === "horizontal" ? "x" : "y",
+        loop: true, 
       },
       plugins
     );
@@ -120,6 +123,18 @@ const Carousel = React.forwardRef<
       };
     }, [api, onSelect]);
 
+    React.useEffect(() => {
+      if (!api) {
+        return;
+      }
+
+      const intervalId = setInterval(() => {
+        scrollNext();
+      }, autoSlideInterval);
+
+      return () => clearInterval(intervalId);
+    }, [api, scrollNext, autoSlideInterval]);
+
     return (
       <CarouselContext.Provider
         value={{
@@ -132,6 +147,7 @@ const Carousel = React.forwardRef<
           scrollNext,
           canScrollPrev,
           canScrollNext,
+          autoSlideInterval,
         }}
       >
         <div
