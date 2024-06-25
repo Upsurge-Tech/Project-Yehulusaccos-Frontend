@@ -1,9 +1,11 @@
 import { cloudinary } from "@/cloudinary.config";
-import { Article, ArticleFormState, FormContent } from "@/data-types/Article";
+import { Article, ArticleContent, ArticleFormState, FormContent } from "@/data-types/Article";
 import { langs } from "@/data-types/Languages";
 import db from "@/db";
 import {
   ArticleContentSQL,
+  ArticleLangSQL,
+  ArticleSQL,
   ContentSQL,
   adminTable,
   articleContentTable,
@@ -109,22 +111,40 @@ export const insertContents = async (
 };
 
 interface Res {
-  article: {
-    id: number;
-    title: string;
-    thumbnail: string;
-    createdAt: Date;
-  };
-  content: {
-    id: number;
-    data: string;
-    articleId: number;
-    type: "heading" | "paragraph" | "image" | "youtube";
-    alt: string | null;
-  } | null;
+  article: ArticleSQL;
+  content: ContentSQL;
+  langId: ArticleLangSQL["langId"];
 }
+//res is orderd by articleId (reversed), then by contentId
 export const extractArticles = (res: Res[]): Article[] | { error: string } => {
   const articles: Article[] = [];
+
+  let i = 0 
+  while (i < res.length){
+      articles.push({
+        ...res[i].article,
+        createdAt: res[i].article.createdAt.toLocaleString("en-US", {
+          timeZone: "UTC",
+        }),
+        title: { en: "", am: "" },
+        langIds: [],
+        excerpt: { en: "", am: "" },
+        contents: [],
+      });
+    }
+
+    const article = articles[articles.length - 1];
+    while (i < res.length && res[i].article.id === article.id) {
+      let content:ArticleContent
+      const contentId = res[i].content.id;
+        while (i < res.length && res[i].content.id === contentId){
+          if ()
+
+        }
+      
+    }
+  }
+
   for (let i = 0; i < res.length; i++) {
     const { article } = res[i];
     articles.push({

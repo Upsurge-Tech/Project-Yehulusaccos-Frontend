@@ -1,8 +1,12 @@
 import { Article } from "@/data-types/Article";
-import articles from "@/data/articles";
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
-import { count, desc, eq } from "drizzle-orm";
+import {
+  articleContentTable,
+  articleLangTable,
+  articleTable,
+  contentTable,
+} from "@/db/schema";
+import { asc, count, desc, eq } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
 const getArticles = async ({
@@ -14,54 +18,61 @@ const getArticles = async ({
   size: number;
   offset: number;
 }): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
-  //not yet connected to new db
-  //pagination logic is also not yet implemented, no problem, only focus on correctly diplaying the articles
-  return { articles, numPages: 1 };
-};
-
-const _getArticles = async ({
-  page,
-  size,
-  offset,
-}: {
-  page: number;
-  size: number;
-  offset: number;
-}): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
   try {
-    const limitQuery = db
+    //counted articles
+    const limitedArticle = db
       .select()
       .from(articleTable)
       .limit(size)
       .offset(size * (page - 1) + offset)
       .orderBy(desc(articleTable.id))
-      .as("limit_query");
+      .as("limited");
 
-    const res = await db
+    //article--contentId
+    const articleWithContentId = db
+      .select()
+      .from(limitedArticle)
+      .innerJoin(
+        articleContentTable,
+        eq(articleContentTable.articleId, limitedArticle.id)
+      )
+      .orderBy(asc(articleContentTable.id))
+      .as("with_content_id");
+
+    //article--contentId--content
+    const articleWithContent = await db
       .select({
-        article: {
-          id: limitQuery.id,
-          title: limitQuery.title,
-          thumbnail: limitQuery.thumbnail,
-          createdAt: limitQuery.createdAt,
-        },
-        content: {
-          id: contentTable.id,
-          articleId: contentTable.articleId,
-          type: contentTable.type,
-          data: contentTable.data,
-          alt: contentTable.alt,
-        },
+        article: articleWithContentId.limited,
+        content: contentTable,
       })
-      .from(limitQuery)
-      .leftJoin(contentTable, eq(limitQuery.id, contentTable.articleId));
+      .from(articleWithContentId)
+      .innerJoin(
+        contentTable,
+        eq(articleWithContentId.article_content.id, contentTable.id)
+      )
+      .as("with_content");
+
+    //article--contentId--content--langId
+    //risky thing is, articles that dont have contents or langs will be filtered out
+    const langs = await db
+      .select({
+        langId: articleLangTable.langId,
+      })
+      .from(articleWithContent)
+      .innerJoin(
+        articleLangTable,
+        eq(
+          articleWithContent.with_content_id.limited.id,
+          articleLangTable.articleId
+        )
+      );
 
     const res2 = await db.select({ count: count() }).from(articleTable);
     const numPages = Math.ceil(res2[0].count / size);
 
     // console.log("res is", res);
 
-    const result = extractArticles(res);
+    const result = extractArticles(articlesWithLangs);
     if ("error" in result) return result;
     return { articles: result, numPages };
   } catch (e) {
