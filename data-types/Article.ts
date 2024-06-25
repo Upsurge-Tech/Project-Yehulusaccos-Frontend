@@ -4,32 +4,28 @@ export const contentTypeStrings = [
   "image",
   "youtube",
 ] as const;
+
+export type Lang = "am" | "en";
 export interface HeadingContent {
   type: "heading";
-  id: number;
-  articleId: number;
   heading: string;
+  langId: Lang;
 }
 
 export interface ParagraphContent {
   type: "paragraph";
-  id: number;
-  articleId: number;
   paragraph: string;
+  langId: Lang;
 }
 
 export interface ImageContent {
   type: "image";
-  id: number;
-  articleId: number;
   src: string;
   alt: string;
 }
 
 export interface YouTubeContent {
   type: "youtube";
-  id: number;
-  articleId: number;
   youtubeId: string;
 }
 
@@ -41,8 +37,8 @@ export type ArticleContent =
 
 export interface Article {
   id: number;
-  title: string;
-  excerpt: string;
+  title: HeadingContent;
+  excerpt: ParagraphContent;
   thumbnail: string;
   createdAt: string; //a date string
   contents: ArticleContent[];
@@ -52,12 +48,14 @@ export interface HeadingFormContent {
   elementId: string;
   type: "heading";
   heading: string;
+  langId: Lang;
 }
 
 export interface ParagraphFormContent {
   elementId: string;
   type: "paragraph";
   paragraph: string;
+  langId: Lang;
 }
 export interface ImageFormContent {
   type: "image";
@@ -82,8 +80,7 @@ export type FormContent =
   | YouTubeFormContent;
 
 export interface ArticleFormState {
-  title: string;
+  title: HeadingFormContent;
   thumbnail: ImageFormContent;
-  unknown: string;
   contents: FormContent[];
 }
