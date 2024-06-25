@@ -54,29 +54,24 @@ const NewsPage: React.FC<NewsPageProps> = ({
   const latestArticles2 = latestArticles.slice(1);
   const latestArticle1 = latestArticles[0];
 
-  const renderArticle = (article : Article) => {
-    if (locale === 'am') {
-      return {
-        ...article,
-        title: article.title.am,
-        excerpt: article.excerpt.am,
-        contents: article.contents.map(content => {
-          if (content.type === 'heading') return { ...content, heading: content.heading?.am };
-          if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.am };
-          return content;
-        })
-      };
-    }
-    return {
+  
+  const renderArticle = (article: Article) => {
+    const langAvailable = article.langIds.includes(locale);
+
+    const contentLocale = langAvailable ? locale : article.langIds[0];
+
+    const localizedArticle = {
       ...article,
-      title: article.title.en,
-      excerpt: article.excerpt.en,
-      contents: article.contents.map(content => {
-        if (content.type === 'heading') return { ...content, heading: content.heading?.en };
-        if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.en };
+      title: article.title[contentLocale],
+      excerpt: article.excerpt[contentLocale],
+      contents: article.contents.map((content) => {
+        if (content.type === "heading") return { ...content, heading: content.heading?.[contentLocale] };
+        if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.[contentLocale] };
         return content;
-      })
+      }),
     };
+
+    return localizedArticle;
   };
 
   return (

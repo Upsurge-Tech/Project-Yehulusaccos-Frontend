@@ -28,28 +28,22 @@ const NewsDetailPage = async ({ params: { locale, id } }: Props) => {
   const { article, relatedArticles } = res;
 
   const renderArticle = (article: Article) => {
-    if (locale === "am") {
-      return {
-        ...article,
-        title: article.title.am,
-        excerpt: article.excerpt.am,
-        contents: article.contents.map((content) => {
-          if (content.type === "heading") return { ...content, heading: content.heading?.am };
-          if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.am };
-          return content;
-        }),
-      };
-    }
-    return {
+    const langAvailable = article.langIds.includes(locale);
+
+    const contentLocale = langAvailable ? locale : article.langIds[0];
+
+    const localizedArticle = {
       ...article,
-      title: article.title.en,
-      excerpt: article.excerpt.en,
+      title: article.title[contentLocale],
+      excerpt: article.excerpt[contentLocale],
       contents: article.contents.map((content) => {
-        if (content.type === "heading") return { ...content, heading: content.heading?.en };
-        if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.en };
+        if (content.type === "heading") return { ...content, heading: content.heading?.[contentLocale] };
+        if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.[contentLocale] };
         return content;
       }),
     };
+
+    return localizedArticle;
   };
 
   const localizedArticle = renderArticle(article);
