@@ -51,32 +51,22 @@ const ArticleGrid = () => {
   };
 
   const renderArticle = (article: Article) => {
-    if (locale === 'am') {
-      return {
-        id: article.id,
-        thumbnail: article.thumbnail,
-        createdAt: article.createdAt,
-        title: article.title.am,
-        excerpt: article.excerpt.am,
-        contents: article.contents.map(content => {
-          if (content.type === 'heading') return { ...content, heading: content.heading?.am };
-          if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.am };
-          return content;
-        })
-      };
-    }
-    return {
-      id: article.id,
-      thumbnail: article.thumbnail,
-      createdAt: article.createdAt,
-      title: article.title.en,
-      excerpt: article.excerpt.en,
-      contents: article.contents.map(content => {
-        if (content.type === 'heading') return { ...content, heading: content.heading?.en };
-        if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.en };
+    const langAvailable = article.langIds.includes(locale);
+
+    const contentLocale = langAvailable ? locale : article.langIds[0];
+
+    const localizedArticle = {
+      ...article,
+      title: article.title[contentLocale],
+      excerpt: article.excerpt[contentLocale],
+      contents: article.contents.map((content) => {
+        if (content.type === "heading") return { ...content, heading: content.heading?.[contentLocale] };
+        if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.[contentLocale] };
         return content;
-      })
+      }),
     };
+
+    return localizedArticle;
   };
 
   return (
