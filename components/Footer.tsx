@@ -1,10 +1,12 @@
 "use client";
 
 import Logo from "@/public/assets/Logo2.png";
+import {  FaTiktok, FaYoutube, FaFacebookF } from "react-icons/fa";
+import { AiFillInstagram  } from "react-icons/ai";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaInstagram  } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
 
 const Footer = () => {
@@ -14,12 +16,15 @@ const Footer = () => {
   return (
     <footer className="bg-shellColor w-full p-10 border-t-[1px] border">
       <div className="container mx-auto flex md:flex-row flex-col md:justify-between md:gap-x-10 space-y-8 md:space-y-0">
-        <Link
-          href={`/${locale}/home`}
-          className="flex items-start justify-center"
-        >
-          <Image src={Logo} alt="Company Logo" width={100} height={100} />
-        </Link>
+        <div className="flex items-center justify-center flex-col gap-y-3">
+          <Link href={`/${locale}/home`} className="flex items-start justify-center">
+            <Image src={Logo} alt="Company Logo" width={100} height={100} />
+          </Link>
+          <div className="flex gap-x-2 items-center justify-center" >
+            <FiPhoneCall className="text-green-600" />
+            <span className="">9859</span>
+          </div>
+        </div>
         <div className="space-y-6">
           <h2 className="text-lg font-semibold text-center md:text-start">
             {tFooter("AboutCompany")}
@@ -29,30 +34,18 @@ const Footer = () => {
             <br />
             {tFooter("Paragraph2")}
           </p>
-          <div className="flex gap-x-4 justify-center md:justify-start">
+          <div className="flex gap-x-1 justify-center md:justify-start">
             <Link href="https://www.facebook.com/profile.php?id=61554075832185">
-              <FaFacebook
-                className="text-green-600 hover:scale-110 transition-transform duration-300"
-                size={25}
-              />
+              <FaFacebookF className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300" size={35} />
             </Link>
-            <Link href="https://www.instagram.com/@yehulu_sacco">
-              <FaInstagram
-                className="text-green-600 hover:scale-110 transition-transform duration-300"
-                size={25}
-              />
+            <Link href="https://www.instagram.com/yehulu_sacco/">
+              <AiFillInstagram  className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
             </Link>
-            <Link href="https://www.tiktok.com/@yehulu_sacco">
-              <FaTiktok
-                className="text-green-600 hover:scale-110 transition-transform duration-300"
-                size={25}
-              />
+            <Link href="https://www.tiktok.com/@yehulu_saccosltd">
+              <FaTiktok className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
             </Link>
             <Link href="https://www.youtube.com/@yehulusacco">
-              <FaYoutube
-                className="text-green-600 hover:scale-110 transition-transform duration-300"
-                size={25}
-              />
+              <FaYoutube className="text-green-600 bg-transparent rounded-full p-2 hover:bg-green-600 hover:text-white hover:scale-105 hover:-translate-y-1 transition-transform duration-300"  size={35} />
             </Link>
           </div>
           <div className="flex items-center justify-center md:justify-start gap-x-4">

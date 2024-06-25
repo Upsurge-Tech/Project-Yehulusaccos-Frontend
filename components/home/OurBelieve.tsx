@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { FaCheckCircle } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import curly from "@/public/curlyarrow.svg";
 import threecircles from "@/public/threecircles.svg";
@@ -8,6 +7,8 @@ import briefcase from "@/public/briefcase.svg";
 import rocket from "@/public/rocket.svg";
 import TitleFadeIn from "../animation/TitleFadeIn";
 import SlideFrom from "../animation/SlideFrom";
+import { IoArrowForwardCircleSharp } from "react-icons/io5";
+
 
 const OurBelieve = () => {
   const tOurBelieve = useTranslations("Home.OurBelieve");
@@ -77,7 +78,7 @@ const OurBelieve = () => {
             {values.map((value) => (
               <div key={value} className="flex  gap-x-5  text-gray-500">
                 <div>
-                  <FaCheckCircle size={20} />
+                  <IoArrowForwardCircleSharp className="text-green-600" size={20} />
                 </div>
                 <p className=" text-sm">{tOurValues(`${value}.name`)}</p>
               </div>

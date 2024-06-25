@@ -10,6 +10,8 @@ import TitleFadeIn from "../animation/TitleFadeIn";
 import SlideFrom from "../animation/SlideFrom";
 import Bounce from "../animation/Bounce";
 import FadeIn from "../animation/FadeIn";
+import { IoArrowForwardCircleSharp } from "react-icons/io5";
+
 
 const OurUniqeness = () => {
   const tOurUniqueness = useTranslations("Home.OurUniqueness");
@@ -45,7 +47,7 @@ const OurUniqeness = () => {
           {uniqeness.map((unique) => (
             <div key={unique} className="flex  gap-x-5  text-gray-500">
               <div>
-                <FaCheckCircle size={20} />
+                <IoArrowForwardCircleSharp className="text-green-600" size={20} />
               </div>
               <p className=" text-sm">{tuniqueMap(`${unique}`)}</p>
             </div>

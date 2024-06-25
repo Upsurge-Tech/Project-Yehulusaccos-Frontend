@@ -1,10 +1,9 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { FaCheckCircle } from "react-icons/fa";
-import { GoDotFill } from "react-icons/go";
 import FadeIn from "../animation/FadeIn";
 import TitleFadeIn from "../animation/TitleFadeIn";
-import LoanSavingTable from "./LoanSavingTable";
+import { IoArrowForwardCircleSharp } from "react-icons/io5";
+
 
 const LoanServices = () => {
   const tLoanTypes = useTranslations("Loan.LoanTypes");
@@ -43,66 +42,19 @@ const LoanServices = () => {
           height={100}
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-7 lg:gap-x-36 w-full  ">
-        <FadeIn className="">
-          <div className="flex items-center gap-x-5 text-gray-500">
-            <div>
-              <FaCheckCircle size={20} />
-            </div>
-            <p className="font-semibold text-black text-md lg:text-xl">
-              {tLoanTypes("LoanSaving")}
-            </p>
-          </div>
-        </FadeIn>
-        <FadeIn className="">
-          <div className="flex items-center   gap-x-5 text-gray-500">
-            <div>
-              <FaCheckCircle size={20} />
-            </div>
-            <p className="font-semibold text-black text-md lg:text-xl">
-              {tLoanTypes("DailyIncome")}
-            </p>
-          </div>
-        </FadeIn>
-        <FadeIn className="">
-          <div className="flex flex-col text-gray-500 gap-y-5 ">
-            <div className="flex items-center gap-x-5">
-              <div>
-                <FaCheckCircle size={20} />
-              </div>
-              <p className="font-semibold text-black text-md lg:text-xl">
-                {tLoanTypes("LoanType")}
-              </p>
-            </div>
-          </div>
-        </FadeIn>
-        <FadeIn className="">
-          <div className="flex gap-y-5 text-gray-500">
-            <div className="flex gap-x-5 items-center">
-              <div>
-                <FaCheckCircle size={20} />
-              </div>
-              <p className="font-semibold text-black text-md lg:text-xl">
-                {tLoanTypes("LoanSaving2")}
-              </p>
-            </div>
-          </div>
-        </FadeIn>
-        <FadeIn className="">
-          <div className="grid grid-cols-1 place-items-center lg:ml-10 lg:place-items-start lg:grid-cols-2  items-center w-full gap-y-4 gap-x-0 lg:gap-x-5 text-gray-500">
-            {typeOfLoans.map((loan) => (
-              <div className="flex items-center w-52 lg:w-auto" key={loan}>
+      <div className="w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-4 text-gray-500 w-full gap-5 text-md lg:text-lg">
+            {typeOfLoans.map((loan, index) => (
+              <FadeIn className="" key={index} delay={0.1 * index} >
+                <div className="flex items-center w-52 lg:w-auto gap-x-4 hover:font-semibold" key={loan}>
                 <div>
-                  <GoDotFill />
+                  <IoArrowForwardCircleSharp className="text-green-600 hover:scale-105"/>
                 </div>
                 <p>{tLoanTypesList(`${loan}`)}</p>
               </div>
+              </FadeIn>
             ))}
           </div>
-        </FadeIn>
-        <FadeIn className="">
-          <LoanSavingTable />
-        </FadeIn>
       </div>
     </div>
   );
