@@ -40,7 +40,7 @@ const LanguageSwitcher: React.FC = () => {
         <SelectContent>
           <SelectGroup>
             {langList.map(({ lang, label }) => (
-              <SelectItem value={lang}>{label}</SelectItem>
+              <SelectItem key={lang} value={lang}>{label}</SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>

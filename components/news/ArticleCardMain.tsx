@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoIosArrowRoundUp } from "react-icons/io";
 
-const ArticleCardMain = ({ article }: { article: Article }) => {
-  console.log(article);
+const ArticleCardMain = ({ article }) => {
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex-1 w-full h-full">
