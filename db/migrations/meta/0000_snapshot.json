@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "831c8ef8-c159-49f1-9677-62790352de9a",
+  "id": "b6027f7a-eee0-4786-9857-fb7ca0da7baf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "admin": {
@@ -39,6 +39,56 @@
           ]
         }
       },
+      "uniqueConstraints": {}
+    },
+    "article_lang": {
+      "name": "article_lang",
+      "columns": {
+        "lang_id": {
+          "name": "lang_id",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "article_id": {
+          "name": "article_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "article_lang_lang_id_lang_id_fk": {
+          "name": "article_lang_lang_id_lang_id_fk",
+          "tableFrom": "article_lang",
+          "tableTo": "lang",
+          "columnsFrom": [
+            "lang_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "article_lang_article_id_article_id_fk": {
+          "name": "article_lang_article_id_article_id_fk",
+          "tableFrom": "article_lang",
+          "tableTo": "article",
+          "columnsFrom": [
+            "article_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "article": {
@@ -96,6 +146,13 @@
           "notNull": true,
           "autoincrement": true
         },
+        "lang_id": {
+          "name": "lang_id",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "article_id": {
           "name": "article_id",
           "type": "int",
@@ -127,6 +184,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "content_lang_id_lang_id_fk": {
+          "name": "content_lang_id_lang_id_fk",
+          "tableFrom": "content",
+          "tableTo": "lang",
+          "columnsFrom": [
+            "lang_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
         "content_article_id_article_id_fk": {
           "name": "content_article_id_article_id_fk",
           "tableFrom": "content",
@@ -144,6 +214,36 @@
       "compositePrimaryKeys": {
         "content_id": {
           "name": "content_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "lang": {
+      "name": "lang",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "label": {
+          "name": "label",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "lang_id": {
+          "name": "lang_id",
           "columns": [
             "id"
           ]

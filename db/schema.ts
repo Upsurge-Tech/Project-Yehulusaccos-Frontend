@@ -16,6 +16,12 @@ export const adminTable = mysqlTable("admin", {
 
 export type AdminSQL = typeof adminTable.$inferSelect;
 
+export const langTable = mysqlTable("lang", {
+  id: varchar("id", { length: 10 }).primaryKey(),
+  label: varchar("label", { length: 50 }).notNull(),
+});
+export type LangSQL = typeof langTable.$inferSelect;
+
 export const articleTable = mysqlTable("article", {
   id: int("id").autoincrement().primaryKey(),
   title: text("title").notNull(),
@@ -26,12 +32,24 @@ export type ArticleSQL = typeof articleTable.$inferSelect;
 
 export const contentTable = mysqlTable("content", {
   id: int("id").autoincrement().primaryKey(),
+  langId: varchar("lang_id", { length: 10 })
+    .notNull()
+    .references(() => langTable.id, { onDelete: "cascade" }),
   articleId: int("article_id")
     .notNull()
     .references(() => articleTable.id, { onDelete: "cascade" }),
   type: mysqlEnum("type", contentTypeStrings).notNull(),
   data: text("data").notNull(),
   alt: text("alt"),
+});
+
+export const articleLangTable = mysqlTable("article_lang", {
+  langId: varchar("lang_id", { length: 10 })
+    .notNull()
+    .references(() => langTable.id, { onDelete: "cascade" }),
+  articleId: int("article_id")
+    .notNull()
+    .references(() => articleTable.id, { onDelete: "cascade" }),
 });
 
 export type ContentSQL = typeof contentTable.$inferSelect;

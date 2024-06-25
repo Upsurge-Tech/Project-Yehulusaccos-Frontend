@@ -1,18 +1,31 @@
 import { Article } from "@/data-types/Article";
 
-const article: Article = {
+const bothArticle: Article = {
   id: 1,
-  title:
-    "New business ventures and expansions Yehulu is planning to come up with.",
-  excerpt: "About yehulus commitment",
+  langIds: ["en", "am"],
+  title: {
+    en: "Yehulu Business Ventures",
+    am: "የተቋቋመ የፋይናንሺያል ህብረት ስራ ማህበር ሲ",
+  },
+
+  excerpt: {
+    en: "Abcd Yehulu Business Ventures",
+    am: "የየፋይናንሺያ የፋይናንሺያ የፋይናንሺያ ልልልተቋቋመ የፋይናንሺያል ህብረት ስራ ማህበር ሲ",
+  },
   thumbnail: "/article-images/car.jpg",
   createdAt: new Date().toISOString(),
   contents: [
-    { id: 1, articleId: 1, youtubeId: "1FLYZdxsteo", type: "youtube" },
-    { id: 2, articleId: 1, type: "heading", heading: "Heading 1" },
+    { id: 1, youtubeId: "1flyzdxsteo", type: "youtube" },
+    {
+      id: 2,
+      type: "heading",
+      heading: {
+        en: "our services",
+        am: "የእኛ አገልግሎት",
+      },
+    },
     {
       id: 3,
-      articleId: 1,
       type: "image",
       src: "/article-images/house.jpg",
       alt: "alt text",
@@ -20,34 +33,126 @@ const article: Article = {
 
     {
       id: 4,
-      articleId: 1,
       type: "paragraph",
-      paragraph:
-        "We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.",
+      paragraph: {
+        en: "our services",
+        am: "የእኛ አገልግሎት",
+      },
     },
 
     {
       id: 5,
-      articleId: 1,
       type: "paragraph",
-      paragraph:
-        "We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.",
-    },
-
-    {
-      id: 6,
-      articleId: 1,
-
-      type: "paragraph",
-      paragraph:
-        "We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.",
+      paragraph: {
+        en: "we offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.we offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.",
+        am: " ህብረት ስራ ማህበር ሲሆን አላማውም ለሁሉም በተለይም ለባህላዊ የባንክ አማራጮች ብቁ ላልሆኑ የቁጠባ እና የብድር አገልግሎት በቀላሉ ተደራሽ ለማድረግ",
+      },
     },
   ],
 };
-export const articles: Article[] = Array.from({ length: 55 }).map((_, i) => ({
-  ...article,
-  id: i + 1,
-  title: `${i + 1} ${article.title}`,
-}));
+
+const enArticle: Article = {
+  id: 2,
+  langIds: ["en"],
+  title: {
+    en: "English only Yehulu Business Ventures",
+    am: "",
+  },
+
+  excerpt: {
+    en: "Abcd Yehulu Business Ventures",
+    am: "",
+  },
+  thumbnail: "/article-images/car.jpg",
+  createdAt: new Date().toISOString(),
+  contents: [
+    { id: 1, youtubeId: "1FLYZdxsteo", type: "youtube" },
+    {
+      id: 2,
+      type: "heading",
+      heading: {
+        en: "Our Services",
+        am: "",
+      },
+    },
+    {
+      id: 3,
+      type: "image",
+      src: "/article-images/house.jpg",
+      alt: "alt text",
+    },
+
+    {
+      id: 4,
+      type: "paragraph",
+      paragraph: {
+        en: "Our Services",
+        am: "",
+      },
+    },
+
+    {
+      id: 5,
+      type: "paragraph",
+      paragraph: {
+        en: "We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.We offer loan packages where collaterals aren’t needed depending on the business profitability and if the customer is a member of our organization.",
+        am: "",
+      },
+    },
+  ],
+};
+
+const amArticle: Article = {
+  id: 3,
+  langIds: ["am"],
+  title: {
+    en: "",
+    am: "አማርኛ only የተቋቋመ የፋይናንሺያል ህብረት ስራ ማህበር ሲ",
+  },
+
+  excerpt: {
+    en: "",
+    am: "የየፋይናንሺያ የፋይናንሺያ የፋይናንሺያ ልልልተቋቋመ የፋይናንሺያል ህብረት ስራ ማህበር ሲ",
+  },
+  thumbnail: "/article-images/car.jpg",
+  createdAt: new Date().toISOString(),
+  contents: [
+    { id: 1, youtubeId: "1flyzdxsteo", type: "youtube" },
+    {
+      id: 2,
+      type: "heading",
+      heading: {
+        en: "",
+        am: "የእኛ አገልግሎት",
+      },
+    },
+    {
+      id: 3,
+      type: "image",
+      src: "/article-images/house.jpg",
+      alt: "alt text",
+    },
+
+    {
+      id: 4,
+      type: "paragraph",
+      paragraph: {
+        en: "",
+        am: "የእኛ አገልግሎት",
+      },
+    },
+
+    {
+      id: 5,
+      type: "paragraph",
+      paragraph: {
+        en: "",
+        am: " ህብረት ስራ ማህበር ሲሆን አላማውም ለሁሉም በተለይም ለባህላዊ የባንክ አማራጮች ብቁ ላልሆኑ የቁጠባ እና የብድር አገልግሎት በቀላሉ ተደራሽ ለማድረግ",
+      },
+    },
+  ],
+};
+
+export const articles: Article[] = [bothArticle, amArticle, enArticle];
 
 export default articles;

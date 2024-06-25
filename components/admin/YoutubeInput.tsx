@@ -5,6 +5,7 @@ import error from "next/error";
 import Image from "next/image";
 import { default as Link } from "next/link";
 import { FaYoutube } from "react-icons/fa6";
+import { Label } from "../ui/label";
 
 const YoutubeInput = ({
   index,
@@ -25,6 +26,7 @@ const YoutubeInput = ({
   return (
     <div>
       {error && <p className="text-destructive text-sm">{content.error}</p>}
+      <Label htmlFor={content.elementId}>{index + 1}. Youtube video</Label>
       <Input
         required
         id={content.elementId}

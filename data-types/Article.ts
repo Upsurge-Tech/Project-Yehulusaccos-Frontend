@@ -1,27 +1,29 @@
+import { Lang } from "./Languages";
+
 export const contentTypeStrings = [
   "heading",
   "paragraph",
   "image",
   "youtube",
+  "title",
+  "excrept",
 ] as const;
+
 export interface HeadingContent {
   type: "heading";
   id: number;
-  articleId: number;
-  heading: string;
+  heading: { [key in Lang]: string };
 }
 
 export interface ParagraphContent {
   type: "paragraph";
   id: number;
-  articleId: number;
-  paragraph: string;
+  paragraph: { [key in Lang]: string };
 }
 
 export interface ImageContent {
   type: "image";
   id: number;
-  articleId: number;
   src: string;
   alt: string;
 }
@@ -29,7 +31,6 @@ export interface ImageContent {
 export interface YouTubeContent {
   type: "youtube";
   id: number;
-  articleId: number;
   youtubeId: string;
 }
 
@@ -40,9 +41,10 @@ export type ArticleContent =
   | YouTubeContent;
 
 export interface Article {
+  langIds: Lang[];
   id: number;
-  title: string;
-  excerpt: string;
+  title: { [key in Lang]: string };
+  excerpt: { [key in Lang]: string };
   thumbnail: string;
   createdAt: string; //a date string
   contents: ArticleContent[];
@@ -51,13 +53,18 @@ export interface Article {
 export interface HeadingFormContent {
   elementId: string;
   type: "heading";
-  heading: string;
+  heading: { [key in Lang]: string };
+}
+export interface TitleFormContent {
+  title: { [key in Lang]: string };
+  type: "title";
+  elementId: string;
 }
 
 export interface ParagraphFormContent {
   elementId: string;
   type: "paragraph";
-  paragraph: string;
+  paragraph: { [key in Lang]: string };
 }
 export interface ImageFormContent {
   type: "image";
@@ -76,14 +83,15 @@ export interface YouTubeFormContent {
 }
 
 export type FormContent =
+  | TitleFormContent
   | HeadingFormContent
   | ParagraphFormContent
   | ImageFormContent
   | YouTubeFormContent;
 
 export interface ArticleFormState {
-  title: string;
+  langs: Lang[];
+  title: TitleFormContent;
   thumbnail: ImageFormContent;
-  unknown: string;
   contents: FormContent[];
 }
