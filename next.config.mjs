@@ -4,6 +4,9 @@ const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  //output to standalone
+  output: "standalone",
+
   images: {
     // https://img.youtube.com/vi/[video-id]/[thumbnail-number].jpg
     remotePatterns: [

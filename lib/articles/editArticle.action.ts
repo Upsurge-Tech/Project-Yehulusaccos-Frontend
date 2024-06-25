@@ -1,48 +1,67 @@
 "use server";
-import { ArticleFormState } from "@/data-types/Article";
+import { Article, ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import getArticle from "./getArticle";
 import {
   errorIfNotLoggedIn,
   insertContents,
   removeImages,
-  uploadImages,
 } from "./server-utils";
+
+const removeUnneededImages = async (
+  oldArticle: Article,
+  article: ArticleFormState
+) => {
+  const oldSrc: string[] = [
+    oldArticle.thumbnail,
+    ...oldArticle.contents
+      .map((c) => (c.type === "image" ? c.src || "" : ""))
+      .filter((s) => s !== ""),
+  ];
+
+  const newSrc = new Set<string>([
+    article.thumbnail.src || "",
+    ...article.contents
+      .map((c) => (c.type === "image" ? c.src || "" : ""))
+      .filter((s) => s !== ""),
+  ]);
+
+  const imagesToRemove = oldSrc.filter((x) => !newSrc.has(x));
+  const res = await removeImages(imagesToRemove);
+  if (res) throw new Error(res.error);
+};
 
 export const editArticle = async (
   articleId: number,
-  formData: FormData,
   article: ArticleFormState
 ): Promise<{ error: string } | void> => {
   const sessionError = await errorIfNotLoggedIn();
   if (sessionError) return sessionError;
+  console.log("starting editing article" + article.title);
 
-  const imageFiles = [...(formData.getAll("images") as File[])];
-  if (
-    imageFiles.length - 1 !==
-    article.contents.filter((c) => c.type === "image").length
-  ) {
-    return { error: "Missing images, Please try again later." };
+  if (!article.thumbnail.src) {
+    return { error: "Thumbnail is required" };
   }
-
-  const oldUrls = article.contents
-    .map((c) => (c.type === "image" ? c.previousSrc ?? "" : ""))
-    .filter((s) => s !== "");
-
   try {
-    const res = await uploadImages(imageFiles);
-    if ("error" in res) return res;
-    const newUrls = res;
+    const res1 = await getArticle(articleId, false);
+    if ("error" in res1) return res1;
 
-    await db
-      .update(articleTable)
-      .set({ title: article.title, thumbnail: newUrls[0] })
-      .where(eq(articleTable.id, articleId));
+    //to react to client side image related errors before doing anything
+    await removeUnneededImages(res1.article, article),
+      await Promise.all([
+        db
+          .update(articleTable)
+          .set({ title: article.title, thumbnail: article.thumbnail.src })
+          .where(eq(articleTable.id, articleId)),
+        db.delete(contentTable).where(eq(contentTable.articleId, articleId)),
+      ]);
+    //after delete
+    const res2 = await insertContents(articleId, article);
+    if (res2 && "error" in res2) return res2;
 
-    await db.delete(contentTable).where(eq(contentTable.articleId, articleId));
-    await insertContents(articleId, article, newUrls);
-    await removeImages(oldUrls);
+    console.log("Successful edit articleId =", articleId);
   } catch (e) {
     if (e instanceof Error) {
       return { error: "Failed to edit article: " + e.message };
@@ -50,5 +69,4 @@ export const editArticle = async (
       return { error: "Failed to edit article." + JSON.stringify(e) };
     }
   }
-  console.log("Successful edit articleId =", articleId);
 };

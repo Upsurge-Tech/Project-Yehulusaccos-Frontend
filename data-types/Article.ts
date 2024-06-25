@@ -49,11 +49,13 @@ export interface Article {
 }
 
 export interface HeadingFormContent {
+  elementId: string;
   type: "heading";
   heading: string;
 }
 
 export interface ParagraphFormContent {
+  elementId: string;
   type: "paragraph";
   paragraph: string;
 }
@@ -63,10 +65,8 @@ export interface ImageFormContent {
   alt: string;
   file: File | null;
   localUrl: string | null;
-  previousSrc?: string; //string if editing image
+  src: string | null; //string if editing image
   error: string;
-  compressing: boolean;
-  compressed: boolean;
 }
 export interface YouTubeFormContent {
   elementId: string;
