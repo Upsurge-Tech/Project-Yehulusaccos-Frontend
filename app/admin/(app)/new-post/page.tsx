@@ -3,21 +3,20 @@ import { ArticleFormState } from "@/data-types/Article";
 
 const NewPost = () => {
   const state: ArticleFormState = {
-    title: "title",
+    title: "",
     thumbnail: {
-      compressing: false,
-      compressed: false,
       type: "image",
       elementId: "thumbnail",
       file: null,
       localUrl: null,
+      src: null,
       alt: "",
       error: "",
     },
     unknown: "",
     contents: [
-      { type: "heading", heading: "" },
-      { type: "paragraph", paragraph: "" },
+      { elementId: "heading1", type: "heading", heading: "" },
+      { elementId: "para1", type: "paragraph", paragraph: "" },
     ],
   };
   return <ArticleForm initialFormState={state} />;

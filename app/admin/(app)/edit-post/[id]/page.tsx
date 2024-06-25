@@ -14,35 +14,41 @@ const EditPost = async ({ params: { id } }: Props) => {
     throw new Error(res.error);
   }
   const { article } = res;
+  const getRandomId = () => `${Math.floor(Math.random() * 1000000)}`;
 
   const formState: ArticleFormState = {
     title: article.title,
     thumbnail: {
-      compressing: false,
-      compressed: true,
       localUrl: null,
       elementId: "thumbnail",
       type: "image",
       file: null,
-      previousSrc: article.thumbnail,
+      src: article.thumbnail,
       alt: article.title,
       error: "",
     },
     unknown: "",
     contents: article.contents.map((c, i) => {
       if (c.type === "heading") {
-        return { type: "heading", heading: c.heading };
+        return {
+          elementId: getRandomId(),
+          type: "heading",
+          heading: c.heading,
+        };
       } else if (c.type === "paragraph") {
-        return { type: "paragraph", paragraph: c.paragraph };
+        return {
+          elementId: getRandomId(),
+          type: "paragraph",
+          paragraph: c.paragraph,
+        };
       } else if (c.type === "image") {
         return {
           type: "image",
           alt: c.alt,
-          compressing: false,
-          compressed: true,
+          loadingSrc: false,
           file: null,
           localUrl: null,
-          previousSrc: c.src,
+          src: c.src,
           elementId: `img_${c.src}`,
           error: "",
         };

@@ -4,7 +4,9 @@ const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: "_next",
+  //output to standalone
+  output: "standalone",
+
   images: {
     unoptimized: true,
     // https://img.youtube.com/vi/[video-id]/[thumbnail-number].jpg
