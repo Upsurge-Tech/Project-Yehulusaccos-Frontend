@@ -16,11 +16,10 @@ import { editArticle } from "@/lib/articles/editArticle.action";
 import {
   getVideoId,
   withNulledImages,
-  withPrevImages,
   withUploadedImages,
 } from "@/lib/articles/utils";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
 import HeadingInput from "./HeadingInput";
@@ -43,9 +42,6 @@ const ArticleForm = ({
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  useEffect(() => {
-    withPrevImages(formState).then((newState) => setFormState(newState));
-  }, []);
 
   const replaceContent = (content: FormContent, i: number) => {
     setFormState((formState) => {
@@ -79,8 +75,7 @@ const ArticleForm = ({
     else return "";
   };
   const validateImage = (state: ImageFormContent): string => {
-    if (!state.file) return "Can not be empty";
-    if (state.compressing) return "Please wait till the image is compressed";
+    if (!state.src && !state.file) return "Can not be empty";
     else return "";
   };
 
@@ -132,7 +127,9 @@ const ArticleForm = ({
       state = withNulledImages(state);
       console.log("submitting", state);
       if (isEdit) {
+        console.log("sending to backend");
         const res = await editArticle(articleId as number, state);
+        console.log("finished");
         if (!res) {
           router.push("/admin/posts");
           router.refresh();

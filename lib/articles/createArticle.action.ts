@@ -14,6 +14,9 @@ export const createArticle = async (
     return sessionError;
   }
 
+  if (!article.thumbnail.src) {
+    return { error: "Thumbnail is required" };
+  }
   let articleId: number;
   try {
     const res = await db.insert(articleTable).values({

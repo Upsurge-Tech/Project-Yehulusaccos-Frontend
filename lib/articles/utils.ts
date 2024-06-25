@@ -38,50 +38,6 @@ export const attachExcrept = (article: Article) => {
     article.title.split(" ").slice(0, maxWords).join(" ") + "...";
 };
 
-const toFile = async (url: string | null): Promise<File | null> => {
-  if (!url) return null;
-
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error("Failed to load image" + url);
-  }
-  const blob = await res.blob();
-  const fileName = url.split("/").pop();
-  const name = `${Math.round(Math.random() * 1000000)}_${fileName}`;
-  const file = new File([blob], name, { type: blob.type });
-  return file;
-};
-
-export const withPrevImages = async (
-  article: ArticleFormState
-): Promise<ArticleFormState> => {
-  const thumbnailFile = await toFile(article.thumbnail.src || null);
-  const thumbnailLocalUrl = article.thumbnail.src || null;
-
-  const contents = await Promise.all(
-    article.contents.map(async (c, i) => {
-      if (c.type !== "image") {
-        return { ...c };
-      } else {
-        const file = await toFile(c.src || null);
-        const localUrl = c.src || null;
-        return { ...c, file, localUrl };
-      }
-    })
-  );
-
-  const copy: ArticleFormState = {
-    ...article,
-    thumbnail: {
-      ...article.thumbnail,
-      file: thumbnailFile,
-      localUrl: thumbnailLocalUrl,
-    },
-    contents,
-  };
-  return copy;
-};
-
 export const replaceContent = (
   state: ArticleFormState,
   content: FormContent,
@@ -121,68 +77,88 @@ export const withNulledImages = (state: ArticleFormState): ArticleFormState => {
   return copy;
 };
 
+const uploadImage = async (
+  file: File,
+  cOptions: {
+    upload_preset: string;
+    cloudName: string;
+    timestamp: number;
+    api_key: string;
+    signature: string;
+  }
+): Promise<string> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", cOptions.upload_preset);
+
+  console.log("uploading", file.name);
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${cOptions.cloudName}/image/upload?api_key=${cOptions.api_key}&timestamp=${cOptions.timestamp}&upload_preset=${cOptions.upload_preset}&signature=${cOptions.signature}`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+  const data = (await res.json()) as {
+    error?: { message: string };
+    secure_url: string;
+  };
+  console.log(data);
+  if (data.error) throw new Error(data.error.message);
+  return data.secure_url;
+};
+
 export const withUploadedImages = async (
   state: ArticleFormState
 ): Promise<ArticleFormState | { error: string }> => {
-  const images: File[] = [];
-  if (!state.thumbnail.file) {
+  //defence zone
+  const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string;
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string;
+  const upload_preset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET as string;
+  if (!api_key) return { error: "Cloudinary api_key not found" };
+  if (!cloudName) return { error: "Cloudinary credentials not found" };
+  if (!upload_preset) return { error: "Cloudinary upload_preset not found" };
+
+  if (!state.thumbnail.file && !state.thumbnail.src) {
     return { error: "Thumbnail is required" };
   }
-  images.push(state.thumbnail.file);
-
-  for (const content of state.contents) {
-    if (content.type === "image") {
-      if (!content.file) return { error: "All images are required" };
-      images.push(content.file);
-    }
+  const res = await getSignature();
+  if ("error" in res) {
+    return { error: res.error };
   }
 
-  const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string;
-  const upload_preset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
-  if (!upload_preset) return { error: "Cloudinary upload_preset not found" };
-  if (!api_key) return { error: "Cloudinary api_key not found" };
-
   try {
-    const res = await getSignature();
-    if ("error" in res) {
-      return { error: res.error };
-    }
-
     const { signature, timestamp, upload_preset } = res;
-    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string;
-    if (!cloudName) {
-      return { error: "Cloudinary credentials not found" };
+    const srcPromises: (Promise<string> | string)[] = [];
+
+    for (const content of [state.thumbnail, ...state.contents]) {
+      if (content.type === "image") {
+        if (content.file) {
+          srcPromises.push(
+            uploadImage(content.file, {
+              cloudName,
+              api_key,
+              upload_preset,
+              timestamp,
+              signature,
+            })
+          );
+        } else if (content.src) {
+          srcPromises.push(content.src);
+        } else {
+          return { error: "All images are required" };
+        }
+      }
     }
 
-    const urls: string[] = await Promise.all(
-      images.map(async (image) => {
-        const formData = new FormData();
-        formData.append("file", image);
-        formData.append("upload_preset", upload_preset);
-
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload?api_key=${api_key}&timestamp=${timestamp}&upload_preset=${upload_preset}&signature=${signature}`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        const data = (await res.json()) as {
-          error?: { message: string };
-          secure_url: string;
-        };
-        console.log(data);
-        if (data.error) throw new Error(data.error.message);
-        return data.secure_url;
-      })
-    );
+    const srcs: string[] = await Promise.all(srcPromises);
 
     const newContents: FormContent[] = state.contents.map((c, i) =>
-      c.type === "image" ? { ...c, src: urls[i + 1] } : c
+      c.type === "image" ? { ...c, src: srcs[i + 1] } : c
     );
     return {
       ...state,
-      thumbnail: { ...state.thumbnail, src: urls[0] },
+      thumbnail: { ...state.thumbnail, src: srcs[0] },
       contents: newContents,
     };
   } catch (e) {

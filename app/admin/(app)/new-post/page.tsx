@@ -5,14 +5,11 @@ const NewPost = () => {
   const state: ArticleFormState = {
     title: "",
     thumbnail: {
-      compressing: false,
-      compressed: false,
       type: "image",
-      loadingSrc: false,
       elementId: "thumbnail",
       file: null,
       localUrl: null,
-      src: "",
+      src: null,
       alt: "",
       error: "",
     },
