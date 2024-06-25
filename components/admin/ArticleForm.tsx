@@ -89,16 +89,12 @@ const ArticleForm = ({
     e.preventDefault();
     let state: ArticleFormState = formState;
 
-    //ensure required* and other unresolved errors
     if (validateImage(state.thumbnail)) {
+      setFormState((s) => ({
+        ...s,
+        thumbnail: { ...s.thumbnail, error: "Can not be empty" },
+      }));
       document.getElementById(state.thumbnail.elementId)?.focus();
-      setFormState({
-        ...formState,
-        thumbnail: {
-          ...formState.thumbnail,
-          error: validateImage(state.thumbnail),
-        },
-      });
       return;
     }
 

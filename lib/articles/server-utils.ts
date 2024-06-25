@@ -1,7 +1,14 @@
 import { cloudinary } from "@/cloudinary.config";
-import { Article, ArticleFormState } from "@/data-types/Article";
+import { Article, ArticleFormState, FormContent } from "@/data-types/Article";
+import { langs } from "@/data-types/Languages";
 import db from "@/db";
-import { adminTable, contentTable } from "@/db/schema";
+import {
+  ArticleContentSQL,
+  ContentSQL,
+  adminTable,
+  articleContentTable,
+  contentTable,
+} from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { attachExcrept, getVideoId } from "./utils";
@@ -24,44 +31,73 @@ export const removeImages = async (
   }
 };
 
+const mapToDbContent = (
+  contents: FormContent[],
+  articleContentLinks: ArticleContentSQL[]
+): ContentSQL[] => {
+  const inserts: ContentSQL[] = [];
+  for (let i = 0; i < contents.length; i++) {
+    const content = contents[i];
+    const insert: ContentSQL = {
+      id: -1,
+      data: "",
+      type: content.type,
+      contentId: articleContentLinks[i].id,
+      langId: "en",
+      alt: "",
+    };
+    if (content.type === "image") {
+      if (!content.src) throw new Error(`Empty image src at ${i + 1}th block`);
+      inserts.push({ ...insert, data: content.src, alt: content.alt });
+    } else if (content.type === "youtube") {
+      const videoId = getVideoId(content.youtubeLink);
+      if (!videoId) throw new Error(`Invalid youtube link at ${i + 1}th block`);
+      inserts.push({ ...insert, data: videoId });
+    } else if (content.type === "heading") {
+      for (const lang of langs) {
+        inserts.push({ ...insert, data: content.heading[lang], langId: lang });
+      }
+    } else if (content.type === "paragraph") {
+      for (const lang of langs) {
+        inserts.push({
+          ...insert,
+          data: content.paragraph[lang],
+          langId: lang,
+        });
+      }
+    } else if (content.type === "title") {
+      for (const lang of langs) {
+        inserts.push({ ...insert, data: content.title[lang], langId: lang });
+      }
+    } else {
+      throw new Error(`Unknown type  at ${i + 1}th block`);
+    }
+  }
+
+  return inserts;
+};
+
 export const insertContents = async (
   articleId: number,
   article: ArticleFormState
 ): Promise<{ error: string } | void> => {
   try {
-    let imageIndex = 1;
-    if (article.contents.length === 0) return;
+    const allContents: FormContent[] = [article.title, ...article.contents];
+
+    await db
+      .insert(articleContentTable)
+      .values(allContents.map(() => ({ articleId })));
+
+    const articleContentLinks = await db
+      .select()
+      .from(articleContentTable)
+      .where(eq(articleContentTable.articleId, articleId));
+
     await db.insert(contentTable).values(
-      article.contents.map((content, i) => {
-        const type = content.type;
-        let data: string = "";
-        let alt: string = "";
-        if (type === "image") {
-          if (!content.src) {
-            console.log(content);
-            throw new Error(`Empty image src at ${i + 1}th block`);
-          }
-          data = content.src;
-          alt = content.alt;
-          imageIndex++;
-        } else if (type === "heading") {
-          data = content.heading;
-        } else if (type === "paragraph") {
-          data = content.paragraph;
-        } else if (type === "youtube") {
-          const videoId = getVideoId(content.youtubeLink);
-          if (videoId === null) {
-            throw new Error(`Invalid youtube link at ${i + 1}th block`);
-          }
-          data = videoId;
-        }
-
-        if (data === "") {
-          throw new Error(`Empty content in ${type} at ${i + 1}th block`);
-        }
-
-        return { articleId, type, data, alt };
-      })
+      mapToDbContent(allContents, articleContentLinks).map((c) => ({
+        ...c,
+        id: undefined,
+      }))
     );
   } catch (e) {
     if (e instanceof Error) {

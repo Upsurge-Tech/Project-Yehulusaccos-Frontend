@@ -4,7 +4,6 @@ import { ArticleFormState } from "@/data-types/Article";
 const NewPost = () => {
   const state: ArticleFormState = {
     langs: ["en", "am"],
-    title: { elementId: "title", type: "title", title: { am: "", en: "" } },
     thumbnail: {
       type: "image",
       elementId: "thumbnail",
@@ -14,6 +13,7 @@ const NewPost = () => {
       alt: "",
       error: "",
     },
+    title: { elementId: "title", type: "title", title: { am: "", en: "" } },
     contents: [
       {
         type: "paragraph",

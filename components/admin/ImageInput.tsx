@@ -69,7 +69,9 @@ const ImageInput = ({
 
   return (
     <div className="relative max-w-[200px] border rounded">
-      <span></span>
+      {content.error && (
+        <p className="text-destructive text-sm">{content.error}</p>
+      )}
 
       <Label>
         {index === -1 && "Thumbnail"}
