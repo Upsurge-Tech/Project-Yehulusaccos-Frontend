@@ -1,10 +1,25 @@
 import { Article } from "@/data-types/Article";
+import articles from "@/data/articles";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { count, desc, eq } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
 const getArticles = async ({
+  page,
+  size,
+  offset,
+}: {
+  page: number;
+  size: number;
+  offset: number;
+}): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
+  //not yet connected to new db
+  //pagination logic is also not yet implemented, no problem, only focus on correctly diplaying the articles
+  return { articles, numPages: 1 };
+};
+
+const _getArticles = async ({
   page,
   size,
   offset,

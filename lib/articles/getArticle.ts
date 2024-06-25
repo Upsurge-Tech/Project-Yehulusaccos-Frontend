@@ -1,10 +1,21 @@
 import { Article } from "@/data-types/Article";
+import articles from "@/data/articles";
 import db from "@/db";
 import { articleTable, contentTable } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
-const getArticle = async (
+const getArticle = async (id: number, withRelatedArticles: boolean) => {
+  //not yet connected to new db
+  const article = articles.find((a) => a.id === id);
+  if (!article) {
+    return { error: "Not Found" };
+  } else {
+    return { article, relatedArticles: articles.filter((a) => a.id !== id) };
+  }
+};
+
+const _getArticle = async (
   id: number,
   withRelatedArticles: boolean
 ): Promise<

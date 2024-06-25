@@ -9,34 +9,28 @@ export const contentTypeStrings = [
   "excrept",
 ] as const;
 
-export interface TitleContent {
-  type: "title";
-  heading: { [key in Lang]: string };
-}
-
-export interface ExcreptContent {
-  type: "excrept";
-  heading: { [key in Lang]: string };
-}
-
 export interface HeadingContent {
   type: "heading";
+  id: number;
   heading: { [key in Lang]: string };
 }
 
 export interface ParagraphContent {
   type: "paragraph";
+  id: number;
   paragraph: { [key in Lang]: string };
 }
 
 export interface ImageContent {
   type: "image";
+  id: number;
   src: string;
   alt: string;
 }
 
 export interface YouTubeContent {
   type: "youtube";
+  id: number;
   youtubeId: string;
 }
 
@@ -49,9 +43,9 @@ export type ArticleContent =
 export interface Article {
   langIds: Lang[];
   id: number;
-  title: TitleContent;
-  excerpts: ExcreptContent;
-  thumbnail: ImageContent;
+  title: { [key in Lang]: string };
+  excerpt: { [key in Lang]: string };
+  thumbnail: string;
   createdAt: string; //a date string
   contents: ArticleContent[];
 }
