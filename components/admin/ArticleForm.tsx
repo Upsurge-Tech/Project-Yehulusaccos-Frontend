@@ -4,8 +4,6 @@ import { AddBlockButton } from "@/components/admin/AddBlock";
 import YoutubeInput from "@/components/admin/YoutubeInput";
 import addContentButtonProps from "@/components/admin/addContentButtonProps";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   ArticleFormState,
   FormContent,
@@ -26,6 +24,8 @@ import { Progress } from "../ui/progress";
 import HeadingInput from "./HeadingInput";
 import ImageInput from "./ImageInput";
 import ParagraphInput from "./ParagraphInput";
+import SelectLang from "./SelectLang";
+import TitleInput from "./TitleInput";
 
 const ArticleForm = ({
   articleId,
@@ -187,18 +187,8 @@ const ArticleForm = ({
             {error && <p className="text-destructive text-sm">{error}</p>}
           </div>
         </div>
-        <div>
-          <Label htmlFor="title">Title *</Label>
-          <Input
-            required
-            id="title"
-            placeholder="Enter title"
-            value={formState.title}
-            onChange={(e) => {
-              setFormState({ ...formState, title: e.target.value });
-            }}
-          />
-        </div>
+        <SelectLang formState={formState} setFormState={setFormState} />
+        <TitleInput formState={formState} setFormState={setFormState} />
         {formState.contents.map((content, i) => {
           const label = `${i + 1}. ${addContentButtonProps.find((b) => b.type === content.type)?.label}`;
           return (
@@ -240,7 +230,6 @@ const ArticleForm = ({
                 </Button>
               </div>
 
-              <Label htmlFor={content.elementId}>{label}</Label>
               {content.type === "heading" && (
                 <HeadingInput
                   index={i}
@@ -281,7 +270,6 @@ const ArticleForm = ({
 
         <div className="flex-1"></div>
         <div className="pt-9 ">
-          <Label htmlFor="thumb">Thumbnail *</Label>
           <ImageInput
             index={-1}
             formState={formState}

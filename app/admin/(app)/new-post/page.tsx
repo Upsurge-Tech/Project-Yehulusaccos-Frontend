@@ -3,7 +3,8 @@ import { ArticleFormState } from "@/data-types/Article";
 
 const NewPost = () => {
   const state: ArticleFormState = {
-    title: "",
+    langs: ["en", "am"],
+    title: { elementId: "title", type: "title", title: { am: "", en: "" } },
     thumbnail: {
       type: "image",
       elementId: "thumbnail",
@@ -13,10 +14,12 @@ const NewPost = () => {
       alt: "",
       error: "",
     },
-    unknown: "",
     contents: [
-      { elementId: "heading1", type: "heading", heading: "" },
-      { elementId: "para1", type: "paragraph", paragraph: "" },
+      {
+        type: "paragraph",
+        elementId: "p1-en",
+        paragraph: { am: "", en: "" },
+      },
     ],
   };
   return <ArticleForm initialFormState={state} />;

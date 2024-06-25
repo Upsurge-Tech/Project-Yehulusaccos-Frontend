@@ -2,8 +2,9 @@
 
 import { ArticleFormState, ImageFormContent } from "@/data-types/Article";
 import { replaceContent } from "@/lib/articles/utils";
-import error from "next/error";
 import Image from "next/image";
+import { Label } from "../ui/label";
+
 import { useRef } from "react";
 import { FaFileImage } from "react-icons/fa6";
 import { MdOutlineCleaningServices } from "react-icons/md";
@@ -68,7 +69,12 @@ const ImageInput = ({
 
   return (
     <div className="relative max-w-[200px] border rounded">
-      {error && <p className="text-destructive text-sm">{content.error}</p>}
+      <span></span>
+
+      <Label>
+        {index === -1 && "Thumbnail"}
+        {index !== -1 && index + 1 + ". Image"}
+      </Label>
       <button
         className={` ${content.file || content.src ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
         type="button"

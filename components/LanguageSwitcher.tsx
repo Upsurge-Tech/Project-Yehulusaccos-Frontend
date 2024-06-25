@@ -1,6 +1,6 @@
-import { useTransition } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { FaGlobe } from "react-icons/fa";
 
 import {
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { langList } from "@/data-types/Languages";
 
 const LanguageSwitcher: React.FC = () => {
   const [isPending, startTransition] = useTransition();
@@ -38,8 +39,9 @@ const LanguageSwitcher: React.FC = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="en">English</SelectItem>
-            <SelectItem value="am">አማርኛ</SelectItem>
+            {langList.map(({ lang, label }) => (
+              <SelectItem value={lang}>{label}</SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

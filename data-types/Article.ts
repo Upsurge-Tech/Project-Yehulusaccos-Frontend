@@ -1,21 +1,32 @@
+import { Lang } from "./Languages";
+
 export const contentTypeStrings = [
   "heading",
   "paragraph",
   "image",
   "youtube",
+  "title",
+  "excrept",
 ] as const;
 
-export type Lang = "am" | "en";
+export interface TitleContent {
+  type: "title";
+  heading: { [key in Lang]: string };
+}
+
+export interface ExcreptContent {
+  type: "excrept";
+  heading: { [key in Lang]: string };
+}
+
 export interface HeadingContent {
   type: "heading";
-  heading: string;
-  langId: Lang;
+  heading: { [key in Lang]: string };
 }
 
 export interface ParagraphContent {
   type: "paragraph";
-  paragraph: string;
-  langId: Lang;
+  paragraph: { [key in Lang]: string };
 }
 
 export interface ImageContent {
@@ -36,10 +47,11 @@ export type ArticleContent =
   | YouTubeContent;
 
 export interface Article {
+  langIds: Lang[];
   id: number;
-  title: HeadingContent;
-  excerpt: ParagraphContent;
-  thumbnail: string;
+  title: TitleContent;
+  excerpts: ExcreptContent;
+  thumbnail: ImageContent;
   createdAt: string; //a date string
   contents: ArticleContent[];
 }
@@ -47,15 +59,18 @@ export interface Article {
 export interface HeadingFormContent {
   elementId: string;
   type: "heading";
-  heading: string;
-  langId: Lang;
+  heading: { [key in Lang]: string };
+}
+export interface TitleFormContent {
+  title: { [key in Lang]: string };
+  type: "title";
+  elementId: string;
 }
 
 export interface ParagraphFormContent {
   elementId: string;
   type: "paragraph";
-  paragraph: string;
-  langId: Lang;
+  paragraph: { [key in Lang]: string };
 }
 export interface ImageFormContent {
   type: "image";
@@ -74,13 +89,15 @@ export interface YouTubeFormContent {
 }
 
 export type FormContent =
+  | TitleFormContent
   | HeadingFormContent
   | ParagraphFormContent
   | ImageFormContent
   | YouTubeFormContent;
 
 export interface ArticleFormState {
-  title: HeadingFormContent;
+  langs: Lang[];
+  title: TitleFormContent;
   thumbnail: ImageFormContent;
   contents: FormContent[];
 }

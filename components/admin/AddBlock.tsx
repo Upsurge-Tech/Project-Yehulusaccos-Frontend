@@ -36,15 +36,15 @@ const AddBlock = ({ formState, setFormState }: Props) => {
                   let content: FormContent;
                   if (type === "heading") {
                     content = {
-                      elementId: `${Math.round(Math.random() * 10000)}`,
                       type,
-                      heading: formState.unknown,
+                      elementId: `${Math.round(Math.random() * 10000)}`,
+                      heading: { am: "", en: "" },
                     };
                   } else if (type === "paragraph") {
                     content = {
-                      elementId: `${Math.round(Math.random() * 10000)}`,
                       type,
-                      paragraph: formState.unknown,
+                      elementId: `${Math.round(Math.random() * 10000)}`,
+                      paragraph: { en: "", am: "" },
                     };
                   } else if (type === "youtube") {
                     content = {
@@ -69,10 +69,6 @@ const AddBlock = ({ formState, setFormState }: Props) => {
 
                   setFormState({
                     ...formState,
-                    unknown:
-                      type === "heading" || type === "paragraph"
-                        ? ""
-                        : formState.unknown,
                     contents: [...formState.contents, content],
                   });
                 }}
