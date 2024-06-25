@@ -6,17 +6,17 @@ import ArticleCardSide from "@/components/news/ArticleCardSide";
 import ArticleGrid from "@/components/news/ArticleGrid";
 import Vector from "@/public/Vector.svg";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import TitleFadeIn from "@/components/animation/TitleFadeIn";
 import SlideFrom from "@/components/animation/SlideFrom";
 import FadeIn from "@/components/animation/FadeIn";
-
+import { Article } from "@/data-types/Article";
 
 interface NewsPageProps {
     searchParams: {
       [key: string]: string | string[] | undefined;
     };
-  }
+}
 
 const NewsPage: React.FC<NewsPageProps> = ({
   searchParams,
@@ -27,6 +27,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
 }) => {
   const [latestArticles, setLatestArticles] = useState([]);
   const tnews = useTranslations("News");
+  const locale = useLocale();
   const page = 1;
   const offset = 0;
   const pageSize = 3;
@@ -42,7 +43,6 @@ const NewsPage: React.FC<NewsPageProps> = ({
         }
         const data = await res.json();
         setLatestArticles(data.data);
-        console.log(data.data);
       } catch (error) {
         console.error(error);
       }
@@ -53,6 +53,31 @@ const NewsPage: React.FC<NewsPageProps> = ({
 
   const latestArticles2 = latestArticles.slice(1);
   const latestArticle1 = latestArticles[0];
+
+  const renderArticle = (article : Article) => {
+    if (locale === 'am') {
+      return {
+        ...article,
+        title: article.title.am,
+        excerpt: article.excerpt.am,
+        contents: article.contents.map(content => {
+          if (content.type === 'heading') return { ...content, heading: content.heading?.am };
+          if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.am };
+          return content;
+        })
+      };
+    }
+    return {
+      ...article,
+      title: article.title.en,
+      excerpt: article.excerpt.en,
+      contents: article.contents.map(content => {
+        if (content.type === 'heading') return { ...content, heading: content.heading?.en };
+        if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.en };
+        return content;
+      })
+    };
+  };
 
   return (
     <div>
@@ -81,7 +106,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
           <FadeIn className="" delay={1.3}>
             <div className="md:w-[80%] mx-auto">
               <div className="p-4 border md:w-[60%] w-[100%] lg:w-[40%]">
-                <ArticleCardMain article={latestArticle1} />
+                <ArticleCardMain article={renderArticle(latestArticle1)} />
               </div>
             </div>
           </FadeIn>
@@ -90,12 +115,12 @@ const NewsPage: React.FC<NewsPageProps> = ({
           <div className="md:w-[70%] lg:w-[60%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
             <SlideFrom from="left" className="">
               <div className=" col-span-1 p-4 border border-black">
-                <ArticleCardMain article={latestArticle1} />
+                <ArticleCardMain article={renderArticle(latestArticle1)} />
               </div>
             </SlideFrom>
             <SlideFrom className="" from="right">
               <div className="col-span-1 p-4 border border-black">
-                <ArticleCardMain article={latestArticles2[0]} />
+                <ArticleCardMain article={renderArticle(latestArticles2[0])} />
               </div>
             </SlideFrom>
           </div>
@@ -105,7 +130,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
             <div className="md:col-span-2 col-span-1 md:p-0 p-4">
               {latestArticle1 && (
                 <SlideFrom from="left" className="">
-                  <ArticleCardMain article={latestArticle1} />
+                  <ArticleCardMain article={renderArticle(latestArticle1)} />
                 </SlideFrom>
               )}
             </div>
@@ -113,7 +138,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
               {latestArticles2 &&
                 latestArticles2.map((article, index) => (
                   <SlideFrom className="" from="right" key={index}>
-                    <ArticleCardSide article={article} />
+                    <ArticleCardSide article={renderArticle(article)} />
                   </SlideFrom>
                 ))}
             </div>

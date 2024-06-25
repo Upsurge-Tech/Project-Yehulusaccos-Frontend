@@ -2,11 +2,7 @@ import { Article } from "@/data-types/Article";
 import formateDate from "@/utils/dateFormatter";
 import Image from "next/image";
 
-interface Props {
-  article: Article;
-}
-
-const ArticleCard = ({ article }: Props) => {
+const ArticleCard = ({ article }: { article: Article }) => {
   return (
     <div className=" w-full  flex flex-col gap-y-2 sm:gap-y-4">
       <Image
@@ -14,7 +10,7 @@ const ArticleCard = ({ article }: Props) => {
         height={200}
         priority
         src={`${article.thumbnail}`}
-        alt=""
+        alt="card image 2"
         className="object-contain self-start rounded-md hover:scale-105 duration-200 max-h-[200px] w-full bg-muted border"
       />
       <div className="bg-primarySoft text-primary self-start flex items-center text-xs font-semibold tracking-wide  px-2 h-7 sm:h-10 rounded-lg">

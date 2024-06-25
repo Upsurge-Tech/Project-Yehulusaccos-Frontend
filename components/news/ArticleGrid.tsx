@@ -7,6 +7,7 @@ import Pagination from "./PaginationControls";
 import Spinner from "../contact/Spinner";
 import ArticleCard from "./ArticleCard";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 
 type GetArticlesResponse =
   | {
@@ -22,6 +23,7 @@ const ArticleGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
   const offset = 3;
+  const locale = useLocale();
 
   useEffect(() => {
     const fetchArticles = async (page: number) => {
@@ -48,6 +50,35 @@ const ArticleGrid = () => {
     setCurrentPage(page);
   };
 
+  const renderArticle = (article: Article) => {
+    if (locale === 'am') {
+      return {
+        id: article.id,
+        thumbnail: article.thumbnail,
+        createdAt: article.createdAt,
+        title: article.title.am,
+        excerpt: article.excerpt.am,
+        contents: article.contents.map(content => {
+          if (content.type === 'heading') return { ...content, heading: content.heading?.am };
+          if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.am };
+          return content;
+        })
+      };
+    }
+    return {
+      id: article.id,
+      thumbnail: article.thumbnail,
+      createdAt: article.createdAt,
+      title: article.title.en,
+      excerpt: article.excerpt.en,
+      contents: article.contents.map(content => {
+        if (content.type === 'heading') return { ...content, heading: content.heading?.en };
+        if (content.type === 'paragraph') return { ...content, paragraph: content.paragraph?.en };
+        return content;
+      })
+    };
+  };
+
   return (
     <div className="flex flex-col gap-4 items-center">
       {isFetching ? (
@@ -59,7 +90,7 @@ const ArticleGrid = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
             {articles.map((article) => (
               <Link href={`/news/${article.id}`} key={article.id}>
-                <ArticleCard key={article.id} article={article} />
+                <ArticleCard key={article.id} article={renderArticle(article)} />
               </Link>
             ))}
           </div>
@@ -73,4 +104,5 @@ const ArticleGrid = () => {
     </div>
   );
 };
+
 export default ArticleGrid;
