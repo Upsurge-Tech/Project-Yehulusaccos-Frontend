@@ -1,6 +1,7 @@
 import { cloudinary } from "@/cloudinary.config";
 import { Article, ArticleContent, ArticleFormState, FormContent } from "@/data-types/Article";
 import { langs } from "@/data-types/Languages";
+import articles from "@/data/articles";
 import db from "@/db";
 import {
   ArticleContentSQL,
@@ -9,7 +10,7 @@ import {
   ContentSQL,
   adminTable,
   articleContentTable,
-  contentTable,
+  contentTable
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
@@ -110,20 +111,16 @@ export const insertContents = async (
   }
 };
 
-interface Res {
-  article: ArticleSQL;
-  content: ContentSQL;
-  langId: ArticleLangSQL["langId"];
-}
+
 //res is orderd by articleId (reversed), then by contentId
-export const extractArticles = (res: Res[]): Article[] | { error: string } => {
+export const extractArticles = (ac: {article:ArticleSQL, content:ContentSQL}[], al:{articleId:ArticleSQL['id'], lang: ArticleLangSQL['langId']}): Article[] | { error: string } => {
   const articles: Article[] = [];
 
   let i = 0 
-  while (i < res.length){
+  while (i < ac.length){
       articles.push({
-        ...res[i].article,
-        createdAt: res[i].article.createdAt.toLocaleString("en-US", {
+        ...ac[i].article,
+        createdAt: ac[i].article.createdAt.toLocaleString("en-US", {
           timeZone: "UTC",
         }),
         title: { en: "", am: "" },
@@ -134,10 +131,10 @@ export const extractArticles = (res: Res[]): Article[] | { error: string } => {
     }
 
     const article = articles[articles.length - 1];
-    while (i < res.length && res[i].article.id === article.id) {
+    while (i < ac.length && ac[i].article.id === article.id) {
       let content:ArticleContent
-      const contentId = res[i].content.id;
-        while (i < res.length && res[i].content.id === contentId){
+      const contentId = ac[i].content.id;
+        while (i < ac.length && ac[i].content.id === contentId){
           if ()
 
         }

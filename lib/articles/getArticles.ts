@@ -49,22 +49,19 @@ const getArticles = async ({
       .innerJoin(
         contentTable,
         eq(articleWithContentId.article_content.id, contentTable.id)
-      )
-      .as("with_content");
+      );
 
-    //article--contentId--content--langId
+    //article--contentId--content
     //risky thing is, articles that dont have contents or langs will be filtered out
-    const langs = await db
+    const articleWithLang = await db
       .select({
+        articleId: limitedArticle.id,
         langId: articleLangTable.langId,
       })
-      .from(articleWithContent)
+      .from(limitedArticle)
       .innerJoin(
         articleLangTable,
-        eq(
-          articleWithContent.with_content_id.limited.id,
-          articleLangTable.articleId
-        )
+        eq(limitedArticle.id, articleLangTable.articleId)
       );
 
     const res2 = await db.select({ count: count() }).from(articleTable);
@@ -72,7 +69,7 @@ const getArticles = async ({
 
     // console.log("res is", res);
 
-    const result = extractArticles(articlesWithLangs);
+    const result = extractArticles(articleWithContent, articleWithLang);
     if ("error" in result) return result;
     return { articles: result, numPages };
   } catch (e) {
