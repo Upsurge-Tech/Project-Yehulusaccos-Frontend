@@ -85,7 +85,8 @@ const uploadImage = async (
     timestamp: number;
     api_key: string;
     signature: string;
-  }
+  },
+  onFinish: () => void
 ): Promise<string> => {
   const formData = new FormData();
   formData.append("file", file);
@@ -105,11 +106,13 @@ const uploadImage = async (
   };
   console.log(data);
   if (data.error) throw new Error(data.error.message);
+  onFinish();
   return data.secure_url;
 };
 
 export const withUploadedImages = async (
-  state: ArticleFormState
+  state: ArticleFormState,
+  appendProgress: (progress: number) => void
 ): Promise<ArticleFormState | { error: string }> => {
   //defence zone
   const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string;
@@ -130,21 +133,28 @@ export const withUploadedImages = async (
   try {
     const { signature, timestamp, upload_preset } = res;
     const srcPromises: (Promise<string> | string)[] = [];
+    const numTasks =
+      state.contents.filter((c) => c.type === "image").length + 1;
 
     for (const content of [state.thumbnail, ...state.contents]) {
       if (content.type === "image") {
         if (content.file) {
           srcPromises.push(
-            uploadImage(content.file, {
-              cloudName,
-              api_key,
-              upload_preset,
-              timestamp,
-              signature,
-            })
+            uploadImage(
+              content.file,
+              {
+                cloudName,
+                api_key,
+                upload_preset,
+                timestamp,
+                signature,
+              },
+              () => appendProgress(80 / numTasks)
+            )
           );
         } else if (content.src) {
           srcPromises.push(content.src);
+          appendProgress(80 / numTasks);
         } else {
           return { error: "All images are required" };
         }
@@ -156,6 +166,7 @@ export const withUploadedImages = async (
     const newContents: FormContent[] = state.contents.map((c, i) =>
       c.type === "image" ? { ...c, src: srcs[i + 1] } : c
     );
+
     return {
       ...state,
       thumbnail: { ...state.thumbnail, src: srcs[0] },

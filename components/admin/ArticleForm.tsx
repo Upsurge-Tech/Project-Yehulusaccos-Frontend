@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
+import { Progress } from "../ui/progress";
 import HeadingInput from "./HeadingInput";
 import ImageInput from "./ImageInput";
 import ParagraphInput from "./ParagraphInput";
@@ -40,7 +41,8 @@ const ArticleForm = ({
 
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
+  const isLoading = progress < 100 && progress > 0;
   const [error, setError] = useState<string>("");
 
   const replaceContent = (content: FormContent, i: number) => {
@@ -77,6 +79,10 @@ const ArticleForm = ({
   const validateImage = (state: ImageFormContent): string => {
     if (!state.src && !state.file) return "Can not be empty";
     else return "";
+  };
+
+  const appendProgress = (percent: number) => {
+    setProgress((prev) => prev + percent);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -116,8 +122,9 @@ const ArticleForm = ({
 
     setError("");
     try {
-      setIsLoading(true);
-      const res = await withUploadedImages(state);
+      setProgress(1);
+      const res = await withUploadedImages(state, appendProgress); //upto 80% progress
+      setProgress(80);
       if ("error" in res) {
         setError(res.error);
         return;
@@ -131,6 +138,7 @@ const ArticleForm = ({
         const res = await editArticle(articleId as number, state);
         console.log("finished");
         if (!res) {
+          setProgress(100);
           router.push("/admin/posts");
           router.refresh();
         } else {
@@ -141,6 +149,7 @@ const ArticleForm = ({
         const res = await createArticle(state);
         if (typeof res === "number") {
           console.log("Article saved with id", res);
+          setProgress(100);
           router.push("/admin/posts");
           router.refresh();
         } else {
@@ -152,132 +161,135 @@ const ArticleForm = ({
       setError("Something went wrong, Please try again later");
       console.log("Not friendly error", e);
     } finally {
-      setIsLoading(false);
+      setProgress(0);
     }
   };
 
   return (
-    <form
-      onSubmit={(e) => handleSubmit(e)}
-      className="h-full  flex flex-col gap-3"
-    >
-      <div className="flex justify-between pb-9">
-        <h1 className="text-primary font-bold text-2xl">
-          {isEdit ? "Edit post" : "Add new post"}
-        </h1>
-        <div>
-          <div className="flex justify-end">
-            <Button className="bg-tertiary" disabled={isLoading}>
-              <Spinner spin={isLoading} />
-              <span>{isEdit ? "Save" : "Publish"}</span>
-            </Button>
-          </div>
-          {error && <p className="text-destructive text-sm">{error}</p>}
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="title">Title *</Label>
-        <Input
-          required
-          id="title"
-          placeholder="Enter title"
-          value={formState.title}
-          onChange={(e) => {
-            setFormState({ ...formState, title: e.target.value });
-          }}
-        />
-      </div>
-      {formState.contents.map((content, i) => {
-        const label = `${i + 1}. ${addContentButtonProps.find((b) => b.type === content.type)?.label}`;
-        return (
-          <div key={i} className="relative">
-            <div className="absolute right-0 top-[-5px] flex items-center text-black/70">
-              <Button
-                variant={"ghost"}
-                size={"sm"}
-                disabled={i === 0}
-                type="button"
-                onClick={() => swapContent(i, i - 1)}
-              >
-                <IoMdArrowDropupCircle />
-              </Button>
-
-              <Button
-                variant={"ghost"}
-                size={"sm"}
-                disabled={i === formState.contents.length - 1}
-                type="button"
-                onClick={() => swapContent(i, i + 1)}
-              >
-                <IoMdArrowDropdownCircle />
-              </Button>
-
-              <Button
-                className="text-destructive"
-                variant={"ghost"}
-                size={"sm"}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const newContents = [...formState.contents];
-                  newContents.splice(i, 1);
-                  setFormState({ ...formState, contents: newContents });
-                }}
-              >
-                <MdCancel />
+    <main className="">
+      {isLoading && <Progress value={progress} className="w-full h-2" />}
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className="h-full py-9  flex flex-col gap-3"
+      >
+        <div className="flex justify-between pb-9">
+          <h1 className="text-primary font-bold text-2xl">
+            {isEdit ? "Edit post" : "Add new post"}
+          </h1>
+          <div>
+            <div className="flex justify-end">
+              <Button className="bg-tertiary" disabled={isLoading}>
+                <Spinner spin={isLoading} />
+                <span>{isEdit ? "Save" : "Publish"}</span>
               </Button>
             </div>
+            {error && <p className="text-destructive text-sm">{error}</p>}
+          </div>
+        </div>
+        <div>
+          <Label htmlFor="title">Title *</Label>
+          <Input
+            required
+            id="title"
+            placeholder="Enter title"
+            value={formState.title}
+            onChange={(e) => {
+              setFormState({ ...formState, title: e.target.value });
+            }}
+          />
+        </div>
+        {formState.contents.map((content, i) => {
+          const label = `${i + 1}. ${addContentButtonProps.find((b) => b.type === content.type)?.label}`;
+          return (
+            <div key={i} className="relative">
+              <div className="absolute right-0 top-[-5px] flex items-center text-black/70">
+                <Button
+                  variant={"ghost"}
+                  size={"sm"}
+                  disabled={i === 0}
+                  type="button"
+                  onClick={() => swapContent(i, i - 1)}
+                >
+                  <IoMdArrowDropupCircle />
+                </Button>
 
-            <Label htmlFor={content.elementId}>{label}</Label>
-            {content.type === "heading" && (
-              <HeadingInput
-                index={i}
-                formState={formState}
-                setFormState={setFormState}
-              />
-            )}
-            {content.type === "paragraph" && (
-              <ParagraphInput
-                index={i}
-                formState={formState}
-                setFormState={setFormState}
-              />
-            )}
-            {content.type === "image" && (
-              <div className="border p-2">
-                <ImageInput
+                <Button
+                  variant={"ghost"}
+                  size={"sm"}
+                  disabled={i === formState.contents.length - 1}
+                  type="button"
+                  onClick={() => swapContent(i, i + 1)}
+                >
+                  <IoMdArrowDropdownCircle />
+                </Button>
+
+                <Button
+                  className="text-destructive"
+                  variant={"ghost"}
+                  size={"sm"}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const newContents = [...formState.contents];
+                    newContents.splice(i, 1);
+                    setFormState({ ...formState, contents: newContents });
+                  }}
+                >
+                  <MdCancel />
+                </Button>
+              </div>
+
+              <Label htmlFor={content.elementId}>{label}</Label>
+              {content.type === "heading" && (
+                <HeadingInput
                   index={i}
-                  validate={validateImage}
                   formState={formState}
                   setFormState={setFormState}
                 />
-              </div>
-            )}
-            {content.type === "youtube" && (
-              <YoutubeInput
-                index={i}
-                formState={formState}
-                setFormState={setFormState}
-                validate={validateYoutube}
-              />
-            )}
-          </div>
-        );
-      })}
+              )}
+              {content.type === "paragraph" && (
+                <ParagraphInput
+                  index={i}
+                  formState={formState}
+                  setFormState={setFormState}
+                />
+              )}
+              {content.type === "image" && (
+                <div className="border p-2">
+                  <ImageInput
+                    index={i}
+                    validate={validateImage}
+                    formState={formState}
+                    setFormState={setFormState}
+                  />
+                </div>
+              )}
+              {content.type === "youtube" && (
+                <YoutubeInput
+                  index={i}
+                  formState={formState}
+                  setFormState={setFormState}
+                  validate={validateYoutube}
+                />
+              )}
+            </div>
+          );
+        })}
 
-      <AddBlockButton formState={formState} setFormState={setFormState} />
+        <AddBlockButton formState={formState} setFormState={setFormState} />
 
-      <div className="flex-1"></div>
-      <div className="pt-9 ">
-        <Label htmlFor="thumb">Thumbnail *</Label>
-        <ImageInput
-          index={-1}
-          formState={formState}
-          setFormState={setFormState}
-          validate={validateImage}
-        />
-      </div>
-    </form>
+        <div className="flex-1"></div>
+        <div className="pt-9 ">
+          <Label htmlFor="thumb">Thumbnail *</Label>
+          <ImageInput
+            index={-1}
+            formState={formState}
+            setFormState={setFormState}
+            validate={validateImage}
+          />
+        </div>
+      </form>
+    </main>
   );
 };
 

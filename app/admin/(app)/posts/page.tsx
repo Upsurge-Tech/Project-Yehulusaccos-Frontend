@@ -35,7 +35,7 @@ const Posts = async ({
   // console.log("articles", articles);
 
   return (
-    <main className="">
+    <main className="py-9">
       <h1 className="text-primary font-bold text-2xl pb-6">Posts</h1>
       <PostsPagination numPages={numPages} page={page} size={size} />
       <Table className="max-h-[25vh] overflow-scroll">
