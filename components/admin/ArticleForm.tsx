@@ -125,6 +125,7 @@ const ArticleForm = ({
       setProgress(1);
       const res = await withUploadedImages(state, appendProgress); //upto 80% progress
       setProgress(80);
+      console.log("withUploadedImages = ", res);
       if ("error" in res) {
         setError(res.error);
         return;
@@ -167,7 +168,7 @@ const ArticleForm = ({
 
   return (
     <main className="">
-      {isLoading && <Progress value={progress} className="w-full h-2" />}
+      {progress > 0 && <Progress value={progress} className="w-full h-2" />}
       <form
         onSubmit={(e) => handleSubmit(e)}
         className="h-full py-9  flex flex-col gap-3"

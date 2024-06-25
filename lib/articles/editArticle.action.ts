@@ -13,7 +13,7 @@ import {
 const removeUnneededImages = async (
   oldArticle: Article,
   article: ArticleFormState
-): Promise<void | { error: string }> => {
+) => {
   const oldSrc: string[] = [
     oldArticle.thumbnail,
     ...oldArticle.contents
@@ -29,7 +29,8 @@ const removeUnneededImages = async (
   ]);
 
   const imagesToRemove = oldSrc.filter((x) => !newSrc.has(x));
-  await removeImages(imagesToRemove);
+  const res = await removeImages(imagesToRemove);
+  if (res) throw new Error(res.error);
 };
 
 export const editArticle = async (
@@ -47,15 +48,20 @@ export const editArticle = async (
     const res1 = await getArticle(articleId, false);
     if ("error" in res1) return res1;
 
-    await Promise.all([
-      db
-        .update(articleTable)
-        .set({ title: article.title, thumbnail: article.thumbnail.src })
-        .where(eq(articleTable.id, articleId)),
-      removeUnneededImages(res1.article, article),
-      db.delete(contentTable).where(eq(contentTable.articleId, articleId)),
-    ]);
-    await insertContents(articleId, article);
+    //to react to client side image related errors before doing anything
+    await removeUnneededImages(res1.article, article),
+      await Promise.all([
+        db
+          .update(articleTable)
+          .set({ title: article.title, thumbnail: article.thumbnail.src })
+          .where(eq(articleTable.id, articleId)),
+        db.delete(contentTable).where(eq(contentTable.articleId, articleId)),
+      ]);
+    //after delete
+    const res2 = await insertContents(articleId, article);
+    if (res2 && "error" in res2) return res2;
+
+    console.log("Successful edit articleId =", articleId);
   } catch (e) {
     if (e instanceof Error) {
       return { error: "Failed to edit article: " + e.message };
@@ -63,5 +69,4 @@ export const editArticle = async (
       return { error: "Failed to edit article." + JSON.stringify(e) };
     }
   }
-  console.log("Successful edit articleId =", articleId);
 };

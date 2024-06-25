@@ -117,10 +117,8 @@ export const withUploadedImages = async (
   //defence zone
   const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string;
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string;
-  const upload_preset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET as string;
   if (!api_key) return { error: "Cloudinary api_key not found" };
   if (!cloudName) return { error: "Cloudinary credentials not found" };
-  if (!upload_preset) return { error: "Cloudinary upload_preset not found" };
 
   if (!state.thumbnail.file && !state.thumbnail.src) {
     return { error: "Thumbnail is required" };
@@ -130,41 +128,41 @@ export const withUploadedImages = async (
     return { error: res.error };
   }
 
-  try {
-    const { signature, timestamp, upload_preset } = res;
-    const srcPromises: (Promise<string> | string)[] = [];
-    const numTasks =
-      state.contents.filter((c) => c.type === "image").length + 1;
+  const { signature, timestamp, upload_preset } = res;
+  const srcPromises: (Promise<string> | string)[] = [];
+  const numTasks = state.contents.filter((c) => c.type === "image").length + 1;
 
-    for (const content of [state.thumbnail, ...state.contents]) {
-      if (content.type === "image") {
-        if (content.file) {
-          srcPromises.push(
-            uploadImage(
-              content.file,
-              {
-                cloudName,
-                api_key,
-                upload_preset,
-                timestamp,
-                signature,
-              },
-              () => appendProgress(80 / numTasks)
-            )
-          );
-        } else if (content.src) {
-          srcPromises.push(content.src);
-          appendProgress(80 / numTasks);
-        } else {
-          return { error: "All images are required" };
-        }
+  for (const content of [state.thumbnail, ...state.contents]) {
+    if (content.type === "image") {
+      if (content.file) {
+        srcPromises.push(
+          uploadImage(
+            content.file,
+            {
+              cloudName,
+              api_key,
+              upload_preset,
+              timestamp,
+              signature,
+            },
+            () => appendProgress(80 / numTasks)
+          )
+        );
+      } else if (content.src) {
+        srcPromises.push(content.src);
+        appendProgress(80 / numTasks);
+      } else {
+        return { error: "All images are required" };
       }
     }
+  }
 
+  try {
     const srcs: string[] = await Promise.all(srcPromises);
 
-    const newContents: FormContent[] = state.contents.map((c, i) =>
-      c.type === "image" ? { ...c, src: srcs[i + 1] } : c
+    let i = 1;
+    const newContents: FormContent[] = state.contents.map((c) =>
+      c.type === "image" ? { ...c, src: srcs[i++] } : c
     );
 
     return {

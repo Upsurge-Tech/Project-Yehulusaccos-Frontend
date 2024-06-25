@@ -38,6 +38,7 @@ export const insertContents = async (
         let alt: string = "";
         if (type === "image") {
           if (!content.src) {
+            console.log(content);
             throw new Error(`Empty image src at ${i + 1}th block`);
           }
           data = content.src;

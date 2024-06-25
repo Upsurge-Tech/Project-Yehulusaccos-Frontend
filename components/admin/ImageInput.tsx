@@ -31,12 +31,11 @@ const ImageInput = ({
     const reader = new FileReader();
     reader.onload = (e) => {
       const localUrl = (e.target?.result as string) || null;
-      const newContent = {
+      const newContent: ImageFormContent = {
         ...content,
+        src: null,
         file,
         localUrl,
-        compressed: false,
-        compressing: false,
         error: "",
       };
       newContent.error = validate(newContent);
