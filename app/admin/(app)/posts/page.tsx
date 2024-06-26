@@ -55,7 +55,7 @@ const Posts = async ({
               <TableCell className="font-medium">
                 {article.langIds.map((lang) => (
                   <h3
-                    className={`flex ${article.langIds.length === 1 ? "" : "border-b"} items-end`}
+                    className={`flex ${article.langIds.length === 1 ? "" : "border-b"}`}
                     key={lang}
                   >
                     <span className="text-xs text-black/70  mr-3">
