@@ -9,9 +9,9 @@ import { Lang, langs } from "@/data-types/Languages";
 import db from "@/db";
 import {
   ArticleContentSQL,
-  ArticleLangSQL,
   ArticleSQL,
   ContentSQL,
+  LangSQL,
   adminTable,
   articleContentTable,
   contentTable,
@@ -146,9 +146,7 @@ const makeExcrept = (data: string): string => {
 };
 
 //res is assumed to be orderd by articleId (reversed), then by contentId
-const validateExtractedArticles = (
-  articles: Article[]
-): { error: string } | void => {
+const errorIfInvalidArticles = (articles: Article[]) => {
   //to prevent unsorted articles
   let lastArticleId = Infinity;
   for (const article of articles) {
@@ -162,15 +160,15 @@ const validateExtractedArticles = (
     const contentIds = new Set<ArticleContent["id"]>();
     for (const content of article.contents) {
       if (contentIds.has(content.id)) {
-        return {
-          error: `Duplicate content id, ${content.id} in article ${article.id}`,
-        };
+        throw new Error(
+          `Duplicate content id, ${content.id} in article ${article.id}`
+        );
       }
     }
   }
 };
 
-interface FlatJoinRes {
+interface FlatArticleContentRes {
   articleId: ArticleSQL["id"];
   thumbnail: ArticleSQL["thumbnail"];
   articleCreatedAt: ArticleSQL["createdAt"];
@@ -180,20 +178,31 @@ interface FlatJoinRes {
   type: ArticleContentSQL["type"];
   lang: ContentSQL["langId"];
 }
-export const extractArticles = (
-  ac: FlatJoinRes[],
-  al: { articleLang: ArticleLangSQL }[]
-): Article[] | { error: string } => {
+interface FlatArticleLangRes {
+  articleId: ArticleSQL["id"];
+  lang: LangSQL["id"];
+}
+export const extractArticles = async (
+  ac: FlatArticleContentRes[],
+  al: FlatArticleLangRes[]
+): Promise<Article[]> => {
   const articleLangsMap: { [key: number]: Lang[] } = {};
-  for (const { articleLang } of al) {
-    const { articleId, langId } = articleLang;
-    articleLangsMap[articleId].push(langId);
+  for (const { lang, articleId } of al) {
+    if (!articleLangsMap[articleId]) articleLangsMap[articleId] = [];
+    articleLangsMap[articleId].push(lang);
   }
 
   const articles: Article[] = [];
 
   let i = 0;
+  console.log("ac length is", ac.length);
+  console.log("ac is", ac);
+  console.log("outer outer - i is", i);
+
   while (i < ac.length) {
+    // await new Promise((r) => setTimeout(r, 1000));
+    console.log("outer- i is", i);
+
     articles.push({
       id: ac[i].articleId,
       thumbnail: ac[i].thumbnail,
@@ -206,42 +215,62 @@ export const extractArticles = (
       excerpt: { en: "", am: "" },
       contents: [],
     });
-  }
 
-  //pause for article
-  const article = articles[articles.length - 1];
+    //pause for article
+    const article = articles[articles.length - 1];
 
-  while (i < ac.length && ac[i].articleId === article.id) {
-    //pause for content with df langs
-    const langToData: { [key in Lang]: string } = { en: "", am: "" };
-    const { type, lang, data, alt, contentId } = ac[i];
-    while (i < ac.length && ac[i].contentId === contentId) {
-      if (type === "title") {
-        article.title[lang] = data;
-      } else if (type === "heading" || type === "paragraph") {
-        langToData[lang] = data;
-        if (!article.excerpt[lang]) article.excerpt[lang] = makeExcrept(data);
-      } else if (type === "image") {
-        article.contents.push({
-          type,
-          src: data,
-          alt: alt || "",
-          id: contentId,
-        });
-      } else if (type === "youtube") {
-        article.contents.push({ type, youtubeId: data, id: contentId });
+    console.log(
+      i < ac.length,
+      ac[i].articleId === article.id,
+      "article id is",
+      article.id
+    );
+    while (i < ac.length && ac[i].articleId === article.id) {
+      // await new Promise((r) => setTimeout(r, 1000));
+      console.log("inner- i is", i);
+      //pause for content with df langs
+      const langToData: { [key in Lang]: string } = { en: "", am: "" };
+      const { type, contentId } = ac[i];
+      while (i < ac.length && ac[i].contentId === contentId) {
+        const { lang, data, alt } = ac[i];
+        // await new Promise((r) => setTimeout(r, 1000));
+        console.log("inner most- i is", i);
+        if (type === "title") {
+          article.title[lang] = data;
+          console.log(
+            "article.title = ",
+            article.title,
+            "lang",
+            lang,
+            "data",
+            data
+          );
+        } else if (type === "heading" || type === "paragraph") {
+          langToData[lang] = data;
+          if (!article.excerpt[lang]) article.excerpt[lang] = makeExcrept(data);
+        } else if (type === "image") {
+          article.contents.push({
+            type,
+            src: data,
+            alt: alt || "",
+            id: contentId,
+          });
+        } else if (type === "youtube") {
+          article.contents.push({ type, youtubeId: data, id: contentId });
+        } else {
+          throw new Error(`Unknown type ${type}`);
+        }
+        i++;
       }
-      i++;
-    }
-    if (type === "heading") {
-      article.contents.push({ type, [type]: langToData, id: contentId });
-    } else if (type === "paragraph") {
-      article.contents.push({ type, paragraph: langToData, id: contentId });
+      if (type === "heading") {
+        article.contents.push({ type, heading: langToData, id: contentId });
+      } else if (type === "paragraph") {
+        article.contents.push({ type, paragraph: langToData, id: contentId });
+      }
     }
   }
 
-  const res = validateExtractedArticles(articles);
-  if (res) return res;
+  errorIfInvalidArticles(articles);
 
   return articles;
 };

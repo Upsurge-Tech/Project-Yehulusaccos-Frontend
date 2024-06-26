@@ -6,7 +6,7 @@ import {
   articleTable,
   contentTable,
 } from "@/db/schema";
-import { asc, eq, sql } from "drizzle-orm";
+import { asc, desc, eq, sql } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
 const getArticle = async (
@@ -16,53 +16,41 @@ const getArticle = async (
   | { article: Article; relatedArticles: Article[] }
   | { error: "Not Found" | string }
 > => {
-  const withLink = db
-    .select()
+  const res = await db
+    .select({
+      articleId: articleTable.id,
+      thumbnail: articleTable.thumbnail,
+      articleCreatedAt: articleTable.createdAt,
+      contentId: contentTable.contentId,
+      data: contentTable.data,
+      alt: contentTable.alt,
+      type: articleContentTable.type,
+      lang: contentTable.langId,
+    })
     .from(articleTable)
     .innerJoin(
       articleContentTable,
-      eq(articleContentTable.articleId, articleTable.id)
+      eq(articleTable.id, articleContentTable.articleId)
     )
-    .as("with_link");
-
-  const withContent = await db
-    .select({
-      article: withLink.article,
-      content: contentTable,
-      articleContent: withLink.article_content,
-    })
-    .from(withLink)
     .innerJoin(
       contentTable,
-      eq(withLink.article_content.id, contentTable.contentId)
+      eq(articleContentTable.id, contentTable.contentId)
     );
 
   const withLang = await db
-    .select({ articleLang: articleLangTable })
-    .from(withLink)
-    .innerJoin(
-      articleLangTable,
-      eq(withLink.article.id, articleLangTable.articleId)
-    );
+    .select({
+      articleId: articleLangTable.articleId,
+      lang: articleLangTable.langId,
+    })
+    .from(articleLangTable)
+    .where(eq(articleLangTable.articleId, id));
 
-  if (withContent.length === 0) {
+  if (res.length === 0) {
     return { error: "Not Found" };
   }
 
-  const result = extractArticles(withContent, withLang);
-  if ("error" in result) {
-    return result;
-  }
-  const article = result[0];
+  const article = (await extractArticles(res, withLang))[0];
 
-  // const res2 = await db.se;
-  /*
-SELECT *
-FROM my_table
-WHERE id <> :given_row_id
-ORDER BY ABS(id - :given_row_id)
-LIMIT 5;
-*/
   let relatedArticles: Article[] = [];
   if (withRelatedArticles) {
     const limited = db
@@ -72,38 +60,34 @@ LIMIT 5;
       .orderBy(sql`ABS(${articleTable.id} - ${id})`)
       .as("limited");
 
-    const withLink = db
-      .select()
+    const res = await db
+      .select({
+        articleId: limited.id,
+        thumbnail: limited.thumbnail,
+        articleCreatedAt: limited.createdAt,
+        contentId: contentTable.contentId,
+        data: contentTable.data,
+        alt: contentTable.alt,
+        type: articleContentTable.type,
+        lang: contentTable.langId,
+      })
       .from(limited)
+      .orderBy(desc(limited.id), asc(contentTable.contentId))
       .innerJoin(
         articleContentTable,
-        eq(articleContentTable.articleId, limited.id)
+        eq(limited.id, articleContentTable.articleId)
       )
-      .orderBy(asc(articleContentTable.id))
-      .as("with_link");
-
-    const withContent = await db
-      .select({
-        article: withLink.limited,
-        content: contentTable,
-        articleContent: withLink.article_content,
-      })
-      .from(withLink)
       .innerJoin(
         contentTable,
-        eq(withLink.article_content.id, contentTable.contentId)
+        eq(articleContentTable.id, contentTable.contentId)
       );
 
-    //risky thing is, articles that dont have contents or langs will be filtered out
     const withLang = await db
-      .select({ articleLang: articleLangTable })
-      .from(limited)
-      .innerJoin(articleLangTable, eq(limited.id, articleLangTable.articleId));
+      .select({ articleId: limited.id, lang: articleLangTable.langId })
+      .from(articleLangTable)
+      .innerJoin(limited, eq(limited.id, articleLangTable.articleId));
 
-    const result = extractArticles(withContent, withLang);
-    if ("error" in result) {
-      return result;
-    }
+    const result = await extractArticles(res, withLang);
     relatedArticles = result.filter((a) => a.id !== id);
   }
 

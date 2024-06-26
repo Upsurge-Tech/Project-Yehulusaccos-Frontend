@@ -26,7 +26,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
   const offset = offsetParam ? parseInt(offsetParam) : 0;
 
   const res = await getArticles({ page, size, offset });
-  if ("error" in res) {
+  if (res && "error" in res) {
     return Response.json(res, { status: 500 });
   } else {
     return Response.json(

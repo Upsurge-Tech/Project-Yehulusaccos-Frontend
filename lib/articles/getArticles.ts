@@ -25,47 +25,40 @@ const getArticles = async ({
       .from(articleTable)
       .limit(size)
       .offset(size * (page - 1) + offset)
-      .orderBy(desc(articleTable.id))
       .as("limited");
 
-    //article--contentId
-    const withLink = db
+    const res = await db
       .select({
-        contentId: articleContentTable.id,
+        articleId: limited.id,
+        thumbnail: limited.thumbnail,
+        articleCreatedAt: limited.createdAt,
+        contentId: contentTable.contentId,
+        data: contentTable.data,
+        alt: contentTable.alt,
         type: articleContentTable.type,
+        lang: contentTable.langId,
       })
       .from(limited)
+      .orderBy(desc(limited.id), asc(contentTable.contentId))
       .innerJoin(
         articleContentTable,
-        eq(articleContentTable.articleId, limited.articleId)
+        eq(limited.id, articleContentTable.articleId)
       )
-      .orderBy(asc(articleContentTable.id))
-      .as("with_link");
-
-    //article--contentId--content
-    const withContent = await db
-      .select({})
-      .from(withLink)
-      .innerJoin(contentTable, eq(withLink.contentId, contentTable.contentId));
-
-    //article--contentId--content
-    //risky thing is, articles that dont have contents or langs will be filtered out
-    const withLang = await db
-      .select({ articleLang: articleLangTable })
-      .from(limited)
       .innerJoin(
-        articleLangTable,
-        eq(limited.articleId, articleLangTable.articleId)
+        contentTable,
+        eq(articleContentTable.id, contentTable.contentId)
       );
+
+    const withLang = await db
+      .select({ articleId: limited.id, lang: articleLangTable.langId })
+      .from(articleLangTable)
+      .innerJoin(limited, eq(limited.id, articleLangTable.articleId));
 
     const res2 = await db.select({ count: count() }).from(articleTable);
     const numPages = Math.ceil(res2[0].count / size);
 
-    // console.log("res is", res);
-
-    const result = extractArticles(withContent, withLang);
-    if ("error" in result) return result;
-    return { articles: result, numPages };
+    const articles = await extractArticles(res, withLang);
+    return { articles, numPages };
   } catch (e) {
     console.error(e);
     if (e instanceof Error) {
