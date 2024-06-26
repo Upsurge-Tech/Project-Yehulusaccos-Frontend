@@ -29,6 +29,8 @@ const getArticle = async (
         lang: contentTable.langId,
       })
       .from(articleTable)
+      .where(eq(articleTable.id, id))
+      .orderBy(asc(contentTable.contentId))
       .innerJoin(
         articleContentTable,
         eq(articleTable.id, articleContentTable.articleId)
@@ -49,6 +51,8 @@ const getArticle = async (
     if (res.length === 0) {
       return { error: "Not Found" };
     }
+    console.log("res", res);
+    console.log("with lang", withLang);
 
     const article = (await extractArticles(res, withLang))[0];
 
@@ -94,6 +98,7 @@ const getArticle = async (
 
     return { article, relatedArticles };
   } catch (e) {
+    console.error(e);
     if (e instanceof Error) {
       return { error: e.message };
     } else {

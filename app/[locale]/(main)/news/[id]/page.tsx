@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 const NewsDetailPage = async ({ params: { locale, id } }: Props) => {
   const res = await getArticle(Number(id), true);
   if ("error" in res) {
+    console.error(res.error);
     notFound();
   }
 

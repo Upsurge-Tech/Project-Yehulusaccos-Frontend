@@ -212,12 +212,18 @@ export const extractArticles = async (
     articleLangsMap[articleId].push(lang);
     articleLangsMap[articleId] = sortLang(articleLangsMap[articleId]);
   }
+  console.log(
+    "articel langs map",
+    articleLangsMap,
+    "article langs",
+    articleLangsMap[4]
+  );
 
   const articles: Article[] = [];
 
   let i = 0;
   console.log("ac length is", ac.length);
-  console.log("ac is", ac);
+  // console.log("ac is", ac);
   console.log("outer outer - i is", i);
 
   while (i < ac.length) {
