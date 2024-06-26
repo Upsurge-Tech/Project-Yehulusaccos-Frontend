@@ -1,10 +1,11 @@
 "use server";
 import { Article, ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
+import { articleTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import getArticle from "./getArticle";
 import {
+  deleteContents,
   errorIfNotLoggedIn,
   insertContents,
   removeImages,
@@ -53,9 +54,10 @@ export const editArticle = async (
       await Promise.all([
         db
           .update(articleTable)
-          .set({ title: article.title, thumbnail: article.thumbnail.src })
+          .set({ thumbnail: article.thumbnail.src })
           .where(eq(articleTable.id, articleId)),
-        db.delete(contentTable).where(eq(contentTable.articleId, articleId)),
+
+        deleteContents(articleId),
       ]);
     //after delete
     const res2 = await insertContents(articleId, article);

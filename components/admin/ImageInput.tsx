@@ -68,49 +68,51 @@ const ImageInput = ({
   };
 
   return (
-    <div className="relative max-w-[200px] border rounded">
-      {content.error && (
-        <p className="text-destructive text-sm">{content.error}</p>
-      )}
-
+    <>
       <Label>
         {index === -1 && "Thumbnail"}
         {index !== -1 && index + 1 + ". Image"}
       </Label>
-      <button
-        className={` ${content.file || content.src ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
-        type="button"
-        onClick={() => cancel()}
-      >
-        <MdOutlineCleaningServices />
-      </button>
+      <div className="relative max-w-[200px] border rounded">
+        {content.error && (
+          <p className="text-destructive text-sm">{content.error}</p>
+        )}
 
-      <label
-        htmlFor={content.elementId}
-        className={`${content.file || content.src ? "hidden" : ""}  p-3 flex gap-2 `}
-      >
-        <FaFileImage className="text-xl text-black/80" />
-        <span>Add Image</span>
-      </label>
+        <button
+          className={` ${content.file || content.src ? "" : "hidden"} absolute right-0 top-0 bg-muted p-1 border `}
+          type="button"
+          onClick={() => cancel()}
+        >
+          <MdOutlineCleaningServices />
+        </button>
 
-      <input
-        ref={ref}
-        id={content.elementId}
-        type="file"
-        accept="image/*"
-        onChange={(e) => onChange(e)}
-        className="w-1 h-1 opacity-0 absolute right-1/2 bottom-0 "
-      />
-      {(content.localUrl || content.src) && (
-        <Image
-          src={content.localUrl || content.src || ""}
-          alt=""
-          width={300}
-          height={300}
-          className="w-full max-h-[200px] object-contain bg-muted"
+        <label
+          htmlFor={content.elementId}
+          className={`${content.file || content.src ? "hidden" : ""}  p-3 flex gap-2 `}
+        >
+          <FaFileImage className="text-xl text-black/80" />
+          <span>Add Image</span>
+        </label>
+
+        <input
+          ref={ref}
+          id={content.elementId}
+          type="file"
+          accept="image/*"
+          onChange={(e) => onChange(e)}
+          className="w-1 h-1 opacity-0 absolute right-1/2 bottom-0 "
         />
-      )}
-    </div>
+        {(content.localUrl || content.src) && (
+          <Image
+            src={content.localUrl || content.src || ""}
+            alt=""
+            width={300}
+            height={300}
+            className="w-full max-h-[200px] object-contain bg-muted"
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default ImageInput;

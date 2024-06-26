@@ -20,7 +20,7 @@ const getArticles = async ({
 }): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
   try {
     //counted articles
-    const limitedArticle = db
+    const limited = db
       .select()
       .from(articleTable)
       .limit(size)
@@ -29,39 +29,33 @@ const getArticles = async ({
       .as("limited");
 
     //article--contentId
-    const articleWithContentId = db
-      .select()
-      .from(limitedArticle)
+    const withLink = db
+      .select({
+        contentId: articleContentTable.id,
+        type: articleContentTable.type,
+      })
+      .from(limited)
       .innerJoin(
         articleContentTable,
-        eq(articleContentTable.articleId, limitedArticle.id)
+        eq(articleContentTable.articleId, limited.articleId)
       )
       .orderBy(asc(articleContentTable.id))
-      .as("with_content_id");
+      .as("with_link");
 
     //article--contentId--content
-    const articleWithContent = await db
-      .select({
-        article: articleWithContentId.limited,
-        content: contentTable,
-      })
-      .from(articleWithContentId)
-      .innerJoin(
-        contentTable,
-        eq(articleWithContentId.article_content.id, contentTable.id)
-      );
+    const withContent = await db
+      .select({})
+      .from(withLink)
+      .innerJoin(contentTable, eq(withLink.contentId, contentTable.contentId));
 
     //article--contentId--content
     //risky thing is, articles that dont have contents or langs will be filtered out
-    const articleWithLang = await db
-      .select({
-        articleId: limitedArticle.id,
-        langId: articleLangTable.langId,
-      })
-      .from(limitedArticle)
+    const withLang = await db
+      .select({ articleLang: articleLangTable })
+      .from(limited)
       .innerJoin(
         articleLangTable,
-        eq(limitedArticle.id, articleLangTable.articleId)
+        eq(limited.articleId, articleLangTable.articleId)
       );
 
     const res2 = await db.select({ count: count() }).from(articleTable);
@@ -69,7 +63,7 @@ const getArticles = async ({
 
     // console.log("res is", res);
 
-    const result = extractArticles(articleWithContent, articleWithLang);
+    const result = extractArticles(withContent, withLang);
     if ("error" in result) return result;
     return { articles: result, numPages };
   } catch (e) {

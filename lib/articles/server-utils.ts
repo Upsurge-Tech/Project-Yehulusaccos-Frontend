@@ -1,7 +1,11 @@
 import { cloudinary } from "@/cloudinary.config";
-import { Article, ArticleContent, ArticleFormState, FormContent } from "@/data-types/Article";
-import { langs } from "@/data-types/Languages";
-import articles from "@/data/articles";
+import {
+  Article,
+  ArticleContent,
+  ArticleFormState,
+  FormContent,
+} from "@/data-types/Article";
+import { Lang, langs } from "@/data-types/Languages";
 import db from "@/db";
 import {
   ArticleContentSQL,
@@ -10,11 +14,11 @@ import {
   ContentSQL,
   adminTable,
   articleContentTable,
-  contentTable
+  contentTable,
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { attachExcrept, getVideoId } from "./utils";
+import { getVideoId } from "./utils";
 
 export const removeImages = async (
   fileUrls: string[]
@@ -44,7 +48,6 @@ const mapToDbContent = (
     const insert: ContentSQL = {
       id: -1,
       data: "",
-      type: content.type,
       contentId: articleContentLinks[i].id,
       langId: "en",
       alt: "",
@@ -89,7 +92,7 @@ export const insertContents = async (
 
     await db
       .insert(articleContentTable)
-      .values(allContents.map(() => ({ articleId })));
+      .values(allContents.map((c) => ({ articleId, type: c.type })));
 
     const articleContentLinks = await db
       .select()
@@ -111,75 +114,135 @@ export const insertContents = async (
   }
 };
 
+export const deleteContents = async (
+  articleId: number
+): Promise<void | { error: string }> => {
+  //cascade delete does not work, not sure why
+  const links = db
+    .select()
+    .from(articleContentTable)
+    .where(eq(articleContentTable.articleId, articleId))
+    .as("links");
 
-//res is orderd by articleId (reversed), then by contentId
-export const extractArticles = (ac: {article:ArticleSQL, content:ContentSQL}[], al:{articleId:ArticleSQL['id'], lang: ArticleLangSQL['langId']}): Article[] | { error: string } => {
-  const articles: Article[] = [];
+  try {
+    await db
+      .with(links)
+      .delete(contentTable)
+      .where(eq(contentTable.contentId, links.id));
 
-  let i = 0 
-  while (i < ac.length){
-      articles.push({
-        ...ac[i].article,
-        createdAt: ac[i].article.createdAt.toLocaleString("en-US", {
-          timeZone: "UTC",
-        }),
-        title: { en: "", am: "" },
-        langIds: [],
-        excerpt: { en: "", am: "" },
-        contents: [],
-      });
+    await db
+      .with(links)
+      .delete(articleContentTable)
+      .where(eq(links.articleId, articleId));
+  } catch (e) {
+    if (e instanceof Error) return { error: e.message };
+    else return { error: "Something went wrong" + JSON.stringify(e) };
+  }
+};
+
+const makeExcrept = (data: string): string => {
+  const maxWords = 7;
+  return data.split(" ").slice(0, maxWords).join(" ");
+};
+
+//res is assumed to be orderd by articleId (reversed), then by contentId
+const validateExtractedArticles = (
+  articles: Article[]
+): { error: string } | void => {
+  //to prevent unsorted articles
+  let lastArticleId = Infinity;
+  for (const article of articles) {
+    if (article.id > lastArticleId) {
+      return {
+        error: `Articles are not ordered by id, id:${article.id} appeard after id:${lastArticleId}`,
+      };
     }
 
-    const article = articles[articles.length - 1];
-    while (i < ac.length && ac[i].article.id === article.id) {
-      let content:ArticleContent
-      const contentId = ac[i].content.id;
-        while (i < ac.length && ac[i].content.id === contentId){
-          if ()
-
-        }
-      
+    //db content with same id but different lang, should be merged in content
+    const contentIds = new Set<ArticleContent["id"]>();
+    for (const content of article.contents) {
+      if (contentIds.has(content.id)) {
+        return {
+          error: `Duplicate content id, ${content.id} in article ${article.id}`,
+        };
+      }
     }
   }
+};
 
-  for (let i = 0; i < res.length; i++) {
-    const { article } = res[i];
+interface FlatJoinRes {
+  articleId: ArticleSQL["id"];
+  thumbnail: ArticleSQL["thumbnail"];
+  articleCreatedAt: ArticleSQL["createdAt"];
+  contentId: ArticleContentSQL["id"];
+  data: ContentSQL["data"];
+  alt: ContentSQL["alt"];
+  type: ArticleContentSQL["type"];
+  lang: ContentSQL["langId"];
+}
+export const extractArticles = (
+  ac: FlatJoinRes[],
+  al: { articleLang: ArticleLangSQL }[]
+): Article[] | { error: string } => {
+  const articleLangsMap: { [key: number]: Lang[] } = {};
+  for (const { articleLang } of al) {
+    const { articleId, langId } = articleLang;
+    articleLangsMap[articleId].push(langId);
+  }
+
+  const articles: Article[] = [];
+
+  let i = 0;
+  while (i < ac.length) {
     articles.push({
-      ...article,
-      createdAt: article.createdAt.toLocaleString("en-Us", {
+      id: ac[i].articleId,
+      thumbnail: ac[i].thumbnail,
+
+      createdAt: ac[i].articleCreatedAt.toLocaleString("en-US", {
         timeZone: "UTC",
       }),
-      excerpt: "",
+      title: { en: "", am: "" },
+      langIds: articleLangsMap[ac[i].articleId],
+      excerpt: { en: "", am: "" },
       contents: [],
     });
+  }
 
-    while (
-      i < res.length &&
-      articles[articles.length - 1].id === res[i].article.id
-    ) {
-      const content = res[i].content;
-      if (!content) break;
+  //pause for article
+  const article = articles[articles.length - 1];
 
-      const { data, alt, id, articleId, type } = content;
-      const lastArticle = articles[articles.length - 1];
-      if (type === "heading") {
-        lastArticle.contents.push({ type, heading: data, id, articleId });
+  while (i < ac.length && ac[i].articleId === article.id) {
+    //pause for content with df langs
+    const langToData: { [key in Lang]: string } = { en: "", am: "" };
+    const { type, lang, data, alt, contentId } = ac[i];
+    while (i < ac.length && ac[i].contentId === contentId) {
+      if (type === "title") {
+        article.title[lang] = data;
+      } else if (type === "heading" || type === "paragraph") {
+        langToData[lang] = data;
+        if (!article.excerpt[lang]) article.excerpt[lang] = makeExcrept(data);
       } else if (type === "image") {
-        const content = { type, src: data, alt: alt || "", id, articleId };
-        lastArticle.contents.push(content);
-      } else if (type === "paragraph") {
-        lastArticle.contents.push({ type, paragraph: data, id, articleId });
+        article.contents.push({
+          type,
+          src: data,
+          alt: alt || "",
+          id: contentId,
+        });
       } else if (type === "youtube") {
-        lastArticle.contents.push({ type, youtubeId: data, id, articleId });
-      } else {
-        return { error: `Unknown type ${type} in article id ${articleId}` };
+        article.contents.push({ type, youtubeId: data, id: contentId });
       }
       i++;
     }
+    if (type === "heading") {
+      article.contents.push({ type, [type]: langToData, id: contentId });
+    } else if (type === "paragraph") {
+      article.contents.push({ type, paragraph: langToData, id: contentId });
+    }
   }
 
-  articles.map(attachExcrept);
-  articles.forEach((a) => a.contents.sort((a, b) => a.id - b.id));
+  const res = validateExtractedArticles(articles);
+  if (res) return res;
+
   return articles;
 };
 

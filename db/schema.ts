@@ -32,6 +32,7 @@ export type ArticleSQL = typeof articleTable.$inferSelect;
 
 export const articleContentTable = mysqlTable("article_content", {
   id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", contentTypeStrings).notNull(),
   articleId: int("article_id")
     .notNull()
     .references(() => articleTable.id, { onDelete: "cascade" }),
@@ -46,14 +47,13 @@ export const contentTable = mysqlTable("content", {
   contentId: int("content_id")
     .notNull()
     .references(() => articleContentTable.id, { onDelete: "cascade" }),
-  type: mysqlEnum("type", contentTypeStrings).notNull(),
   data: text("data").notNull(),
   alt: text("alt"),
 });
 export type ContentSQL = typeof contentTable.$inferSelect;
 
 export const articleLangTable = mysqlTable("article_lang", {
-  langId: varchar("lang_id", { length: 10 })
+  langId: mysqlEnum("lang_id", langs)
     .notNull()
     .references(() => langTable.id, { onDelete: "cascade" }),
 

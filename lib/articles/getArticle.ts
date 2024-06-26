@@ -1,38 +1,55 @@
 import { Article } from "@/data-types/Article";
-import articles from "@/data/articles";
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import {
+  articleContentTable,
+  articleLangTable,
+  articleTable,
+  contentTable,
+} from "@/db/schema";
+import { asc, eq, sql } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
-const getArticle = async (id: number, withRelatedArticles: boolean) => {
-  //not yet connected to new db
-  const article = articles.find((a) => a.id === id);
-  if (!article) {
-    return { error: "Not Found" };
-  } else {
-    return { article, relatedArticles: articles.filter((a) => a.id !== id) };
-  }
-};
-
-const _getArticle = async (
+const getArticle = async (
   id: number,
   withRelatedArticles: boolean
 ): Promise<
   | { article: Article; relatedArticles: Article[] }
   | { error: "Not Found" | string }
 > => {
-  const res = await db
+  const withLink = db
     .select()
     .from(articleTable)
-    .where(eq(articleTable.id, id))
-    .leftJoin(contentTable, eq(articleTable.id, contentTable.articleId));
+    .innerJoin(
+      articleContentTable,
+      eq(articleContentTable.articleId, articleTable.id)
+    )
+    .as("with_link");
 
-  if (res.length === 0) {
+  const withContent = await db
+    .select({
+      article: withLink.article,
+      content: contentTable,
+      articleContent: withLink.article_content,
+    })
+    .from(withLink)
+    .innerJoin(
+      contentTable,
+      eq(withLink.article_content.id, contentTable.contentId)
+    );
+
+  const withLang = await db
+    .select({ articleLang: articleLangTable })
+    .from(withLink)
+    .innerJoin(
+      articleLangTable,
+      eq(withLink.article.id, articleLangTable.articleId)
+    );
+
+  if (withContent.length === 0) {
     return { error: "Not Found" };
   }
 
-  const result = extractArticles(res);
+  const result = extractArticles(withContent, withLang);
   if ("error" in result) {
     return result;
   }
@@ -48,33 +65,42 @@ LIMIT 5;
 */
   let relatedArticles: Article[] = [];
   if (withRelatedArticles) {
-    const limitQuery = db
+    const limited = db
       .select()
       .from(articleTable)
       .limit(4)
       .orderBy(sql`ABS(${articleTable.id} - ${id})`)
-      .as("limit_query");
+      .as("limited");
 
-    const res = await db
+    const withLink = db
+      .select()
+      .from(limited)
+      .innerJoin(
+        articleContentTable,
+        eq(articleContentTable.articleId, limited.id)
+      )
+      .orderBy(asc(articleContentTable.id))
+      .as("with_link");
+
+    const withContent = await db
       .select({
-        article: {
-          id: limitQuery.id,
-          title: limitQuery.title,
-          thumbnail: limitQuery.thumbnail,
-          createdAt: limitQuery.createdAt,
-        },
-        content: {
-          id: contentTable.id,
-          articleId: contentTable.articleId,
-          type: contentTable.type,
-          data: contentTable.data,
-          alt: contentTable.alt,
-        },
+        article: withLink.limited,
+        content: contentTable,
+        articleContent: withLink.article_content,
       })
-      .from(limitQuery)
-      .leftJoin(contentTable, eq(limitQuery.id, contentTable.articleId));
+      .from(withLink)
+      .innerJoin(
+        contentTable,
+        eq(withLink.article_content.id, contentTable.contentId)
+      );
 
-    const result = extractArticles(res);
+    //risky thing is, articles that dont have contents or langs will be filtered out
+    const withLang = await db
+      .select({ articleLang: articleLangTable })
+      .from(limited)
+      .innerJoin(articleLangTable, eq(limited.id, articleLangTable.articleId));
+
+    const result = extractArticles(withContent, withLang);
     if ("error" in result) {
       return result;
     }

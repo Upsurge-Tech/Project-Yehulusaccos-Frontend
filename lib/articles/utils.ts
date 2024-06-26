@@ -1,4 +1,5 @@
-import { Article, ArticleFormState, FormContent } from "@/data-types/Article";
+import { ArticleFormState, FormContent } from "@/data-types/Article";
+import { Lang, langs } from "@/data-types/Languages";
 import { getSignature } from "./getSignature.action";
 
 export const getVideoId = (link: string): string | null => {
@@ -16,28 +17,6 @@ export const getVideoId = (link: string): string | null => {
   }
 };
 
-export const attachExcrept = (article: Article) => {
-  const maxWords = 7;
-  for (const c of article.contents) {
-    if (c.type === "paragraph") {
-      article.excerpt =
-        c.paragraph.split(" ").slice(0, maxWords).join(" ") + "...";
-      return;
-    }
-  }
-
-  for (const c of article.contents) {
-    if (c.type === "heading") {
-      article.excerpt =
-        c.heading.split(" ").slice(0, maxWords).join(" ") + "...";
-      return;
-    }
-  }
-
-  article.excerpt =
-    article.title.split(" ").slice(0, maxWords).join(" ") + "...";
-};
-
 export const replaceContent = (
   state: ArticleFormState,
   content: FormContent,
@@ -48,8 +27,14 @@ export const replaceContent = (
   return { ...state, contents: newContents };
 };
 
+export const pickNonEmptyLang = (option: { [key in Lang]: string }): string => {
+  for (const lang of langs) {
+    if (option[lang]) return option[lang];
+  }
+  return "";
+};
 export const withNulledImages = (state: ArticleFormState): ArticleFormState => {
-  let nearestHeading: string = state.title;
+  let nearestHeading: string = pickNonEmptyLang(state.title.title);
   const copy: ArticleFormState = {
     ...state,
     thumbnail: {
@@ -60,7 +45,7 @@ export const withNulledImages = (state: ArticleFormState): ArticleFormState => {
     },
     contents: state.contents.map((c) => {
       if (c.type === "heading") {
-        nearestHeading = c.heading;
+        nearestHeading = pickNonEmptyLang(c.heading);
       }
       if (c.type === "image") {
         return {
