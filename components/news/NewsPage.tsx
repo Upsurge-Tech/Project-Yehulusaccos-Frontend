@@ -1,21 +1,22 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from "react";
+import FadeIn from "@/components/animation/FadeIn";
+import SlideFrom from "@/components/animation/SlideFrom";
+import TitleFadeIn from "@/components/animation/TitleFadeIn";
 import ArticleCardMain from "@/components/news/ArticleCardMain";
 import ArticleCardSide from "@/components/news/ArticleCardSide";
 import ArticleGrid from "@/components/news/ArticleGrid";
-import Vector from "@/public/Vector.svg";
-import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
-import TitleFadeIn from "@/components/animation/TitleFadeIn";
-import SlideFrom from "@/components/animation/SlideFrom";
-import FadeIn from "@/components/animation/FadeIn";
 import { Article } from "@/data-types/Article";
+import { Lang } from "@/data-types/Languages";
+import Vector from "@/public/Vector.svg";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 interface NewsPageProps {
-    searchParams: {
-      [key: string]: string | string[] | undefined;
-    };
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
 }
 
 const NewsPage: React.FC<NewsPageProps> = ({
@@ -25,9 +26,9 @@ const NewsPage: React.FC<NewsPageProps> = ({
     [key: string]: string | string[] | undefined;
   };
 }) => {
-  const [latestArticles, setLatestArticles] = useState([]);
+  const [latestArticles, setLatestArticles] = useState<Article[]>([]);
   const tnews = useTranslations("News");
-  const locale = useLocale();
+  const locale = useLocale() as Lang;
   const page = 1;
   const offset = 0;
   const pageSize = 3;
@@ -41,7 +42,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
         if (!res.ok) {
           throw new Error("Failed to fetch articles");
         }
-        const data = await res.json();
+        const data = (await res.json()) as { data: Article[] };
         setLatestArticles(data.data);
       } catch (error) {
         console.error(error);
@@ -54,7 +55,6 @@ const NewsPage: React.FC<NewsPageProps> = ({
   const latestArticles2 = latestArticles.slice(1);
   const latestArticle1 = latestArticles[0];
 
-  
   const renderArticle = (article: Article) => {
     const langAvailable = article.langIds.includes(locale);
 
@@ -65,8 +65,10 @@ const NewsPage: React.FC<NewsPageProps> = ({
       title: article.title[contentLocale],
       excerpt: article.excerpt[contentLocale],
       contents: article.contents.map((content) => {
-        if (content.type === "heading") return { ...content, heading: content.heading?.[contentLocale] };
-        if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.[contentLocale] };
+        if (content.type === "heading")
+          return { ...content, heading: content.heading?.[contentLocale] };
+        if (content.type === "paragraph")
+          return { ...content, paragraph: content.paragraph?.[contentLocale] };
         return content;
       }),
     };
@@ -101,7 +103,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
           <FadeIn className="" delay={1.3}>
             <div className="md:w-[80%] mx-auto">
               <div className="p-4 border md:w-[60%] w-[100%] lg:w-[40%]">
-                <ArticleCardMain article={renderArticle(latestArticle1)} />
+                <ArticleCardMain article={latestArticle1} locale={locale} />
               </div>
             </div>
           </FadeIn>
@@ -110,12 +112,12 @@ const NewsPage: React.FC<NewsPageProps> = ({
           <div className="md:w-[70%] lg:w-[60%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
             <SlideFrom from="left" className="">
               <div className=" col-span-1 p-4 border border-black">
-                <ArticleCardMain article={renderArticle(latestArticle1)} />
+                <ArticleCardMain article={latestArticle1} locale={locale} />
               </div>
             </SlideFrom>
             <SlideFrom className="" from="right">
               <div className="col-span-1 p-4 border border-black">
-                <ArticleCardMain article={renderArticle(latestArticles2[0])} />
+                <ArticleCardMain article={latestArticles2[0]} locale={locale} />
               </div>
             </SlideFrom>
           </div>
@@ -125,7 +127,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
             <div className="md:col-span-2 col-span-1 md:p-0 p-4">
               {latestArticle1 && (
                 <SlideFrom from="left" className="">
-                  <ArticleCardMain article={renderArticle(latestArticle1)} />
+                  <ArticleCardMain article={latestArticle1} locale={locale} />
                 </SlideFrom>
               )}
             </div>
@@ -133,7 +135,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
               {latestArticles2 &&
                 latestArticles2.map((article, index) => (
                   <SlideFrom className="" from="right" key={index}>
-                    <ArticleCardSide article={renderArticle(article)} />
+                    <ArticleCardSide article={article} locale={locale} />
                   </SlideFrom>
                 ))}
             </div>

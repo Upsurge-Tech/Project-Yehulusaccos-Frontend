@@ -54,7 +54,7 @@ const Posts = async ({
             <TableRow key={article.id} className="flex flex-col sm:table-row">
               <TableCell className="font-medium">
                 {article.langIds.map((lang) => (
-                  <h3 className="flex border-b items-end">
+                  <h3 className="flex border-b items-end" key={lang}>
                     <span className="text-xs text-black/70  mr-3">
                       {langList.find((l) => l.lang === lang)?.label || lang}:
                     </span>

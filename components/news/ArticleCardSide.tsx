@@ -1,10 +1,19 @@
 import { Article } from "@/data-types/Article";
+import { Lang } from "@/data-types/Languages";
+import { chooseLang } from "@/lib/articles/utils";
 import formateDate from "@/utils/dateFormatter";
 import Image from "next/image";
+import Link from "next/link";
 import { IoIosArrowRoundUp } from "react-icons/io";
-import Link from 'next/link'
 
-const ArticleCardSide = ({ article }: { article: Article }) => {
+const ArticleCardSide = ({
+  article,
+  locale,
+}: {
+  article: Article;
+  locale: Lang;
+}) => {
+  const chosenLang = chooseLang(article.langIds, locale);
   return (
     <div className="flex md:flex-row flex-col gap-x-4">
       <div className="flex-1">
@@ -21,15 +30,15 @@ const ArticleCardSide = ({ article }: { article: Article }) => {
           {formateDate(article.createdAt)}
         </span>
         <div className="flex justify-between items-center gap-x-3">
-        <Link
-          href={`/news/${article.id}`}
-          className="flex justify-between items-center gap-x-3 w-full"
-        >
-          <p className="font-bold">{article.title}</p>
-          <IoIosArrowRoundUp className="text-primary rotate-45" size={40} />
-        </Link>
+          <Link
+            href={`/news/${article.id}`}
+            className="flex justify-between items-center gap-x-3 w-full"
+          >
+            <p className="font-bold">{article.title[chosenLang]}</p>
+            <IoIosArrowRoundUp className="text-primary rotate-45" size={40} />
+          </Link>
         </div>
-        <p>{article.excerpt}</p>
+        <p>{article.excerpt[chosenLang]}</p>
       </div>
     </div>
   );
