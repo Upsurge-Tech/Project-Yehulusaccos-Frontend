@@ -111,12 +111,12 @@ const NewsPage: React.FC<NewsPageProps> = ({
         {latestArticles.length === 2 && (
           <div className="md:w-[70%] lg:w-[60%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
             <SlideFrom from="left" className="">
-              <div className=" col-span-1 p-4 border border-black">
+              <div className=" col-span-1 p-4 border _border-black">
                 <ArticleCardMain article={latestArticle1} locale={locale} />
               </div>
             </SlideFrom>
             <SlideFrom className="" from="right">
-              <div className="col-span-1 p-4 border border-black">
+              <div className="col-span-1 p-4 border _border-black">
                 <ArticleCardMain article={latestArticles2[0]} locale={locale} />
               </div>
             </SlideFrom>
