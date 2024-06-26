@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { langList } from "@/data-types/Languages";
 import getArticles from "@/lib/articles/getArticles";
 import dateFormat from "dateformat";
 import Link from "next/link";
@@ -41,6 +42,7 @@ const Posts = async ({
       <Table className="max-h-[25vh] overflow-scroll">
         <TableHeader>
           <TableRow>
+            <TableHead className="hidden sm:table-cell">Languages</TableHead>
             <TableHead className="hidden sm:table-cell">Title</TableHead>
             <TableHead className="hidden sm:table-cell">
               Date Published
@@ -51,7 +53,17 @@ const Posts = async ({
         <TableBody className="overflow-auto">
           {articles.map((article, i) => (
             <TableRow key={article.id} className="flex flex-col sm:table-row">
-              <TableCell className="font-medium">{article.title}</TableCell>
+              <TableCell className="font-medium">
+                {article.langIds
+                  .map((lang) => langList.find((l) => l.lang === lang)?.label)
+                  .filter((l) => l)
+                  .join(", ")}
+              </TableCell>
+              <TableCell className="font-medium">
+                {article.langIds.map((lang) => (
+                  <h3>{article.title[lang]}</h3>
+                ))}
+              </TableCell>
               <TableCell>
                 {dateFormat(article.createdAt, "dd mmmm, yyyy, h:MM TT")}
               </TableCell>
