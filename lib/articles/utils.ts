@@ -167,3 +167,8 @@ export const withUploadedImages = async (
 export const sortLang = (givenLangs: Lang[]) => {
   return langs.filter((l) => givenLangs.includes(l));
 };
+
+export const chooseLang = (langs: Lang[], local: Lang): Lang => {
+  if (langs.includes(local)) return local;
+  else return langs[0];
+};

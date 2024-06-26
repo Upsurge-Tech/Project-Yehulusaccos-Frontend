@@ -1,13 +1,15 @@
 import { Article } from "@/data-types/Article";
+import { Lang } from "@/data-types/Languages";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import ArticelCard from "./ArticleCard";
 
 interface Props {
   articles: Article[];
+  locale: Lang;
 }
 
-const ArticlesGrid = ({ articles }: Props) => {
+const ArticlesGrid = ({ articles, locale }: Props) => {
   const t = useTranslations("News.SingleNews");
   return (
     <div className="flex flex-col gap-y-10">
@@ -15,7 +17,7 @@ const ArticlesGrid = ({ articles }: Props) => {
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-6 sm:gap-10 2xl:gap-x-20">
         {articles.map((article) => (
           <Link key={article.id} href={`${article.id}`}>
-            <ArticelCard article={article} />
+            <ArticelCard article={article} locale={locale} />
           </Link>
         ))}
         {articles.length === 0 && (

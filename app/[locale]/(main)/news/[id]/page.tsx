@@ -1,16 +1,18 @@
-import ArticlesGrid from "@/components/news/ArticlesGrid";
-import Image from "next/image";
-import Contents from "@/components/news/Contents";
-import getArticle from "@/lib/articles/getArticle";
-import formateDate from "@/utils/dateFormatter";
 import TitleFadeIn from "@/components/animation/TitleFadeIn";
-import { Metadata } from "next";
+import ArticlesGrid from "@/components/news/ArticlesGrid";
+import Contents from "@/components/news/Contents";
 import { Article } from "@/data-types/Article";
-import { notFound } from 'next/navigation';
+import { Lang } from "@/data-types/Languages";
+import getArticle from "@/lib/articles/getArticle";
+import { chooseLang } from "@/lib/articles/utils";
+import formateDate from "@/utils/dateFormatter";
+import { Metadata } from "next";
+import Image from "next/image";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: {
-    locale: string;
+    locale: Lang;
     id: string;
   };
 }
@@ -37,8 +39,10 @@ const NewsDetailPage = async ({ params: { locale, id } }: Props) => {
       title: article.title[contentLocale],
       excerpt: article.excerpt[contentLocale],
       contents: article.contents.map((content) => {
-        if (content.type === "heading") return { ...content, heading: content.heading?.[contentLocale] };
-        if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.[contentLocale] };
+        if (content.type === "heading")
+          return { ...content, heading: content.heading?.[contentLocale] };
+        if (content.type === "paragraph")
+          return { ...content, paragraph: content.paragraph?.[contentLocale] };
         return content;
       }),
     };
@@ -48,6 +52,7 @@ const NewsDetailPage = async ({ params: { locale, id } }: Props) => {
 
   const localizedArticle = renderArticle(article);
   const localizedRelatedArticles = relatedArticles.map(renderArticle);
+  const chosenLang = chooseLang(article.langIds, locale);
 
   return (
     <div className="container my-5 md:my-10 lg:my-16 xl:my-24 flex flex-col items-center w-full overflow-hidden gap-y-10 min-h-screen">
@@ -56,7 +61,7 @@ const NewsDetailPage = async ({ params: { locale, id } }: Props) => {
           {formateDate(article.createdAt)}
         </div>
         <TitleFadeIn
-          title={localizedArticle.title}
+          title={article.title[chosenLang]}
           className="font-semibold text-xl md:text-2xl lg:text-4xl"
         />
         <div className="relative w-full h-[35vh] sm:h-[50vh] xl:h-[80vh]">
@@ -68,9 +73,13 @@ const NewsDetailPage = async ({ params: { locale, id } }: Props) => {
             priority
           />
         </div>
-        <Contents contents={localizedArticle.contents} />
+        <Contents
+          contents={article.contents}
+          langs={article.langIds}
+          locale={locale}
+        />
       </div>
-      <ArticlesGrid articles={localizedRelatedArticles} />
+      <ArticlesGrid articles={relatedArticles} locale={locale} />
     </div>
   );
 };
