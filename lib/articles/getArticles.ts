@@ -23,6 +23,7 @@ const getArticles = async ({
     const limited = db
       .select()
       .from(articleTable)
+      .orderBy(desc(articleTable.id))
       .limit(size)
       .offset(size * (page - 1) + offset)
       .as("limited");
