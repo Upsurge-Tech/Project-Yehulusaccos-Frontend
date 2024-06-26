@@ -5,8 +5,10 @@ import { articleTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import getArticle from "./getArticle";
 import {
+  deleteArticleLangs,
   deleteContents,
   errorIfNotLoggedIn,
+  insertArticleLangs,
   insertContents,
   removeImages,
 } from "./server-utils";
@@ -47,7 +49,7 @@ export const editArticle = async (
   }
   try {
     const res1 = await getArticle(articleId, false);
-    if ("error" in res1) return res1;
+    if ("error" in res1) throw res1.error;
 
     //to react to client side image related errors before doing anything
     await removeUnneededImages(res1.article, article),
@@ -58,10 +60,13 @@ export const editArticle = async (
           .where(eq(articleTable.id, articleId)),
 
         deleteContents(articleId),
+        deleteArticleLangs(articleId),
       ]);
     //after delete
-    const res2 = await insertContents(articleId, article);
-    if (res2 && "error" in res2) return res2;
+    await Promise.all([
+      insertContents(articleId, article),
+      insertArticleLangs(articleId, article.langs),
+    ]);
 
     console.log("Successful edit articleId =", articleId);
   } catch (e) {

@@ -14,6 +14,7 @@ import {
   LangSQL,
   adminTable,
   articleContentTable,
+  articleLangTable,
   contentTable,
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -86,7 +87,7 @@ const mapToDbContent = (
 export const insertContents = async (
   articleId: number,
   article: ArticleFormState
-): Promise<{ error: string } | void> => {
+) => {
   try {
     const allContents: FormContent[] = [article.title, ...article.contents];
 
@@ -115,7 +116,7 @@ export const insertContents = async (
 };
 
 export const deleteContents = async (
-  articleId: number
+  articleId: ArticleSQL["id"]
 ): Promise<void | { error: string }> => {
   //cascade delete does not work, not sure why
   const links = db
@@ -138,6 +139,21 @@ export const deleteContents = async (
     if (e instanceof Error) return { error: e.message };
     else return { error: "Something went wrong" + JSON.stringify(e) };
   }
+};
+
+export const deleteArticleLangs = async (articleId: ArticleSQL["id"]) => {
+  await db
+    .delete(articleLangTable)
+    .where(eq(articleLangTable.articleId, articleId));
+};
+
+export const insertArticleLangs = async (
+  articleId: ArticleSQL["id"],
+  langs: Lang[]
+) => {
+  await db
+    .insert(articleLangTable)
+    .values(langs.map((lang) => ({ articleId, langId: lang })));
 };
 
 const makeExcrept = (data: string): string => {

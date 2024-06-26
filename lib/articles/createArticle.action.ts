@@ -1,8 +1,12 @@
 "use server";
 import { ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
-import { articleLangTable, articleTable } from "@/db/schema";
-import { errorIfNotLoggedIn, insertContents } from "./server-utils";
+import { articleTable } from "@/db/schema";
+import {
+  errorIfNotLoggedIn,
+  insertArticleLangs,
+  insertContents,
+} from "./server-utils";
 
 export const createArticle = async (
   article: ArticleFormState
@@ -28,9 +32,7 @@ export const createArticle = async (
     const res2 = await insertContents(articleId, article);
     if (res2 && res2.error) return res2;
     console.log("inserted contents");
-    const res3 = await db
-      .insert(articleLangTable)
-      .values(article.langs.map((lang) => ({ articleId, langId: lang })));
+    insertArticleLangs(articleId, article.langs);
   } catch (e) {
     console.error(e);
     let errString = "";
