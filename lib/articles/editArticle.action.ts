@@ -70,6 +70,7 @@ export const editArticle = async (
 
     console.log("Successful edit articleId =", articleId);
   } catch (e) {
+    console.error(e);
     if (e instanceof Error) {
       return { error: "Failed to edit article: " + e.message };
     } else {

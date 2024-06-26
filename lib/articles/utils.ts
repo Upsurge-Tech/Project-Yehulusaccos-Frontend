@@ -163,3 +163,7 @@ export const withUploadedImages = async (
     }
   }
 };
+
+export const sortLang = (givenLangs: Lang[]) => {
+  return langs.filter((l) => givenLangs.includes(l));
+};

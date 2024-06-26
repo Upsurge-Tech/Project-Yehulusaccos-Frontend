@@ -17,9 +17,9 @@ import {
   articleLangTable,
   contentTable,
 } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { asc, eq, or } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { getVideoId } from "./utils";
+import { getVideoId, sortLang } from "./utils";
 
 export const removeImages = async (
   fileUrls: string[]
@@ -98,7 +98,15 @@ export const insertContents = async (
     const articleContentLinks = await db
       .select()
       .from(articleContentTable)
+      .orderBy(asc(articleContentTable.id))
       .where(eq(articleContentTable.articleId, articleId));
+
+    if (articleContentLinks.length !== allContents.length) {
+      throw new Error(
+        `Article content links and contents are not equal for
+         ${articleId}, ${articleContentLinks.length} ${allContents.length}`
+      );
+    }
 
     await db.insert(contentTable).values(
       mapToDbContent(allContents, articleContentLinks).map((c) => ({
@@ -115,30 +123,21 @@ export const insertContents = async (
   }
 };
 
-export const deleteContents = async (
-  articleId: ArticleSQL["id"]
-): Promise<void | { error: string }> => {
+export const deleteContents = async (articleId: ArticleSQL["id"]) => {
   //cascade delete does not work, not sure why
-  const links = db
+
+  const res = await db
     .select()
     .from(articleContentTable)
-    .where(eq(articleContentTable.articleId, articleId))
-    .as("links");
+    .where(eq(articleContentTable.articleId, articleId));
 
-  try {
-    await db
-      .with(links)
-      .delete(contentTable)
-      .where(eq(contentTable.contentId, links.id));
+  await db
+    .delete(contentTable)
+    .where(or(...res.map((r) => eq(contentTable.contentId, r.id))));
 
-    await db
-      .with(links)
-      .delete(articleContentTable)
-      .where(eq(links.articleId, articleId));
-  } catch (e) {
-    if (e instanceof Error) return { error: e.message };
-    else return { error: "Something went wrong" + JSON.stringify(e) };
-  }
+  await db
+    .delete(articleContentTable)
+    .where(eq(articleContentTable.articleId, articleId));
 };
 
 export const deleteArticleLangs = async (articleId: ArticleSQL["id"]) => {
@@ -164,12 +163,16 @@ const makeExcrept = (data: string): string => {
 //res is assumed to be orderd by articleId (reversed), then by contentId
 const errorIfInvalidArticles = (articles: Article[]) => {
   //to prevent unsorted articles
+
   let lastArticleId = Infinity;
   for (const article of articles) {
+    if (!article.langIds || article.langIds.length === 0) {
+      throw new Error(`Article ${article.id} has no lang`);
+    }
     if (article.id > lastArticleId) {
-      return {
-        error: `Articles are not ordered by id, id:${article.id} appeard after id:${lastArticleId}`,
-      };
+      throw new Error(
+        `Articles are not ordered by id, id:${article.id} appeard after id:${lastArticleId}`
+      );
     }
 
     //db content with same id but different lang, should be merged in content
@@ -205,7 +208,9 @@ export const extractArticles = async (
   const articleLangsMap: { [key: number]: Lang[] } = {};
   for (const { lang, articleId } of al) {
     if (!articleLangsMap[articleId]) articleLangsMap[articleId] = [];
+    //consistent sorting is nicer
     articleLangsMap[articleId].push(lang);
+    articleLangsMap[articleId] = sortLang(articleLangsMap[articleId]);
   }
 
   const articles: Article[] = [];

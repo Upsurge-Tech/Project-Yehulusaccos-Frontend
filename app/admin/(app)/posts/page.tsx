@@ -42,7 +42,6 @@ const Posts = async ({
       <Table className="max-h-[25vh] overflow-scroll">
         <TableHeader>
           <TableRow>
-            <TableHead className="hidden sm:table-cell">Languages</TableHead>
             <TableHead className="hidden sm:table-cell">Title</TableHead>
             <TableHead className="hidden sm:table-cell">
               Date Published
@@ -54,14 +53,13 @@ const Posts = async ({
           {articles.map((article, i) => (
             <TableRow key={article.id} className="flex flex-col sm:table-row">
               <TableCell className="font-medium">
-                {article.langIds
-                  .map((lang) => langList.find((l) => l.lang === lang)?.label)
-                  .filter((l) => l)
-                  .join(", ")}
-              </TableCell>
-              <TableCell className="font-medium">
                 {article.langIds.map((lang) => (
-                  <h3>{article.title[lang]}</h3>
+                  <h3 className="flex border-b items-end">
+                    <span className="text-xs text-black/70  mr-3">
+                      {langList.find((l) => l.lang === lang)?.label || lang}:
+                    </span>
+                    <span>{article.title[lang]}</span>
+                  </h3>
                 ))}
               </TableCell>
               <TableCell>
