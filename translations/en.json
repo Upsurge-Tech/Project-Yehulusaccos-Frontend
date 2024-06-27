@@ -39,7 +39,7 @@
       "Individuals": "Individuals"
     },
     "OurBelieve": {
-      "Header": "OUR BELIEVE",
+      "Header": "OUR BELIEF",
       "Title": "Our guiding principles",
       "Vision": "Vision",
       "VisionParagraph": "Access to finance for all",
@@ -361,10 +361,10 @@
         "question": "What kind of business ventures and expansions does Yehulu support?",
         "answer": "Yehulu supports various business ventures and expansions including social services, business expansion projects, vehicle purchases, and home purchases. Our loan services are designed to cater to these needs, offering flexible repayment terms and accessible financial support to help businesses and individuals achieve their goals."
       },
-      "Question4":{
-        "id":"4",
-        "question":"Does Yehulu have interest rates?",
-        "answer":"Yes, we offer a variety of loan options with competitive interest rates designed to meet your financial needs. Our team is dedicated to providing flexible terms and personalized service to ensure you find the best loan for your situation. To get more detailed information about our loan amounts and interest rates, we invite you to contact us directly. We will be happy to discuss your specific requirements and provide you with a tailored solution that fits your budget and goals. Please reach out to us at your earliest convenience to set up a consultation. We look forward to assisting you in securing the financing you need."
+      "Question4": {
+        "id": "4",
+        "question": "Does Yehulu have interest rates?",
+        "answer": "Yes, we offer a variety of loan options with competitive interest rates designed to meet your financial needs. Our team is dedicated to providing flexible terms and personalized service to ensure you find the best loan for your situation. To get more detailed information about our loan amounts and interest rates, we invite you to contact us directly. We will be happy to discuss your specific requirements and provide you with a tailored solution that fits your budget and goals. Please reach out to us at your earliest convenience to set up a consultation. We look forward to assisting you in securing the financing you need."
       },
       "Question5": {
         "id": "5",
