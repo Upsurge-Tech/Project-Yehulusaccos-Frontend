@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { langList } from "@/data-types/Languages";
 import getArticles from "@/lib/articles/getArticles";
 import dateFormat from "dateformat";
 import Link from "next/link";
@@ -32,7 +33,7 @@ const Posts = async ({
     throw new Error(res.error);
   }
   const { articles, numPages } = res;
-  // console.log("articles", articles);
+  //
 
   return (
     <main className="py-9">
@@ -51,7 +52,19 @@ const Posts = async ({
         <TableBody className="overflow-auto">
           {articles.map((article, i) => (
             <TableRow key={article.id} className="flex flex-col sm:table-row">
-              <TableCell className="font-medium">{article.title}</TableCell>
+              <TableCell className="font-medium">
+                {article.langIds.map((lang) => (
+                  <h3
+                    className={`flex ${article.langIds.length === 1 ? "" : "border-b"}`}
+                    key={lang}
+                  >
+                    <span className="text-xs text-black/70  mr-3">
+                      {langList.find((l) => l.lang === lang)?.label || lang}:
+                    </span>
+                    <span>{article.title[lang]}</span>
+                  </h3>
+                ))}
+              </TableCell>
               <TableCell>
                 {dateFormat(article.createdAt, "dd mmmm, yyyy, h:MM TT")}
               </TableCell>

@@ -1,10 +1,15 @@
 "use server";
 
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
+import { articleTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import getArticle from "./getArticle";
-import { errorIfNotLoggedIn, removeImages } from "./server-utils";
+import {
+  deleteArticleLangs,
+  deleteContents,
+  errorIfNotLoggedIn,
+  removeImages,
+} from "./server-utils";
 
 const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
   const sessionError = await errorIfNotLoggedIn();
@@ -12,7 +17,7 @@ const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
 
   try {
     const result = await getArticle(id, false);
-    if ("error" in result) return result;
+    if ("error" in result) throw new Error(result.error);
 
     const { article } = result;
     const imageUrls: string[] = [
@@ -21,9 +26,12 @@ const deleteArticle = async (id: number): Promise<{ error: string } | void> => {
         .map((c) => (c.type === "image" ? c.src : ""))
         .filter((src) => src !== ""),
     ];
-    await removeImages(imageUrls);
-    await db.delete(contentTable).where(eq(contentTable.articleId, id));
-    await db.delete(articleTable).where(eq(articleTable.id, id));
+    await Promise.all([
+      removeImages(imageUrls),
+      db.delete(articleTable).where(eq(articleTable.id, id)),
+      deleteContents(id),
+      deleteArticleLangs(id),
+    ]);
   } catch (e) {
     let errString = "";
     if (e instanceof Error) errString = e.message;

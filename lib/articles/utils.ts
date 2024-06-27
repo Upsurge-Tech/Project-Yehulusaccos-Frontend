@@ -1,4 +1,6 @@
-import { Article, ArticleFormState, FormContent } from "@/data-types/Article";
+import { ArticleFormState, FormContent } from "@/data-types/Article";
+import { Lang, langs } from "@/data-types/Languages";
+import { Dispatch, SetStateAction } from "react";
 import { getSignature } from "./getSignature.action";
 
 export const getVideoId = (link: string): string | null => {
@@ -11,31 +13,9 @@ export const getVideoId = (link: string): string | null => {
     const videoId = params.get("v");
     return videoId || null;
   } catch (e) {
-    // console.log(e);
+    //
     return null;
   }
-};
-
-export const attachExcrept = (article: Article) => {
-  const maxWords = 7;
-  for (const c of article.contents) {
-    if (c.type === "paragraph") {
-      article.excerpt =
-        c.paragraph.split(" ").slice(0, maxWords).join(" ") + "...";
-      return;
-    }
-  }
-
-  for (const c of article.contents) {
-    if (c.type === "heading") {
-      article.excerpt =
-        c.heading.split(" ").slice(0, maxWords).join(" ") + "...";
-      return;
-    }
-  }
-
-  article.excerpt =
-    article.title.split(" ").slice(0, maxWords).join(" ") + "...";
 };
 
 export const replaceContent = (
@@ -48,8 +28,14 @@ export const replaceContent = (
   return { ...state, contents: newContents };
 };
 
+export const pickNonEmptyLang = (option: { [key in Lang]: string }): string => {
+  for (const lang of langs) {
+    if (option[lang]) return option[lang];
+  }
+  return "";
+};
 export const withNulledImages = (state: ArticleFormState): ArticleFormState => {
-  let nearestHeading: string = state.title;
+  let nearestHeading: string = pickNonEmptyLang(state.title.title);
   const copy: ArticleFormState = {
     ...state,
     thumbnail: {
@@ -60,7 +46,7 @@ export const withNulledImages = (state: ArticleFormState): ArticleFormState => {
     },
     contents: state.contents.map((c) => {
       if (c.type === "heading") {
-        nearestHeading = c.heading;
+        nearestHeading = pickNonEmptyLang(c.heading);
       }
       if (c.type === "image") {
         return {
@@ -77,6 +63,10 @@ export const withNulledImages = (state: ArticleFormState): ArticleFormState => {
   return copy;
 };
 
+interface CloudinaryResData {
+  error?: { message: string };
+  secure_url: string;
+}
 const uploadImage = async (
   file: File,
   cOptions: {
@@ -86,95 +76,132 @@ const uploadImage = async (
     api_key: string;
     signature: string;
   },
-  onFinish: () => void
+  appendProgressPercent: (percent: number) => void
 ): Promise<string> => {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", cOptions.upload_preset);
+  return await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    let progressPercent = 0;
 
-  console.log("uploading", file.name);
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${cOptions.cloudName}/image/upload?api_key=${cOptions.api_key}&timestamp=${cOptions.timestamp}&upload_preset=${cOptions.upload_preset}&signature=${cOptions.signature}`,
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-  const data = (await res.json()) as {
-    error?: { message: string };
-    secure_url: string;
-  };
-  console.log(data);
-  if (data.error) throw new Error(data.error.message);
-  onFinish();
-  return data.secure_url;
+    xhr.upload.addEventListener("progress", (e) => {
+      const percent = e.loaded / e.total;
+      appendProgressPercent(percent - progressPercent);
+      progressPercent = percent;
+    });
+
+    xhr.addEventListener("error", () => {
+      const data = JSON.parse(xhr.responseText) as CloudinaryResData;
+
+      reject(`Image upload failed: ${data.error}`);
+    });
+
+    xhr.addEventListener("abort", () => {
+      reject(`File upload aborted`);
+    });
+
+    xhr.addEventListener("load", () => {
+      const data = JSON.parse(xhr.responseText) as CloudinaryResData;
+      if (data.error) {
+        reject(`Image upload failed: ${data.error.message}`);
+      } else {
+        resolve(data.secure_url);
+      }
+    });
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", cOptions.upload_preset);
+
+    xhr.open(
+      "POST",
+      `https://api.cloudinary.com/v1_1/${cOptions.cloudName}/image/upload?api_key=${cOptions.api_key}&timestamp=${cOptions.timestamp}&upload_preset=${cOptions.upload_preset}&signature=${cOptions.signature}`,
+      true
+    );
+    xhr.send(formData);
+  });
 };
 
 export const withUploadedImages = async (
   state: ArticleFormState,
-  appendProgress: (progress: number) => void
-): Promise<ArticleFormState | { error: string }> => {
+  setProgress: Dispatch<SetStateAction<number>>
+): Promise<ArticleFormState> => {
   //defence zone
   const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string;
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string;
-  if (!api_key) return { error: "Cloudinary api_key not found" };
-  if (!cloudName) return { error: "Cloudinary credentials not found" };
+  if (!api_key)
+    throw new Error("Something went wrong: Cloudinary api_key not found");
+  if (!cloudName)
+    throw new Error("Something went wrong: Cloudinary coudName not found");
 
   if (!state.thumbnail.file && !state.thumbnail.src) {
-    return { error: "Thumbnail is required" };
+    throw new Error("Thumbnail is required");
   }
   const res = await getSignature();
-  if ("error" in res) {
-    return { error: res.error };
-  }
+  const { signatures, timestamp, upload_presets } = res;
 
-  const { signature, timestamp, upload_preset } = res;
   const srcPromises: (Promise<string> | string)[] = [];
+  const appendProgress = (change: number) =>
+    setProgress((prev) => prev + change);
   const numTasks = state.contents.filter((c) => c.type === "image").length + 1;
+  const singleTaskChange = 80 / numTasks;
 
   for (const content of [state.thumbnail, ...state.contents]) {
-    if (content.type === "image") {
-      if (content.file) {
-        srcPromises.push(
-          uploadImage(
-            content.file,
-            {
-              cloudName,
-              api_key,
-              upload_preset,
-              timestamp,
-              signature,
-            },
-            () => appendProgress(80 / numTasks)
-          )
-        );
-      } else if (content.src) {
-        srcPromises.push(content.src);
-        appendProgress(80 / numTasks);
-      } else {
-        return { error: "All images are required" };
-      }
-    }
-  }
+    if (content.type !== "image") continue;
 
-  try {
-    const srcs: string[] = await Promise.all(srcPromises);
+    if (content.file) {
+      let presetI: number;
+      if (content.file.size < 100 * 1024) presetI = 0;
+      else if (content.file.size < 1000 * 1024) presetI = 1;
+      else presetI = 2;
 
-    let i = 1;
-    const newContents: FormContent[] = state.contents.map((c) =>
-      c.type === "image" ? { ...c, src: srcs[i++] } : c
-    );
+      console.log(
+        "choosing preset",
+        upload_presets[presetI],
+        "for",
+        content.file.size,
+        "bytes",
+        content.file.name
+      );
 
-    return {
-      ...state,
-      thumbnail: { ...state.thumbnail, src: srcs[0] },
-      contents: newContents,
-    };
-  } catch (e) {
-    if (e instanceof Error) {
-      return { error: e.message };
+      const srcPromise = uploadImage(
+        content.file,
+        {
+          cloudName,
+          api_key,
+          upload_preset: upload_presets[presetI],
+          timestamp,
+          signature: signatures[presetI],
+        },
+        (percentChange) => appendProgress(percentChange * singleTaskChange)
+      );
+
+      srcPromises.push(srcPromise);
+    } else if (content.src) {
+      srcPromises.push(content.src);
+      appendProgress(singleTaskChange);
     } else {
-      return { error: "An error occurred: " + JSON.stringify(e) };
+      throw new Error("All images are required");
     }
   }
+
+  const srcs: string[] = await Promise.all(srcPromises);
+
+  let i = 1;
+  const newContents: FormContent[] = state.contents.map((c) =>
+    c.type === "image" ? { ...c, src: srcs[i++] } : c
+  );
+
+  return {
+    ...state,
+    thumbnail: { ...state.thumbnail, src: srcs[0] },
+    contents: newContents,
+  };
+};
+
+export const sortLang = (givenLangs: Lang[]) => {
+  return langs.filter((l) => givenLangs.includes(l));
+};
+
+export const chooseLang = (langs: Lang[], local: Lang): Lang => {
+  if (langs.includes(local)) return local;
+  else return langs[0];
 };

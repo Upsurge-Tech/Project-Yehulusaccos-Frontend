@@ -1,87 +1,108 @@
 import { Article } from "@/data-types/Article";
-import articles from "@/data/articles";
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import {
+  articleContentTable,
+  articleLangTable,
+  articleTable,
+  contentTable,
+} from "@/db/schema";
+import { asc, desc, eq, sql } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
-const getArticle = async (id: number, withRelatedArticles: boolean) => {
-  //not yet connected to new db
-  const article = articles.find((a) => a.id === id);
-  if (!article) {
-    return { error: "Not Found" };
-  } else {
-    return { article, relatedArticles: articles.filter((a) => a.id !== id) };
-  }
-};
-
-const _getArticle = async (
+const getArticle = async (
   id: number,
   withRelatedArticles: boolean
 ): Promise<
   | { article: Article; relatedArticles: Article[] }
   | { error: "Not Found" | string }
 > => {
-  const res = await db
-    .select()
-    .from(articleTable)
-    .where(eq(articleTable.id, id))
-    .leftJoin(contentTable, eq(articleTable.id, contentTable.articleId));
-
-  if (res.length === 0) {
-    return { error: "Not Found" };
-  }
-
-  const result = extractArticles(res);
-  if ("error" in result) {
-    return result;
-  }
-  const article = result[0];
-
-  // const res2 = await db.se;
-  /*
-SELECT *
-FROM my_table
-WHERE id <> :given_row_id
-ORDER BY ABS(id - :given_row_id)
-LIMIT 5;
-*/
-  let relatedArticles: Article[] = [];
-  if (withRelatedArticles) {
-    const limitQuery = db
-      .select()
-      .from(articleTable)
-      .limit(4)
-      .orderBy(sql`ABS(${articleTable.id} - ${id})`)
-      .as("limit_query");
-
+  try {
     const res = await db
       .select({
-        article: {
-          id: limitQuery.id,
-          title: limitQuery.title,
-          thumbnail: limitQuery.thumbnail,
-          createdAt: limitQuery.createdAt,
-        },
-        content: {
-          id: contentTable.id,
-          articleId: contentTable.articleId,
-          type: contentTable.type,
+        articleId: articleTable.id,
+        thumbnail: articleTable.thumbnail,
+        articleCreatedAt: articleTable.createdAt,
+        contentId: contentTable.contentId,
+        data: contentTable.data,
+        alt: contentTable.alt,
+        type: articleContentTable.type,
+        lang: contentTable.langId,
+      })
+      .from(articleTable)
+      .where(eq(articleTable.id, id))
+      .orderBy(asc(contentTable.contentId))
+      .innerJoin(
+        articleContentTable,
+        eq(articleTable.id, articleContentTable.articleId)
+      )
+      .innerJoin(
+        contentTable,
+        eq(articleContentTable.id, contentTable.contentId)
+      );
+
+    const withLang = await db
+      .select({
+        articleId: articleLangTable.articleId,
+        lang: articleLangTable.langId,
+      })
+      .from(articleLangTable)
+      .where(eq(articleLangTable.articleId, id));
+
+    if (res.length === 0) {
+      return { error: "Not Found" };
+    }
+
+    const article = (await extractArticles(res, withLang))[0];
+
+    let relatedArticles: Article[] = [];
+    if (withRelatedArticles) {
+      const limited = db
+        .select()
+        .from(articleTable)
+        .limit(4)
+        .orderBy(sql`ABS(${articleTable.id} - ${id})`)
+        .as("limited");
+
+      const res = await db
+        .select({
+          articleId: limited.id,
+          thumbnail: limited.thumbnail,
+          articleCreatedAt: limited.createdAt,
+          contentId: contentTable.contentId,
           data: contentTable.data,
           alt: contentTable.alt,
-        },
-      })
-      .from(limitQuery)
-      .leftJoin(contentTable, eq(limitQuery.id, contentTable.articleId));
+          type: articleContentTable.type,
+          lang: contentTable.langId,
+        })
+        .from(limited)
+        .orderBy(desc(limited.id), asc(contentTable.contentId))
+        .innerJoin(
+          articleContentTable,
+          eq(limited.id, articleContentTable.articleId)
+        )
+        .innerJoin(
+          contentTable,
+          eq(articleContentTable.id, contentTable.contentId)
+        );
 
-    const result = extractArticles(res);
-    if ("error" in result) {
-      return result;
+      const withLang = await db
+        .select({ articleId: limited.id, lang: articleLangTable.langId })
+        .from(articleLangTable)
+        .innerJoin(limited, eq(limited.id, articleLangTable.articleId));
+
+      const result = await extractArticles(res, withLang);
+      relatedArticles = result.filter((a) => a.id !== id);
     }
-    relatedArticles = result.filter((a) => a.id !== id);
-  }
 
-  return { article, relatedArticles };
+    return { article, relatedArticles };
+  } catch (e) {
+    console.error(e);
+    if (e instanceof Error) {
+      return { error: e.message };
+    } else {
+      return { error: "An error occurred: " + JSON.stringify(e) };
+    }
+  }
 };
 
 export default getArticle;

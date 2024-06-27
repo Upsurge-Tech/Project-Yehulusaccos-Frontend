@@ -1,6 +1,7 @@
 import ArticleForm from "@/components/admin/ArticleForm";
 import { ArticleFormState } from "@/data-types/Article";
 import getArticle from "@/lib/articles/getArticle";
+import { pickNonEmptyLang } from "@/lib/articles/utils";
 
 interface Props {
   params: {
@@ -17,17 +18,17 @@ const EditPost = async ({ params: { id } }: Props) => {
   const getRandomId = () => `${Math.floor(Math.random() * 1000000)}`;
 
   const formState: ArticleFormState = {
-    title: article.title,
+    langs: article.langIds,
+    title: { type: "title", title: article.title, elementId: "title" },
     thumbnail: {
       localUrl: null,
       elementId: "thumbnail",
       type: "image",
       file: null,
       src: article.thumbnail,
-      alt: article.title,
+      alt: pickNonEmptyLang(article.title),
       error: "",
     },
-    unknown: "",
     contents: article.contents.map((c, i) => {
       if (c.type === "heading") {
         return {

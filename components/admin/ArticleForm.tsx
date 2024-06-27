@@ -81,24 +81,16 @@ const ArticleForm = ({
     else return "";
   };
 
-  const appendProgress = (percent: number) => {
-    setProgress((prev) => prev + percent);
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     let state: ArticleFormState = formState;
 
-    //ensure required* and other unresolved errors
     if (validateImage(state.thumbnail)) {
+      setFormState((s) => ({
+        ...s,
+        thumbnail: { ...s.thumbnail, error: "Can not be empty" },
+      }));
       document.getElementById(state.thumbnail.elementId)?.focus();
-      setFormState({
-        ...formState,
-        thumbnail: {
-          ...formState.thumbnail,
-          error: validateImage(state.thumbnail),
-        },
-      });
       return;
     }
 
@@ -123,44 +115,37 @@ const ArticleForm = ({
     setError("");
     try {
       setProgress(1);
-      const res = await withUploadedImages(state, appendProgress); //upto 80% progress
-      setProgress(80);
-      console.log("withUploadedImages = ", res);
-      if ("error" in res) {
-        setError(res.error);
-        return;
-      }
+      const res = await withUploadedImages(state, setProgress); //upto 80% progress
 
       state = res;
       state = withNulledImages(state);
-      console.log("submitting", state);
+
       if (isEdit) {
-        console.log("sending to backend");
         const res = await editArticle(articleId as number, state);
-        console.log("finished");
+
         if (!res) {
           setProgress(100);
           router.push("/admin/posts");
           router.refresh();
         } else {
           setError(res.error);
-          console.log("Friendly error", res.error);
+          console.error(res.error);
         }
       } else {
         const res = await createArticle(state);
         if (typeof res === "number") {
-          console.log("Article saved with id", res);
           setProgress(100);
           router.push("/admin/posts");
           router.refresh();
         } else {
           setError(res.error);
-          console.log("Friendly error", res.error);
+          console.error(res.error);
         }
       }
     } catch (e) {
-      setError("Something went wrong, Please try again later");
-      console.log("Not friendly error", e);
+      console.error("in article form catch", e);
+      if (e instanceof Error) setError(e.message);
+      else setError(`Something went wrong: ${e}`);
     } finally {
       setProgress(0);
     }

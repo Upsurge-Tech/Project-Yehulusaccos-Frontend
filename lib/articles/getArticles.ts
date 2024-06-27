@@ -1,8 +1,12 @@
 import { Article } from "@/data-types/Article";
-import articles from "@/data/articles";
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
-import { count, desc, eq } from "drizzle-orm";
+import {
+  articleContentTable,
+  articleLangTable,
+  articleTable,
+  contentTable,
+} from "@/db/schema";
+import { asc, count, desc, eq } from "drizzle-orm";
 import { extractArticles } from "./server-utils";
 
 const getArticles = async ({
@@ -14,56 +18,48 @@ const getArticles = async ({
   size: number;
   offset: number;
 }): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
-  //not yet connected to new db
-  //pagination logic is also not yet implemented, no problem, only focus on correctly diplaying the articles
-  return { articles, numPages: 1 };
-};
-
-const _getArticles = async ({
-  page,
-  size,
-  offset,
-}: {
-  page: number;
-  size: number;
-  offset: number;
-}): Promise<{ articles: Article[]; numPages: number } | { error: string }> => {
   try {
-    const limitQuery = db
+    //counted articles
+    const limited = db
       .select()
       .from(articleTable)
+      .orderBy(desc(articleTable.id))
       .limit(size)
       .offset(size * (page - 1) + offset)
-      .orderBy(desc(articleTable.id))
-      .as("limit_query");
+      .as("limited");
 
     const res = await db
       .select({
-        article: {
-          id: limitQuery.id,
-          title: limitQuery.title,
-          thumbnail: limitQuery.thumbnail,
-          createdAt: limitQuery.createdAt,
-        },
-        content: {
-          id: contentTable.id,
-          articleId: contentTable.articleId,
-          type: contentTable.type,
-          data: contentTable.data,
-          alt: contentTable.alt,
-        },
+        articleId: limited.id,
+        thumbnail: limited.thumbnail,
+        articleCreatedAt: limited.createdAt,
+        contentId: contentTable.contentId,
+        data: contentTable.data,
+        alt: contentTable.alt,
+        type: articleContentTable.type,
+        lang: contentTable.langId,
       })
-      .from(limitQuery)
-      .leftJoin(contentTable, eq(limitQuery.id, contentTable.articleId));
+      .from(limited)
+      .orderBy(desc(limited.id), asc(contentTable.contentId))
+      .innerJoin(
+        articleContentTable,
+        eq(limited.id, articleContentTable.articleId)
+      )
+      .innerJoin(
+        contentTable,
+        eq(articleContentTable.id, contentTable.contentId)
+      );
+
+    const withLang = await db
+      .select({ articleId: limited.id, lang: articleLangTable.langId })
+      .from(articleLangTable)
+      .innerJoin(limited, eq(limited.id, articleLangTable.articleId));
 
     const res2 = await db.select({ count: count() }).from(articleTable);
     const numPages = Math.ceil(res2[0].count / size);
 
-    // console.log("res is", res);
-
-    const result = extractArticles(res);
-    if ("error" in result) return result;
-    return { articles: result, numPages };
+    const articles = await extractArticles(res, withLang);
+    return { articles, numPages };
   } catch (e) {
     console.error(e);
     if (e instanceof Error) {

@@ -6,7 +6,6 @@ export const contentTypeStrings = [
   "image",
   "youtube",
   "title",
-  "excrept",
 ] as const;
 
 export interface HeadingContent {

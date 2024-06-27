@@ -1,13 +1,13 @@
 "use client";
 
 import { Article } from "@/data-types/Article";
+import { Lang } from "@/data-types/Languages";
+import { useLocale } from "next-intl";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import ArticleCardMain from "./ArticleCardMain";
-import Pagination from "./PaginationControls";
 import Spinner from "../contact/Spinner";
 import ArticleCard from "./ArticleCard";
-import Link from "next/link";
-import { useLocale } from "next-intl";
+import Pagination from "./PaginationControls";
 
 type GetArticlesResponse =
   | {
@@ -23,7 +23,7 @@ const ArticleGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
   const offset = 3;
-  const locale = useLocale();
+  const locale = useLocale() as Lang;
 
   useEffect(() => {
     const fetchArticles = async (page: number) => {
@@ -60,8 +60,10 @@ const ArticleGrid = () => {
       title: article.title[contentLocale],
       excerpt: article.excerpt[contentLocale],
       contents: article.contents.map((content) => {
-        if (content.type === "heading") return { ...content, heading: content.heading?.[contentLocale] };
-        if (content.type === "paragraph") return { ...content, paragraph: content.paragraph?.[contentLocale] };
+        if (content.type === "heading")
+          return { ...content, heading: content.heading?.[contentLocale] };
+        if (content.type === "paragraph")
+          return { ...content, paragraph: content.paragraph?.[contentLocale] };
         return content;
       }),
     };
@@ -80,7 +82,11 @@ const ArticleGrid = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
             {articles.map((article) => (
               <Link href={`/news/${article.id}`} key={article.id}>
-                <ArticleCard key={article.id} article={renderArticle(article)} />
+                <ArticleCard
+                  key={article.id}
+                  article={article}
+                  locale={locale}
+                />
               </Link>
             ))}
           </div>

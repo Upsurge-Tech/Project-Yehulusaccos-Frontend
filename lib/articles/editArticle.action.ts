@@ -1,11 +1,15 @@
 "use server";
 import { Article, ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
-import { articleTable, contentTable } from "@/db/schema";
+import { articleTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import getArticle from "./getArticle";
 import {
+  deleteArticleLangs,
+  deleteContents,
+  errorIfBadArticle,
   errorIfNotLoggedIn,
+  insertArticleLangs,
   insertContents,
   removeImages,
 } from "./server-utils";
@@ -39,30 +43,31 @@ export const editArticle = async (
 ): Promise<{ error: string } | void> => {
   const sessionError = await errorIfNotLoggedIn();
   if (sessionError) return sessionError;
-  console.log("starting editing article" + article.title);
 
-  if (!article.thumbnail.src) {
-    return { error: "Thumbnail is required" };
-  }
   try {
+    errorIfBadArticle(article);
+    if (!article.thumbnail.src) throw new Error("Thumbnail is required");
     const res1 = await getArticle(articleId, false);
-    if ("error" in res1) return res1;
+    if ("error" in res1) throw res1.error;
 
     //to react to client side image related errors before doing anything
     await removeUnneededImages(res1.article, article),
       await Promise.all([
         db
           .update(articleTable)
-          .set({ title: article.title, thumbnail: article.thumbnail.src })
+          .set({ thumbnail: article.thumbnail.src })
           .where(eq(articleTable.id, articleId)),
-        db.delete(contentTable).where(eq(contentTable.articleId, articleId)),
+
+        deleteContents(articleId),
+        deleteArticleLangs(articleId),
       ]);
     //after delete
-    const res2 = await insertContents(articleId, article);
-    if (res2 && "error" in res2) return res2;
-
-    console.log("Successful edit articleId =", articleId);
+    await Promise.all([
+      insertContents(articleId, article),
+      insertArticleLangs(articleId, article.langs),
+    ]);
   } catch (e) {
+    console.error(e);
     if (e instanceof Error) {
       return { error: "Failed to edit article: " + e.message };
     } else {
