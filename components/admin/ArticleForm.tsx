@@ -119,8 +119,7 @@ const ArticleForm = ({
     setError("");
     try {
       setProgress(1);
-      const res = await withUploadedImages(state, appendProgress); //upto 80% progress
-      setProgress(80);
+      const res = await withUploadedImages(state, setProgress); //upto 80% progress
       console.log("withUploadedImages = ", res);
       if ("error" in res) {
         setError(res.error);
