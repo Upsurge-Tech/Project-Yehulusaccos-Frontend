@@ -12,6 +12,7 @@ import Vector from "@/public/Vector.svg";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Spinner from "../Spinner";
 
 interface NewsPageProps {
   searchParams: {
@@ -27,6 +28,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
   };
 }) => {
   const [latestArticles, setLatestArticles] = useState<Article[]>([]);
+  const [loadingLatest, setLoadingLatest] = useState<boolean>(true);
   const tnews = useTranslations("News");
   const locale = useLocale() as Lang;
   const page = 1;
@@ -35,6 +37,7 @@ const NewsPage: React.FC<NewsPageProps> = ({
 
   useEffect(() => {
     const fetchLatestArticles = async () => {
+      setLoadingLatest(true);
       try {
         const res = await fetch(
           `/api/articles?page=${page}&size=${pageSize}&offset=${offset}`
@@ -46,6 +49,8 @@ const NewsPage: React.FC<NewsPageProps> = ({
         setLatestArticles(data.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoadingLatest(false);
       }
     };
 
@@ -94,7 +99,13 @@ const NewsPage: React.FC<NewsPageProps> = ({
             />
           </div>
         </div>
-        {latestArticles.length === 0 && (
+        {loadingLatest && (
+          <div className="flex justify-center">
+            <Spinner spin={loadingLatest} />
+          </div>
+        )}
+
+        {latestArticles.length === 0 && !loadingLatest && (
           <p className="text-center text-xl text-gray-700 font-semibold">
             {tnews("NoNews")}
           </p>
