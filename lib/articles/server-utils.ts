@@ -157,7 +157,7 @@ export const insertArticleLangs = async (
 
 const makeExcrept = (data: string): string => {
   const maxWords = 7;
-  return data.split(" ").slice(0, maxWords).join(" ");
+  return data.split(" ").slice(0, maxWords).join(" ") + "...";
 };
 
 //res is assumed to be orderd by articleId (reversed), then by contentId
@@ -223,11 +223,7 @@ export const extractArticles = async (
 
   let i = 0;
 
-  //
-
   while (i < ac.length) {
-    // await new Promise((r) => setTimeout(r, 1000));
-
     articles.push({
       id: ac[i].articleId,
       thumbnail: ac[i].thumbnail,
@@ -241,24 +237,14 @@ export const extractArticles = async (
       contents: [],
     });
 
-    //pause for article
     const article = articles[articles.length - 1];
 
-    console.log(
-      i < ac.length,
-      ac[i].articleId === article.id,
-      "article id is",
-      article.id
-    );
     while (i < ac.length && ac[i].articleId === article.id) {
-      // await new Promise((r) => setTimeout(r, 1000));
-
       //pause for content with df langs
       const langToData: { [key in Lang]: string } = { en: "", am: "" };
       const { type, contentId } = ac[i];
       while (i < ac.length && ac[i].contentId === contentId) {
         const { lang, data, alt } = ac[i];
-        // await new Promise((r) => setTimeout(r, 1000));
 
         if (type === "title") {
           article.title[lang] = data;
