@@ -81,10 +81,6 @@ const ArticleForm = ({
     else return "";
   };
 
-  const appendProgress = (percent: number) => {
-    setProgress((prev) => prev + percent);
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     let state: ArticleFormState = formState;
@@ -121,11 +117,6 @@ const ArticleForm = ({
       setProgress(1);
       const res = await withUploadedImages(state, setProgress); //upto 80% progress
       console.log("withUploadedImages = ", res);
-      if ("error" in res) {
-        setError(res.error);
-        return;
-      }
-
       state = res;
       state = withNulledImages(state);
       console.log("submitting", state);
@@ -154,9 +145,11 @@ const ArticleForm = ({
         }
       }
     } catch (e) {
-      setError("Something went wrong, Please try again later");
-      console.log("Not friendly error", e);
+      console.error("in article form catch", e);
+      if (e instanceof Error) setError(e.message);
+      else setError(`Something went wrong: ${e}`);
     } finally {
+      console.log("in set progress");
       setProgress(0);
     }
   };

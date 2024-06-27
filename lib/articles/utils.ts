@@ -78,7 +78,7 @@ const uploadImage = async (
   },
   appendProgressPercent: (percent: number) => void
 ): Promise<string> => {
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     let progressPercent = 0;
 
@@ -87,19 +87,28 @@ const uploadImage = async (
       appendProgressPercent(percent - progressPercent);
       progressPercent = percent;
     });
-    xhr.addEventListener("load", () => {
-      const data = JSON.parse(xhr.responseText) as CloudinaryResData;
-      resolve(data.secure_url);
-    });
+
     xhr.addEventListener("error", () => {
       const data = JSON.parse(xhr.responseText) as CloudinaryResData;
-      console.log();
-      reject(new Error(`Image upload failed: ${data.error}`));
+      console.log("here in error");
+      reject(`Image upload failed: ${data.error}`);
     });
 
-    xhr.addEventListener("abort", () =>
-      reject(new Error("File upload aborted"))
-    );
+    xhr.addEventListener("abort", () => {
+      console.log("here in abort");
+      reject(`File upload aborted`);
+    });
+
+    xhr.addEventListener("load", () => {
+      const data = JSON.parse(xhr.responseText) as CloudinaryResData;
+      if (data.error) {
+        console.log("here in load error");
+        reject(`Image upload failed: ${data.error.message}`);
+      } else {
+        console.log("here in load");
+        resolve(data.secure_url);
+      }
+    });
 
     const formData = new FormData();
     formData.append("file", file);
@@ -117,22 +126,21 @@ const uploadImage = async (
 export const withUploadedImages = async (
   state: ArticleFormState,
   setProgress: Dispatch<SetStateAction<number>>
-): Promise<ArticleFormState | { error: string }> => {
+): Promise<ArticleFormState> => {
   //defence zone
   const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string;
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string;
-  if (!api_key) return { error: "Cloudinary api_key not found" };
-  if (!cloudName) return { error: "Cloudinary credentials not found" };
+  if (!api_key)
+    throw new Error("Something went wrong: Cloudinary api_key not found");
+  if (!cloudName)
+    throw new Error("Something went wrong: Cloudinary coudName not found");
 
   if (!state.thumbnail.file && !state.thumbnail.src) {
-    return { error: "Thumbnail is required" };
+    throw new Error("Thumbnail is required");
   }
   const res = await getSignature();
-  if ("error" in res) {
-    return { error: res.error };
-  }
+  const { signatures, timestamp, upload_presets } = res;
 
-  const { signature, timestamp, upload_preset } = res;
   const srcPromises: (Promise<string> | string)[] = [];
   const appendProgress = (change: number) =>
     setProgress((prev) => prev + change);
@@ -143,14 +151,28 @@ export const withUploadedImages = async (
     if (content.type !== "image") continue;
 
     if (content.file) {
+      let presetI: number;
+      if (content.file.size < 100 * 1024) presetI = 0;
+      else if (content.file.size < 1000 * 1024) presetI = 1;
+      else presetI = 2;
+
+      console.log(
+        "choosing preset",
+        upload_presets[presetI],
+        "for",
+        content.file.size,
+        "bytes",
+        content.file.name
+      );
+
       const srcPromise = uploadImage(
         content.file,
         {
           cloudName,
           api_key,
-          upload_preset,
+          upload_preset: upload_presets[presetI],
           timestamp,
-          signature,
+          signature: signatures[presetI],
         },
         (percentChange) => appendProgress(percentChange * singleTaskChange)
       );
@@ -160,30 +182,22 @@ export const withUploadedImages = async (
       srcPromises.push(content.src);
       appendProgress(singleTaskChange);
     } else {
-      return { error: "All images are required" };
+      throw new Error("All images are required");
     }
   }
 
-  try {
-    const srcs: string[] = await Promise.all(srcPromises);
+  const srcs: string[] = await Promise.all(srcPromises);
 
-    let i = 1;
-    const newContents: FormContent[] = state.contents.map((c) =>
-      c.type === "image" ? { ...c, src: srcs[i++] } : c
-    );
+  let i = 1;
+  const newContents: FormContent[] = state.contents.map((c) =>
+    c.type === "image" ? { ...c, src: srcs[i++] } : c
+  );
 
-    return {
-      ...state,
-      thumbnail: { ...state.thumbnail, src: srcs[0] },
-      contents: newContents,
-    };
-  } catch (e) {
-    if (e instanceof Error) {
-      return { error: e.message };
-    } else {
-      return { error: "An error occurred: " + JSON.stringify(e) };
-    }
-  }
+  return {
+    ...state,
+    thumbnail: { ...state.thumbnail, src: srcs[0] },
+    contents: newContents,
+  };
 };
 
 export const sortLang = (givenLangs: Lang[]) => {
