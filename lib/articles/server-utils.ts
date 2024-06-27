@@ -323,3 +323,32 @@ export const errorIfNotLoggedIn = async (): Promise<{
   }
   return;
 };
+
+export const errorIfBadArticle = (article: ArticleFormState) => {
+  if (article.langs.length === 0) throw new Error("No langs selected");
+  if (!article.thumbnail.src) throw new Error("Thumbnail is required");
+  //check lang not empty
+  for (const content of [article.title, ...article.contents]) {
+    const t = content.type;
+    let langMap: { [key in Lang]: string };
+    if (t === "heading") langMap = content.heading;
+    else if (t === "paragraph") langMap = content.paragraph;
+    else if (t === "title") langMap = content.title;
+    else {
+      continue;
+    }
+    for (const lang of article.langs) {
+      if (!langMap[lang]) throw new Error(`Empty ${t} in ${lang}`);
+    }
+  }
+
+  for (let i = 0; i < article.contents.length; i++) {
+    const content = article.contents[i];
+    if (content.type === "youtube") {
+      if (!content.youtubeLink)
+        throw new Error(`Empty youtube link at ${i + 1}th block`);
+    } else if (content.type === "image") {
+      if (!content.src) throw new Error(`Empty image at ${i + 1}th block`);
+    }
+  }
+};

@@ -3,6 +3,7 @@ import { ArticleFormState } from "@/data-types/Article";
 import db from "@/db";
 import { articleTable } from "@/db/schema";
 import {
+  errorIfBadArticle,
   errorIfNotLoggedIn,
   insertArticleLangs,
   insertContents,
@@ -17,11 +18,11 @@ export const createArticle = async (
     return sessionError;
   }
 
-  if (!article.thumbnail.src) {
-    return { error: "Thumbnail is required" };
-  }
   let articleId: number;
   try {
+    errorIfBadArticle(article);
+    if (!article.thumbnail.src) throw new Error("Thumbnail is required");
+
     const res = await db.insert(articleTable).values({
       thumbnail: article.thumbnail.src,
     });

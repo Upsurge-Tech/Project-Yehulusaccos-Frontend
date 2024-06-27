@@ -7,6 +7,7 @@ import getArticle from "./getArticle";
 import {
   deleteArticleLangs,
   deleteContents,
+  errorIfBadArticle,
   errorIfNotLoggedIn,
   insertArticleLangs,
   insertContents,
@@ -43,10 +44,9 @@ export const editArticle = async (
   const sessionError = await errorIfNotLoggedIn();
   if (sessionError) return sessionError;
 
-  if (!article.thumbnail.src) {
-    return { error: "Thumbnail is required" };
-  }
   try {
+    errorIfBadArticle(article);
+    if (!article.thumbnail.src) throw new Error("Thumbnail is required");
     const res1 = await getArticle(articleId, false);
     if ("error" in res1) throw res1.error;
 
