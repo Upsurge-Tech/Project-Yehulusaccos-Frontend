@@ -10,7 +10,6 @@ const authOptions: AuthOptions = {
   },
   callbacks: {
     session: async ({ session, token }) => {
-      console.log("token is", token);
       if (session?.user) {
         if (typeof token.uid !== "number") {
           throw new Error(
@@ -18,20 +17,12 @@ const authOptions: AuthOptions = {
           );
         }
         session.user.id = token.uid;
-      } else {
-        console.log("skipping adding id to session", session, token);
       }
-      console.log("session", session);
       return session;
     },
     jwt: async ({ user, token }) => {
-      console.log("user is", user);
       if (user && typeof user.id === "number") {
-        console.log("id is ", user.id);
         token.uid = user.id;
-      }
-      if (!user || !user.id) {
-        console.log("skipping token formation user:", user);
       }
 
       return token;
@@ -48,8 +39,6 @@ const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("credentials", credentials);
-
         if (!credentials) {
           return null;
         }

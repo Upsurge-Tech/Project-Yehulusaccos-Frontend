@@ -51,8 +51,6 @@ const getArticle = async (
     if (res.length === 0) {
       return { error: "Not Found" };
     }
-    console.log("res", res);
-    console.log("with lang", withLang);
 
     const article = (await extractArticles(res, withLang))[0];
 

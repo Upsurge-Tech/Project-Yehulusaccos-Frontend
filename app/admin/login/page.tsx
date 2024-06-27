@@ -10,7 +10,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
-console.log("here");
 const Login = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -28,16 +27,17 @@ const Login = () => {
         ...formState,
         redirect: false,
       })) as { status: number; error?: string };
-      console.log("res", res);
+
       if (res.error) {
         const errorString =
           res.error === "CredentialsSignin" ? "Invalid Credentials" : res.error;
-        console.log("errorString", errorString);
+        console.error("errorString", errorString);
         setError(errorString);
       } else {
         router.push("/admin/posts");
       }
     } catch (e) {
+      console.error(e);
       if (e instanceof Error) {
         setError(e.message);
       } else {

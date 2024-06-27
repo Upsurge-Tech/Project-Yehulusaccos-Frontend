@@ -22,7 +22,6 @@ const TitleInput = ({
             required
             value={content.title[lang]}
             onChange={(e) => {
-              console.log();
               setFormState((s) => ({
                 ...s,
                 title: {

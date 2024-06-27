@@ -116,32 +116,30 @@ const ArticleForm = ({
     try {
       setProgress(1);
       const res = await withUploadedImages(state, setProgress); //upto 80% progress
-      console.log("withUploadedImages = ", res);
+
       state = res;
       state = withNulledImages(state);
-      console.log("submitting", state);
+
       if (isEdit) {
-        console.log("sending to backend");
         const res = await editArticle(articleId as number, state);
-        console.log("finished");
+
         if (!res) {
           setProgress(100);
           router.push("/admin/posts");
           router.refresh();
         } else {
           setError(res.error);
-          console.log("Friendly error", res.error);
+          console.error(res.error);
         }
       } else {
         const res = await createArticle(state);
         if (typeof res === "number") {
-          console.log("Article saved with id", res);
           setProgress(100);
           router.push("/admin/posts");
           router.refresh();
         } else {
           setError(res.error);
-          console.log("Friendly error", res.error);
+          console.error(res.error);
         }
       }
     } catch (e) {
@@ -149,7 +147,6 @@ const ArticleForm = ({
       if (e instanceof Error) setError(e.message);
       else setError(`Something went wrong: ${e}`);
     } finally {
-      console.log("in set progress");
       setProgress(0);
     }
   };

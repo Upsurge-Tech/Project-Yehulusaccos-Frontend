@@ -13,7 +13,7 @@ export const getVideoId = (link: string): string | null => {
     const videoId = params.get("v");
     return videoId || null;
   } catch (e) {
-    // console.log(e);
+    //
     return null;
   }
 };
@@ -90,22 +90,19 @@ const uploadImage = async (
 
     xhr.addEventListener("error", () => {
       const data = JSON.parse(xhr.responseText) as CloudinaryResData;
-      console.log("here in error");
+
       reject(`Image upload failed: ${data.error}`);
     });
 
     xhr.addEventListener("abort", () => {
-      console.log("here in abort");
       reject(`File upload aborted`);
     });
 
     xhr.addEventListener("load", () => {
       const data = JSON.parse(xhr.responseText) as CloudinaryResData;
       if (data.error) {
-        console.log("here in load error");
         reject(`Image upload failed: ${data.error.message}`);
       } else {
-        console.log("here in load");
         resolve(data.secure_url);
       }
     });

@@ -34,7 +34,6 @@ const SelectLang = ({
         if (v === "all") {
           setFormState((s) => ({ ...s, langs: langList.map((l) => l.lang) }));
         } else {
-          console.log(v);
           setFormState((s) => ({ ...s, langs: [v] as Lang[] }));
         }
       }}

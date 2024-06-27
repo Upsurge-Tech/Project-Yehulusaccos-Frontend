@@ -42,7 +42,6 @@ export const editArticle = async (
 ): Promise<{ error: string } | void> => {
   const sessionError = await errorIfNotLoggedIn();
   if (sessionError) return sessionError;
-  console.log("starting editing article" + article.title);
 
   if (!article.thumbnail.src) {
     return { error: "Thumbnail is required" };
@@ -67,8 +66,6 @@ export const editArticle = async (
       insertContents(articleId, article),
       insertArticleLangs(articleId, article.langs),
     ]);
-
-    console.log("Successful edit articleId =", articleId);
   } catch (e) {
     console.error(e);
     if (e instanceof Error) {

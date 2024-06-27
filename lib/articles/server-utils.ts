@@ -222,13 +222,11 @@ export const extractArticles = async (
   const articles: Article[] = [];
 
   let i = 0;
-  console.log("ac length is", ac.length);
-  // console.log("ac is", ac);
-  console.log("outer outer - i is", i);
+
+  //
 
   while (i < ac.length) {
     // await new Promise((r) => setTimeout(r, 1000));
-    console.log("outer- i is", i);
 
     articles.push({
       id: ac[i].articleId,
@@ -254,14 +252,14 @@ export const extractArticles = async (
     );
     while (i < ac.length && ac[i].articleId === article.id) {
       // await new Promise((r) => setTimeout(r, 1000));
-      console.log("inner- i is", i);
+
       //pause for content with df langs
       const langToData: { [key in Lang]: string } = { en: "", am: "" };
       const { type, contentId } = ac[i];
       while (i < ac.length && ac[i].contentId === contentId) {
         const { lang, data, alt } = ac[i];
         // await new Promise((r) => setTimeout(r, 1000));
-        console.log("inner most- i is", i);
+
         if (type === "title") {
           article.title[lang] = data;
           console.log(
